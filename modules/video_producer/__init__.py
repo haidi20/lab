@@ -12,6 +12,7 @@ from modules.video_producer.producer import (
 from modules.video_producer.article_details import enrich_articles
 from modules.video_producer.renderer import (
     EdgeTTSEngine,
+    EMOTION_MOTION_STYLE,
     ease_out_cubic,
     render_article_video,
     render_scene_image,
@@ -30,6 +31,7 @@ __all__ = [
     "html_to_text",
     "layout_text",
     "EdgeTTSEngine",
+    "EMOTION_MOTION_STYLE",
     "ease_out_cubic",
     "render_article_video",
     "render_scene_image",

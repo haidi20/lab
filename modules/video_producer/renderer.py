@@ -17,20 +17,39 @@ from modules.video_producer.producer import (
 )
 
 
-BACKGROUND_TOP = (250, 252, 255)
-BACKGROUND_BOTTOM = (209, 229, 255)
+BACKGROUND_TOP = (248, 250, 252)
+BACKGROUND_BOTTOM = (248, 250, 252)
 CARD_COLOR = (255, 255, 255)
-INK_COLOR = (15, 23, 42)
-MUTED_COLOR = (100, 116, 139)
-BLUE_COLOR = (37, 99, 235)
-SOFT_BLUE = (96, 165, 250)
-PALE_BLUE = (191, 219, 254)
+INK_COLOR = (0, 0, 0)
+MUTED_COLOR = (102, 102, 102)
+BLUE_COLOR = (11, 132, 243)
+SOFT_BLUE = (53, 120, 229)
+PALE_BLUE = (213, 229, 253)
 MOTION_TOKENS = {
     "ease_out_strong": (0.23, 1.0, 0.32, 1.0),
     "ease_in_out_strong": (0.77, 0.0, 0.175, 1.0),
     "enter_duration_seconds": 0.2,
     "on_screen_duration_seconds": 0.35,
     "stagger_seconds": 0.05,
+}
+EMOTION_MOTION_STYLE = {
+    "camera_amplitude": (26.0, 18.0),
+    "camera_rotation_degrees": 1.8,
+    "parallax_depths": (0.18, 0.46, 1.0),
+    "entrance_seconds": 0.18,
+    "beat_seconds": 0.04,
+}
+REMOTION_UI_STYLE = {
+    "background": (248, 250, 252),
+    "surface": (255, 255, 255),
+    "text": (0, 0, 0),
+    "subtitle": (102, 102, 102),
+    "primary": (53, 120, 229),
+    "brand": (11, 132, 243),
+    "border": (0, 0, 0),
+    "border_width": 6,
+    "bottom_border_width": 10,
+    "card_radius": 16,
 }
 
 
@@ -136,6 +155,113 @@ def _layout_motif_motion(layout: str, progress: float) -> tuple[float, float, fl
         "conclusion": (0.66 + 0.18 * cosine, 0.30 + 0.20 * wave, 24.0 * cosine, 1.03 + 0.025 * wave),
     }
     return motifs.get(layout, (0.5 + 0.1 * wave, 0.5 + 0.1 * cosine, 10.0 * wave, 1.02 + 0.02 * cosine))
+
+def _emotion_camera(progress: float, variant: int = 0) -> tuple[float, float, float, float]:
+    phase = math.tau * _clamp(progress) + variant * 0.72
+    direction = -1.0 if variant % 2 else 1.0
+    slow_x = math.sin(phase * 0.82)
+    fast_x = math.sin(phase * 1.65 + 0.4)
+    slow_y = math.cos(phase * 0.68 + variant * 0.12)
+    fast_y = math.sin(phase * 1.38 + 0.8)
+    camera_x = direction * EMOTION_MOTION_STYLE["camera_amplitude"][0] * (
+        0.80 + 0.35 * (0.60 * slow_x + 0.40 * fast_x)
+    )
+    camera_y = direction * EMOTION_MOTION_STYLE["camera_amplitude"][1] * (
+        0.80 + 0.35 * (0.60 * slow_y + 0.40 * fast_y)
+    )
+    rotation = direction * EMOTION_MOTION_STYLE["camera_rotation_degrees"] * (
+        1.15 + 0.65 * math.sin(phase * 0.92 + variant * 0.25)
+    )
+    light = _clamp(0.5 + 0.5 * math.sin(phase * 1.14 + variant * 0.55))
+    return camera_x, camera_y, rotation, light
+
+def _emotion_parallax(
+    depth: float,
+    camera: tuple[float, float, float, float],
+) -> tuple[float, float]:
+    normalized_depth = _clamp(depth)
+    return (-camera[0] * normalized_depth, -camera[1] * normalized_depth)
+
+def _emotion_stage(
+    size: tuple[int, int],
+    progress: float,
+    variant: int = 0,
+) -> Image.Image:
+    width, height = size
+    camera = _emotion_camera(progress, variant)
+    camera_x, camera_y, rotation, light = camera
+    stage = Image.new("RGBA", size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(stage)
+    center_x = width / 2
+    center_y = height * 0.40
+    for index in range(3):
+        depth = EMOTION_MOTION_STYLE["parallax_depths"][index]
+        offset_x, offset_y = _emotion_parallax(depth, camera)
+        radius_x = width * (0.36 + index * 0.12)
+        radius_y = height * (0.16 + index * 0.05)
+        alpha = round(58 + index * 30)
+        for dash_index in range(16):
+            start_ratio = dash_index / 16
+            start_angle = math.degrees(progress * math.tau + variant * 0.72 + index * 2.1 + start_ratio * math.tau)
+            end_angle = start_angle + 14
+            draw.arc(
+                (
+                    center_x - radius_x + offset_x,
+                    center_y - radius_y + offset_y,
+                    center_x + radius_x + offset_x,
+                    center_y + radius_y + offset_y,
+                ),
+                start=start_angle,
+                end=end_angle,
+                fill=REMOTION_UI_STYLE["primary"] + (alpha,),
+                width=3 + index * 2,
+            )
+
+    code_panel_x = width * 0.08 + camera_x * 0.18
+    code_panel_y = height * 0.74 + camera_y * 0.18
+    code_panel_width = width * 0.34
+    code_panel_height = height * 0.075
+    draw.rounded_rectangle(
+        (code_panel_x, code_panel_y, code_panel_x + code_panel_width, code_panel_y + code_panel_height),
+        radius=12,
+        fill=(51, 51, 51, 225),
+        outline=REMOTION_UI_STYLE["border"] + (255,),
+        width=2,
+    )
+    for index in range(3):
+        line_y = code_panel_y + 18 + index * 12
+        line_width = code_panel_width * (0.52 - index * 0.12)
+        draw.line(
+            (code_panel_x + 16, line_y, code_panel_x + 16 + line_width, line_y),
+            fill=(248, 250, 252, 190),
+            width=4,
+        )
+
+    for index in range(5):
+        depth = EMOTION_MOTION_STYLE["parallax_depths"][index % 3]
+        offset_x, offset_y = _emotion_parallax(depth, camera)
+        chip_progress = (progress * (0.42 + index * 0.08) + index / 5.0) % 1
+        chip_x = width * (0.12 + index * 0.16) + offset_x
+        chip_y = height * (0.88 + 0.015 * math.sin(math.tau * progress + index)) + offset_y
+        chip_width = 58 + (index % 3) * 18
+        fill = REMOTION_UI_STYLE["brand"] if index % 2 == 0 else REMOTION_UI_STYLE["surface"]
+        draw.rounded_rectangle(
+            (chip_x, chip_y, chip_x + chip_width, chip_y + 30),
+            radius=10,
+            fill=fill + (225,),
+            outline=REMOTION_UI_STYLE["border"] + (255,),
+            width=2,
+        )
+        draw.line(
+            (chip_x + 8, chip_y + 27, chip_x + chip_width - 8, chip_y + 27),
+            fill=REMOTION_UI_STYLE["border"] + (255,),
+            width=4,
+        )
+
+    playhead_x = width * (0.10 + 0.80 * progress)
+    draw.line((playhead_x, height * 0.94, playhead_x, height * 0.985), fill=REMOTION_UI_STYLE["text"] + (210,), width=3)
+    draw.ellipse((playhead_x - 6, height * 0.955 - 6, playhead_x + 6, height * 0.955 + 6), fill=REMOTION_UI_STYLE["text"] + (235,))
+    return stage
 
 def _draw_layout_motif(
     layer: Image.Image,
@@ -250,61 +376,30 @@ def _background(
     overlay = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
-    variant_offset = variant * 0.18
-    first_x = width * (0.14 + 0.20 * settle + 0.03 * math.sin(math.tau * (progress + variant_offset)))
-    first_y = height * (0.16 + 0.05 * math.sin(math.tau * (progress + 0.2 + variant_offset)))
-    first_radius = 170 + 35 * settle + variant * 12
-    draw.ellipse(
-        (first_x - first_radius, first_y - first_radius, first_x + first_radius, first_y + first_radius),
-        fill=SOFT_BLUE + (42,),
-    )
-
-    second_x = width * (0.82 - 0.16 * settle + 0.02 * math.sin(math.tau * (progress + 0.45 - variant_offset)))
-    second_y = height * (0.74 + 0.04 * math.cos(math.tau * (progress + 0.1 + variant_offset)))
-    second_radius = 210 + 45 * settle - variant * 15
-    draw.ellipse(
-        (second_x - second_radius, second_y - second_radius, second_x + second_radius, second_y + second_radius),
-        fill=PALE_BLUE + (54,),
-    )
-
-    band_direction = -1 if variant % 2 else 1
-    band_position = progress if band_direction > 0 else 1 - progress
-    band_x = width * (-0.25 + 1.45 * band_position)
-    draw.polygon(
-        [(band_x, 0), (band_x + 190, 0), (band_x + 60, height), (band_x - 130, height)],
-        fill=(255, 255, 255, 34),
-    )
-    for index in range(16):
-        seed = index * 0.117
-        particle_x = width * ((seed + progress * (0.16 + index % 4 * 0.035)) % 1.15 - 0.075)
-        particle_y = height * ((0.92 - seed % 0.8 - progress * (0.08 + index % 3 * 0.025)) % 1.05 - 0.025)
-        particle_radius = 4 + (index % 5) * 3
-        particle_alpha = 34 + (index % 4) * 12
-        draw.ellipse(
-            (
-                particle_x - particle_radius,
-                particle_y - particle_radius,
-                particle_x + particle_radius,
-                particle_y + particle_radius,
-            ),
-            fill=(255, 255, 255, particle_alpha),
-        )
-
-    ring_center_x = width * (0.76 + 0.025 * math.sin(math.tau * progress + variant))
-    ring_center_y = height * (0.28 + 0.025 * math.cos(math.tau * progress + variant))
-    ring_radius = 128 + 18 * math.sin(math.tau * progress * 1.5 + variant)
-    draw.arc(
-        (
-            ring_center_x - ring_radius,
-            ring_center_y - ring_radius,
-            ring_center_x + ring_radius,
-            ring_center_y + ring_radius,
-        ),
-        start=math.degrees(math.tau * progress),
-        end=math.degrees(math.tau * progress + 1.35),
-        fill=(255, 255, 255, 62),
-        width=5,
-    )
+    center_x = width / 2
+    center_y = height * 0.44
+    for index in range(3):
+        rotation = variant * 0.72 + progress * math.tau + index * (math.tau / 3)
+        radius_x = width * (0.44 + index * 0.11)
+        radius_y = height * (0.20 + index * 0.055)
+        dash_count = 18
+        for dash_index in range(dash_count):
+            start_ratio = dash_index / dash_count
+            end_ratio = start_ratio + 0.024
+            start_angle = math.degrees(rotation + start_ratio * math.tau)
+            end_angle = math.degrees(rotation + end_ratio * math.tau)
+            draw.arc(
+                (
+                    center_x - radius_x,
+                    center_y - radius_y,
+                    center_x + radius_x,
+                    center_y + radius_y,
+                ),
+                start=start_angle,
+                end=end_angle,
+                fill=REMOTION_UI_STYLE["primary"] + (round(70 + index * 22),),
+                width=4 + index,
+            )
     return Image.alpha_composite(image, overlay)
 
 def footer_text(scene: Scene, source: str) -> str:
@@ -325,13 +420,19 @@ def _card(
     left, top, right, bottom = box
     offset = round((1 - reveal) * slide)
     animated_box = (left, top + offset, right, bottom + offset)
-    alpha = round(235 * reveal)
+    alpha = round(255 * reveal)
     draw.rounded_rectangle(
-        (animated_box[0] + 5, animated_box[1] + 8, animated_box[2] + 5, animated_box[3] + 8),
-        radius=30,
-        fill=(15, 23, 42, 18),
+        animated_box,
+        radius=REMOTION_UI_STYLE["card_radius"],
+        fill=CARD_COLOR + (alpha,),
+        outline=REMOTION_UI_STYLE["border"] + (alpha,),
+        width=REMOTION_UI_STYLE["border_width"],
     )
-    draw.rounded_rectangle(animated_box, radius=30, fill=CARD_COLOR + (alpha,), outline=(219, 234, 254, alpha))
+    draw.line(
+        (animated_box[0] + 10, animated_box[3] - 2, animated_box[2] - 10, animated_box[3] - 2),
+        fill=REMOTION_UI_STYLE["border"] + (alpha,),
+        width=REMOTION_UI_STYLE["bottom_border_width"],
+    )
     return offset
 
 
@@ -606,11 +707,15 @@ def render_scene_image(
     local = _local_progress(scene, progress, total_duration)
     entrance_progress = min(
         0.34,
-        MOTION_TOKENS["enter_duration_seconds"] / max(scene.duration, 0.001),
+        EMOTION_MOTION_STYLE["entrance_seconds"] / max(scene.duration, 0.001),
     )
     reveal = ease_out_strong(_clamp(local / entrance_progress))
     settle = ease_in_out_strong(local)
     image = _background(size, progress, settle, scene.index - 1)
+    image = Image.alpha_composite(
+        image,
+        _emotion_stage(size, progress, scene.index - 1),
+    )
 
     content_layer = Image.new("RGBA", size, (0, 0, 0, 0))
     _draw_layout_motif(content_layer, scene.layout, local, width, height)
@@ -626,7 +731,17 @@ def render_scene_image(
         _draw_headline_block(content_layer, scene, article_title, reveal, width)
         _draw_caption_card(content_layer, scene, reveal, width, height)
 
-    layer = _animate_layer(content_layer, _layout_motion(scene.layout, local))
+    camera_x, camera_y, camera_rotation, _ = _emotion_camera(progress, scene.index - 1)
+    content_motion = _layout_motion(scene.layout, local)
+    layer = _animate_layer(
+        content_layer,
+        (
+            content_motion[0] + camera_x * 0.72,
+            content_motion[1] + camera_y * 0.72,
+            content_motion[2],
+            content_motion[3] + camera_rotation * 0.45,
+        ),
+    )
 
     hook_text = hook_for_frame(scene, _local_progress(scene, progress, total_duration) * scene.duration, total_duration)
     if hook_text:
@@ -638,10 +753,15 @@ def render_scene_image(
         hook_draw = ImageDraw.Draw(layer)
         hook_draw.rounded_rectangle(
             (46, hook_top + hook_offset, width - 46, hook_top + hook_height + hook_offset),
-            radius=34,
-            fill=(255, 255, 255, round(245 * hook_reveal)),
-            outline=BLUE_COLOR + (round(255 * hook_reveal),),
-            width=3,
+            radius=REMOTION_UI_STYLE["card_radius"],
+            fill=REMOTION_UI_STYLE["surface"] + (round(255 * hook_reveal),),
+            outline=REMOTION_UI_STYLE["border"] + (round(255 * hook_reveal),),
+            width=REMOTION_UI_STYLE["border_width"],
+        )
+        hook_draw.line(
+            (58, hook_top + hook_height + hook_offset - 3, width - 58, hook_top + hook_height + hook_offset - 3),
+            fill=REMOTION_UI_STYLE["border"] + (round(255 * hook_reveal),),
+            width=REMOTION_UI_STYLE["bottom_border_width"],
         )
         hook_draw.text((82, hook_top + hook_offset + 34), "HOOK", font=_load_font(24), fill=BLUE_COLOR + (round(255 * hook_reveal),))
         hook_y = hook_top + hook_offset + 82
@@ -656,16 +776,20 @@ def render_scene_image(
             hook_y += 56
 
     draw = ImageDraw.Draw(layer)
-    draw.text((52, height - 76), footer_text(scene, source), font=_load_font(22), fill=MUTED_COLOR + (235,))
-    draw.rounded_rectangle((52, height - 48, width - 52, height - 34), radius=7, fill=PALE_BLUE + (255,))
-    bar_end = 52 + round((width - 104) * ease_out_cubic(progress))
-    draw.rounded_rectangle((52, height - 48, bar_end, height - 34), radius=7, fill=BLUE_COLOR + (255,))
-
-    edge_alpha = 1 - _clamp(min(local / 0.08, (1 - local) / 0.08))
-    if edge_alpha > 0:
-        edge = Image.new("RGBA", size, (255, 255, 255, round(150 * edge_alpha)))
-        layer = Image.alpha_composite(layer, edge)
-
+    draw.text((52, height - 78), footer_text(scene, source), font=_load_font(22), fill=REMOTION_UI_STYLE["subtitle"] + (255,))
+    draw.rounded_rectangle(
+        (52, height - 50, width - 52, height - 32),
+        radius=9,
+        fill=REMOTION_UI_STYLE["surface"] + (255,),
+        outline=REMOTION_UI_STYLE["border"] + (255,),
+        width=2,
+    )
+    bar_end = max(58, 52 + round((width - 104) * ease_out_cubic(progress)))
+    draw.rounded_rectangle(
+        (58, height - 44, bar_end, height - 38),
+        radius=3,
+        fill=REMOTION_UI_STYLE["brand"] + (255,),
+    )
     return Image.alpha_composite(image, layer).convert("RGB")
 
 

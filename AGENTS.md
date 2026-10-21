@@ -50,10 +50,35 @@
 - Animasi TIDAK BOLEH terlihat seperti PPT. Setiap layout WAJIB punya
   motif gerak khas yang terus berjalan, gerakan konten harus terlihat
   jelas, dan transisi antar elemen harus dinamis namun tetap mudah dibaca.
-- Gunakan skill animasi lokal di `skills/emilkowalski/` sebagai acuan
-  motion. Token wajib memakai `ease-out` kuat untuk entrance,
-  `ease-in-out` kuat untuk movement on-screen, entrance 200ms, stagger
-  50ms, dan hindari gerakan yang mengganggu keterbacaan data.
+- Visual frame video WAJIB memakai design system bergaya **Remotion UI**:
+  background `#F8FAFC`, surface putih, teks hitam, subtitle `#666666`,
+  primary `#3578E5`, brand `#0B84F3`, border hitam tebal, sudut kartu
+  membulat, dan progress bar tipis. Motion tetap memakai Emotion Motion
+  Graphic; Remotion adalah acuan tampilan frame, bukan runtime baru.
+## UI/UX Animation Standard: Emotion
+
+- **Emotion adalah standar WAJIB untuk semua styling dan animasi UI/UX**
+  di repositori ini. Standar ini mengikuti keputusan user pada
+  2026-10-21 dan WAJIB dipakai bersama skill
+  `skills/emotion-ui-ux/SKILL.md`.
+- Agent TIDAK BOLEH memakai blok `<style>` lama, file CSS global manual,
+  inline `style`, atau framework styling lain untuk UI tanpa keputusan
+  baru dari user.
+- Untuk HTML statis, gunakan `@emotion/css`. Untuk React, gunakan
+  `@emotion/react`. Runtime untuk `public/login.html` WAJIB lokal di
+  `public/vendor/emotion-css.umd.min.js` agar captive portal tetap jalan
+  tanpa internet.
+- Animasi UI WAJIB memakai `css`, `keyframes`, dan/atau `injectGlobal`
+  dari Emotion, punya stagger yang jelas, tetap mudah dibaca, dan
+  menghormati `prefers-reduced-motion`.
+- Untuk video Python, gunakan **Emotion Motion Graphic** sebagai gaya
+  utama: kamera kontinu, parallax depth, kinetic typography, stage
+  lighting, dan transisi yang hidup. Implementasinya ada di
+  `EMOTION_MOTION_STYLE` beserta fungsi `_emotion_camera`,
+  `_emotion_parallax`, dan `_emotion_stage` pada
+  `modules/video_producer/renderer.py`.
+- Gaya motion spasial ini hanya berlaku untuk pipeline video Python; ini
+  bukan pengganti Emotion untuk UI/UX web.
 - Tiga detik pertama video WAJIB memakai hook konkret sesuai skill
   `skills/linkedin-hook-generator/SKILL.md`. Hook harus pendek, langsung,
   punya angka atau janji hasil, tidak mengulang judul berita, dan tetap

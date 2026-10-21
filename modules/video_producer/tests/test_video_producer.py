@@ -22,9 +22,19 @@ from modules.video_producer.renderer import ease_out_strong
 from modules.video_producer.renderer import stagger_step
 from modules.video_producer.renderer import hook_for_frame
 from modules.video_producer.renderer import _layout_motif_motion
+from modules.video_producer.renderer import EMOTION_MOTION_STYLE
+from modules.video_producer.renderer import REMOTION_UI_STYLE
+from modules.video_producer.renderer import _emotion_camera
+from modules.video_producer.renderer import _emotion_parallax
+from modules.video_producer.renderer import _emotion_stage
 from modules.video_producer.renderer import EdgeTTSEngine as RendererEdgeTTSEngine
 from modules.video_producer.article_provider import load_article, load_latest_kaltim_articles
-from modules.video_producer import EdgeTTSEngine, render_article_video, render_scene_image
+from modules.video_producer import (
+    EdgeTTSEngine,
+    EMOTION_MOTION_STYLE,
+    render_article_video,
+    render_scene_image,
+)
 from modules.video_producer.cli import build_roundup_plan
 
 
@@ -189,7 +199,7 @@ class VideoProducerTests(unittest.TestCase):
 
         self.assertNotEqual(first.tobytes(), second.tobytes())
 
-    def test_scene_frames_do_not_repeat_and_have_soft_edges(self):
+    def test_scene_frames_do_not_repeat_and_preserve_remotion_contrast(self):
         scene = build_video_plan(
             {"title": "Judul berita", "source": "Antara Kaltim", "url": "https://example.test"},
             conclusion="Kesimpulan berita.",
@@ -202,6 +212,33 @@ class VideoProducerTests(unittest.TestCase):
 
         signatures = [frame.tobytes() for frame in frames]
         self.assertEqual(len(signatures), len(set(signatures)))
+
+        final_frame = render_scene_image(
+            scene,
+            "Judul berita",
+            "Antara Kaltim",
+            progress=0.9,
+        )
+        darkest = min(final_frame.getdata(), key=lambda pixel: sum(pixel[:3]))
+        self.assertLess(sum(darkest[:3]), 120)
+
+    def test_first_progress_bar_frame_does_not_draw_invalid_rectangle(self):
+        plan = build_video_plan(
+            {"title": "Judul berita", "source": "Antara Kaltim", "url": "https://example.test"},
+            conclusion="Kesimpulan berita.",
+            duration_seconds=180,
+        )
+        first_progress = 1 / (plan.duration_seconds * 24)
+
+        image = render_scene_image(
+            plan.scenes[0],
+            plan.title,
+            plan.source,
+            progress=first_progress,
+            total_duration=plan.duration_seconds,
+        )
+
+        self.assertEqual(image.size, (720, 1280))
 
     def test_metric_layout_extracts_informative_values(self):
         metrics = _extract_metrics(
@@ -220,6 +257,7 @@ class VideoProducerTests(unittest.TestCase):
     def test_package_exports_animation_api(self):
         self.assertTrue(callable(render_article_video))
         self.assertTrue(callable(render_scene_image))
+        self.assertEqual(EMOTION_MOTION_STYLE["entrance_seconds"], 0.18)
         self.assertIs(EdgeTTSEngine, RendererEdgeTTSEngine)
 
     def test_build_concat_args_copies_scene_videos(self):
@@ -389,6 +427,64 @@ class VideoProducerTests(unittest.TestCase):
         self.assertEqual(len(second), len(set(second)))
         for layout in layouts:
             self.assertNotEqual(_layout_motif_motion(layout, 0.25), _layout_motif_motion(layout, 0.75))
+
+    def test_emotion_motion_style_is_primary_and_spatial(self):
+        self.assertEqual(EMOTION_MOTION_STYLE["camera_amplitude"], (26.0, 18.0))
+        self.assertEqual(EMOTION_MOTION_STYLE["camera_rotation_degrees"], 1.8)
+        self.assertEqual(EMOTION_MOTION_STYLE["parallax_depths"], (0.18, 0.46, 1.0))
+        self.assertEqual(EMOTION_MOTION_STYLE["entrance_seconds"], 0.18)
+        self.assertEqual(EMOTION_MOTION_STYLE["beat_seconds"], 0.04)
+
+    def test_emotion_camera_is_continuous_and_varies_by_scene(self):
+        for progress in (0.25, 0.55, 0.85):
+            values = [_emotion_camera(progress, variant) for variant in range(4)]
+            self.assertEqual(len(values), len(set(values)))
+            for camera_x, camera_y, rotation, light in values:
+                self.assertGreater(abs(camera_x), 8)
+                self.assertGreater(abs(camera_y), 6)
+                self.assertGreater(abs(rotation), 0.5)
+                self.assertGreaterEqual(light, 0.0)
+                self.assertLessEqual(light, 1.0)
+
+    def test_emotion_parallax_scales_by_depth(self):
+        camera = _emotion_camera(0.55, 1)
+        offsets = [_emotion_parallax(depth, camera) for depth in EMOTION_MOTION_STYLE["parallax_depths"]]
+
+        self.assertEqual(len(offsets), 3)
+        self.assertEqual(len(set(offsets)), 3)
+        self.assertLess(abs(offsets[0][0]), abs(offsets[2][0]))
+        self.assertLess(abs(offsets[0][1]), abs(offsets[2][1]))
+
+    def test_emotion_stage_changes_continuously_and_by_variant(self):
+        size = (720, 1280)
+        first = _emotion_stage(size, 0.25, 0)
+        second = _emotion_stage(size, 0.55, 0)
+        variant = _emotion_stage(size, 0.25, 2)
+
+        self.assertEqual(first.size, size)
+        self.assertEqual(first.mode, "RGBA")
+        self.assertIsNotNone(first.getbbox())
+        self.assertNotEqual(first.tobytes(), second.tobytes())
+        self.assertNotEqual(first.tobytes(), variant.tobytes())
+
+    def test_video_uses_remotion_ui_design_system(self):
+        self.assertEqual(REMOTION_UI_STYLE["background"], (248, 250, 252))
+        self.assertEqual(REMOTION_UI_STYLE["surface"], (255, 255, 255))
+        self.assertEqual(REMOTION_UI_STYLE["text"], (0, 0, 0))
+        self.assertEqual(REMOTION_UI_STYLE["primary"], (53, 120, 229))
+        self.assertEqual(REMOTION_UI_STYLE["brand"], (11, 132, 243))
+        self.assertEqual(REMOTION_UI_STYLE["border"], (0, 0, 0))
+        self.assertEqual(REMOTION_UI_STYLE["border_width"], 6)
+        self.assertEqual(REMOTION_UI_STYLE["bottom_border_width"], 10)
+        self.assertEqual(REMOTION_UI_STYLE["card_radius"], 16)
+
+    def test_emotion_stage_contains_remotion_ui_fingerprint(self):
+        stage = _emotion_stage((720, 1280), 0.42, 1)
+        colors = {item[:3] for count, item in stage.getcolors(maxcolors=100000)}
+
+        self.assertIn(REMOTION_UI_STYLE["text"], colors)
+        self.assertIn(REMOTION_UI_STYLE["brand"], colors)
+        self.assertIn(REMOTION_UI_STYLE["primary"], colors)
 
     def test_motion_tokens_follow_emil_animation_skill(self):
         self.assertEqual(MOTION_TOKENS["ease_out_strong"], (0.23, 1.0, 0.32, 1.0))
