@@ -1,0 +1,3 @@
+[submodule "modules/remotion"]
+	path = modules/remotion
+	url = https://github.com/remotion-dev/remotion.git
