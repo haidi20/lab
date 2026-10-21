@@ -1,5 +1,8 @@
 .env
 *.session
 public/generated_video/
+node_modules/
+modules/remotion_video/remotion/public/
+modules/remotion_video/remotion/out/
 __pycache__/
 *.py[cod]
