@@ -1,4 +1,5 @@
 .env
 *.session
+public/generated_video/
 __pycache__/
 *.py[cod]
