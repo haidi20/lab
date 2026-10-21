@@ -1,0 +1,415 @@
+# Berita Hari Ini
+
+> Tanggal: 2026-10-21 (Asia/Makassar)
+> Total artikel: 378
+
+## Antara Kaltim
+
+- [Prabowo terima saran DEN soal MSCI, reformasi pasar modal berlanjut](https://kaltim.antaranews.com/berita/269209/prabowo-terima-saran-den-soal-msci-reformasi-pasar-modal-berlanjut) — 06:28
+- [Pemkot Samarinda perketat pengawasan pasokan cabai dan BBM subsidi](https://kaltim.antaranews.com/berita/269205/pemkot-samarinda-perketat-pengawasan-pasokan-cabai-dan-bbm-subsidi) — 06:23
+- [Warga Lapas Bontang lakukan deteksi dini TBC](https://kaltim.antaranews.com/berita/269201/warga-lapas-bontang-lakukan-deteksi-dini-tbc) — 06:21
+- [Penerima manfaat bantuan pendidikan Kartu Penajam Cerdas bertambah](https://kaltim.antaranews.com/berita/269197/penerima-manfaat-bantuan-pendidikan-kartu-penajam-cerdas-bertambah) — 06:20
+- [Masyarakat adat hulu mahakam konsisten jaga hutan dari ekspansi sawit](https://kaltim.antaranews.com/berita/269193/masyarakat-adat-hulu-mahakam-konsisten-jaga-hutan-dari-ekspansi-sawit) — 06:19
+- [Pemkab Penajam minta perusahaan bantu pemadaman kebakaran](https://kaltim.antaranews.com/berita/269189/pemkab-penajam-minta-perusahaan-bantu-pemadaman-kebakaran) — 06:18
+- [DPPKB Kutim edukasi siswa SMK tentang kesehatan reproduksi](https://kaltim.antaranews.com/berita/269185/dppkb-kutim-edukasi-siswa-smk-tentang-kesehatan-reproduksi) — 06:16
+- [Utusan Kaltim sabet dua gelar juara kompetisi juru masak halal ISEF](https://kaltim.antaranews.com/berita/269181/utusan-kaltim-sabet-dua-gelar-juara-kompetisi-juru-masak-halal-isef) — 06:15
+- [Pemkab Kutai Timur ajak guru kembangkan metode literasi](https://kaltim.antaranews.com/berita/269177/pemkab-kutai-timur-ajak-guru-kembangkan-metode-literasi) — 06:14
+- [Kaltim percepat hilirisasi industri demi dongkrak PAD berkelanjutan](https://kaltim.antaranews.com/berita/269173/kaltim-percepat-hilirisasi-industri-demi-dongkrak-pad-berkelanjutan) — 06:13
+- [Kabupaten Penajam bantu air bersih  rumah ibadah dan sekolah](https://kaltim.antaranews.com/berita/269169/kabupaten-penajam-bantu-air-bersih-rumah-ibadah-dan-sekolah) — 06:11
+- [Bupati: Hudoq Pekayang jadi jembatan harmoni manusia dan alam](https://kaltim.antaranews.com/berita/269165/bupati-hudoq-pekayang-jadi-jembatan-harmoni-manusia-dan-alam) — 06:10
+- [Tarian Hudoq Pekayang berlangsung hingga dini hari](https://kaltim.antaranews.com/berita/269161/tarian-hudoq-pekayang-berlangsung-hingga-dini-hari) — 02:34
+
+## Tribun Kaltim
+
+- [Prediksi Bournemouth vs AC Milan di Liga Europa, Ruben Amorim Bawa Rekor Mentereng ke Tanah Inggris](https://kaltim.tribunnews.com/superball/1170986/prediksi-bournemouth-vs-ac-milan-di-liga-europa-ruben-amorim-bawa-rekor-mentereng-ke-tanah-inggris) — 09:15
+- [Mati Lampu Hari Ini di Kaltim Pukul 10.00 WITA, Daftar Wilayah Terdampak Balikpapan hingga Bontang](https://kaltim.tribunnews.com/tribun-etam/1170985/mati-lampu-hari-ini-di-kaltim-pukul-1000-wita-daftar-wilayah-terdampak-balikpapan-hingga-bontang) — 09:07
+- [Target Borneo FC Lawan Tainan City FC di Matchday 2 ACGL Hari Ini, Menang Besar!](https://kaltim.tribunnews.com/superball/1170984/target-borneo-fc-lawan-tainan-city-fc-di-matchday-2-acgl-hari-ini-menang-besar) — 08:47
+- [Prediksi Skor Inter Milan vs Shakhtar Donetsk di Liga Champions dan Susunan Pemain](https://kaltim.tribunnews.com/superball/1170983/prediksi-skor-inter-milan-vs-shakhtar-donetsk-di-liga-champions-dan-susunan-pemain) — 08:40
+- [Borneo FC Menatap Laga Lawan Tainan City, Dandri Dauri Ajak Suporter Penuhi Stadion Segiri Samarinda](https://kaltim.tribunnews.com/superball/1170982/borneo-fc-menatap-laga-lawan-tainan-city-dandri-dauri-ajak-suporter-penuhi-stadion-segiri-samarinda) — 08:27
+- [Sekte Kiamat Sebabkan 190 Anak Tewas Kelaparan, Orang Tua Diwajibkan Saksikan Detik-detik Kematian](https://kaltim.tribunnews.com/news/1170981/sekte-kiamat-sebabkan-190-anak-tewas-kelaparan-orang-tua-diwajibkan-saksikan-detik-detik-kematian) — 08:10
+- [Gerakan Pangan Murah Balikpapan Dimulai Hari Ini 21 Oktober 2026, Cek Lokasinya](https://kaltim.tribunnews.com/tribun-etam/1170980/gerakan-pangan-murah-balikpapan-dimulai-hari-ini-21-oktober-2026-cek-lokasinya) — 07:53
+- [Terima Rektor Tiga Negara di GOR Segiri, Walikota Samarinda Andi Harun Buka Peluang Kerja Sama](https://kaltim.tribunnews.com/tribun-etam/1170979/terima-rektor-tiga-negara-di-gor-segiri-walikota-samarinda-andi-harun-buka-peluang-kerja-sama) — 07:53
+- [Kualitas Udara Kaltim Pagi Ini 21 Oktober 2026: Kutai Barat Masuk Berbahaya, Kawasan IKN Tidak Sehat](https://kaltim.tribunnews.com/tribun-etam/1170978/kualitas-udara-kaltim-pagi-ini-21-oktober-2026-kutai-barat-masuk-berbahaya-kawasan-ikn-tidak-sehat) — 07:26
+- [17 Wilayah Terdampak Mati Air PDAM di Samarinda 21 Oktober 2026, Ada Pekerjaan Teknis Pipa Transmisi](https://kaltim.tribunnews.com/tribun-etam/1170977/17-wilayah-terdampak-mati-air-pdam-di-samarinda-21-oktober-2026-ada-pekerjaan-teknis-pipa-transmisi) — 07:25
+- [Agenda Pemkot Samarinda Hari Ini, Mulai Penilaian Probebaya Award Sampai Forum Ketenagakerjaan](https://kaltim.tribunnews.com/tribun-etam/1170976/agenda-pemkot-samarinda-hari-ini-mulai-penilaian-probebaya-award-sampai-forum-ketenagakerjaan) — 07:23
+- [Reaksi Bahlil, Nusron Wahid 2 Kali Mangkir dari Pemeriksaan KPK Terkait Kasus Suap HGB](https://kaltim.tribunnews.com/news/1170975/reaksi-bahlil-nusron-wahid-2-kali-mangkir-dari-pemeriksaan-kpk-terkait-kasus-suap-hgb) — 07:18
+- [Jadwal SIM Keliling Polresta Balikpapan Rabu 21 Oktober 2026, Cek Lokasinya](https://kaltim.tribunnews.com/tribun-etam/1170974/jadwal-sim-keliling-polresta-balikpapan-rabu-21-oktober-2026-cek-lokasinya) — 07:17
+- [Beasiswa BSI Scholarship Talenta 2026 Dibuka hingga 30 Oktober, Cek Syarat dan Cara Daftar](https://kaltim.tribunnews.com/news/1170973/beasiswa-bsi-scholarship-talenta-2026-dibuka-hingga-30-oktober-cek-syarat-dan-cara-daftar) — 07:00
+- [Daftar Wilayah Kaltim yang Diprediksi BMKG Turun Hujan Hari Ini Rabu 21 Oktober 2026](https://kaltim.tribunnews.com/tribun-etam/1170972/daftar-wilayah-kaltim-yang-diprediksi-bmkg-turun-hujan-hari-ini-rabu-21-oktober-2026) — 06:44
+- [Stadion Kudungga Bersolek Sambut Liga Nusantara, Markas Persikutim Dinilai Layak Gelar Laga Liga 2](https://kaltim.tribunnews.com/superball/1170971/stadion-kudungga-bersolek-sambut-liga-nusantara-markas-persikutim-dinilai-layak-gelar-laga-liga-2) — 06:28
+- [Link Live Streaming Gratis Borneo FC vs Tainan City FC di AFC Challenge League Hari Ini](https://kaltim.tribunnews.com/superball/1170970/link-live-streaming-gratis-borneo-fc-vs-tainan-city-fc-di-afc-challenge-league-hari-ini) — 06:12
+- [Jadwal Mati Air PDAM di Samarinda 21 Oktober 2026, Ini Daftar Wilayah Terdampak](https://kaltim.tribunnews.com/tribun-etam/1170969/jadwal-mati-air-pdam-di-samarinda-21-oktober-2026-ini-daftar-wilayah-terdampak) — 05:57
+- [Demo 2 Tahun Pemerintahan Prabowo-Gibran: Greenpeace Curi Perhatian, Bandung, Makassar, Solo Ricuh](https://kaltim.tribunnews.com/news/1170968/demo-2-tahun-pemerintahan-prabowo-gibran-greenpeace-curi-perhatian-bandung-makassar-solo-ricuh) — 05:38
+- [Hasil Liga Champions: PSG Bantai Barcelona, Hujan Gol di Kandang Liverpool dan Napoli](https://kaltim.tribunnews.com/superball/1170967/hasil-liga-champions-psg-bantai-barcelona-hujan-gol-di-kandang-liverpool-dan-napoli) — 05:18
+
+## Prokal Kaltim
+
+- [Ajudan Gubernur Kaltim Diduga Senggol Kader GMNI, Tim Ahli Akui Keliru](https://prokal.co/kaltim/2610200022/ajudan-gubernur-kaltim-diduga-senggol-kader-gmni-tim-ahli-akui-keliru) — 19:18
+- [PWI Kaltim Ingatkan Pemilik Akun Medsos: Ingin Jadi Jurnalis, Tempuh Jalur yang Benar](https://prokal.co/kaltim/2610200021/pwi-kaltim-ingatkan-pemilik-akun-medsos-ingin-jadi-jurnalis-tempuh-jalur-yang-benar) — 19:12
+- [SAE Pastarung dan NahloK Cafe Dibuka, WBP Kukar Disiapkan Punya Keahlian hingga Pasar Kerja](https://prokal.co/kutai-kartanegara/2610200018/sae-pastarung-dan-nahlok-cafe-dibuka-wbp-kukar-disiapkan-punya-keahlian-hingga-pasar-kerja) — 19:02
+- [Menuju Universal Coverage, Kutai Timur Masuk 10 Besar Paritrana Award Tingkat Nasional](https://prokal.co/kaltim/2610200017/menuju-universal-coverage-kutai-timur-masuk-10-besar-paritrana-award-tingkat-nasional) — 18:47
+- [Jalan Sukarelawan dan Martadinata Muara Jawa Dinanti 40 Tahun, DPRD Kukar Perjuangkan Rp5 M di 2027](https://prokal.co/kutai-kartanegara/2610200015/jalan-sukarelawan-dan-martadinata-muara-jawa-dinanti-40-tahun-dprd-kukar-perjuangkan-rp5-m-di-2027) — 16:15
+- [Jalan Martadinata dan Sukarelawan Muara Jawa Rusak Tahunan, Camat Harap Rp5 M Masuk Anggaran 2027](https://prokal.co/kutai-kartanegara/2610200014/jalan-martadinata-dan-sukarelawan-muara-jawa-rusak-tahunan-camat-harap-rp5-m-masuk-anggaran-2027) — 16:14
+- [Kasatpol PP Kukar Apresiasi Pemusnahan Barang Bukti, Siap Perkuat Sinergi dengan Kejari](https://prokal.co/kutai-kartanegara/2610200013/kasatpol-pp-kukar-apresiasi-pemusnahan-barang-bukti-siap-perkuat-sinergi-dengan-kejari) — 16:12
+- [Telkomsel Serahkan Bantuan Kemanusiaan, Dukung Pemulihan Warga Pascakebakaran di Tenggaromg](https://prokal.co/kutai-kartanegara/2610200011/telkomsel-serahkan-bantuan-kemanusiaan-dukung-pemulihan-warga-pascakebakaran-di-tenggaromg) — 16:09
+
+## Kaltim Online
+
+- [Tujuh Tahun Dinanti, CustoMAXI Bali Kembali dengan Modifikasi Berteknologi Tinggi](https://kaltimonline.com/tujuh-tahun-dinanti-customaxi-bali-kembali-dengan-modifikasi-berteknologi-tinggi/) — 00:59
+- [Pembinaan Rider Yamaha Racing Indonesia, Diproyeksikan Ikut Berkompetisi di Moto2 Musim 2028](https://kaltimonline.com/pembinaan-rider-yamaha-racing-indonesia-diproyeksikan-ikut-berkompetisi-di-moto2-musim-2028/) — 16:18
+- [PPN RU V Balikpapan Bersama SP Mathilda-FSPPB Bekali 55 Peserta dengan Kompetensi Keselamatan dan Keterampilan Kerja](https://kaltimonline.com/ppn-ru-v-balikpapan-bersama-sp-mathilda-fsppb-bekali-55-peserta-dengan-kompetensi-keselamatan-dan-keterampilan-kerja/) — 16:16
+
+## Antara Nasional
+
+- [Polisi selidiki kecelakaan yang tewaskan pejalan kaki di Jakarta Utara](https://www.antaranews.com/berita/5800973/polisi-selidiki-kecelakaan-yang-tewaskan-pejalan-kaki-di-jakarta-utara) — 08:46
+- [Alfin Nomleni raih perunggu lari 400 meter Asian Para Games 2026](https://asiangames.antaranews.com/video/5800897/alfin-nomleni-raih-perunggu-lari-400-meter-asian-para-games-2026) — 08:43
+- [Maulana Rifky gandakan emas sekaligus catat rekor para renang Asia](https://asiangames.antaranews.com/video/5800785/maulana-rifky-gandakan-emas-sekaligus-catat-rekor-para-renang-asia) — 08:32
+- [DKI gelar simulasi gempa bumi serentak guna hadapi potensi bencana](https://www.antaranews.com/berita/5800969/dki-gelar-simulasi-gempa-bumi-serentak-guna-hadapi-potensi-bencana) — 08:27
+- [Indonesia berpotensi tambah emas dari panahan dan atletik](https://www.antaranews.com/berita/5800965/indonesia-berpotensi-tambah-emas-dari-panahan-dan-atletik) — 08:13
+- [Satu pindai, tetap waspada](https://www.antaranews.com/berita/5800961/satu-pindai-tetap-waspada) — 08:12
+- [Brunei gelar pertemuan ASEAN untuk perkuat pengembangan UMKM](https://www.antaranews.com/berita/5800957/brunei-gelar-pertemuan-asean-untuk-perkuat-pengembangan-umkm) — 08:09
+- [KMP Batumandi terbakar, penumpang dievakuasi di Pelabuhan Merak](https://www.antaranews.com/foto/5800953/kmp-batumandi-terbakar-penumpang-dievakuasi-di-pelabuhan-merak) — 08:08
+- [Studi temukan hubungan yang berbeda antara makanan ultraproses dan risiko kanker usus besar.](https://www.antaranews.com/berita/5800949/studi-temukan-hubungan-yang-berbeda-antara-makanan-ultraproses-dan-risiko-kanker-usus-besar) — 08:00
+- [Sering stres di tempat kerja? Coba 6 cara mengatasinya](https://www.antaranews.com/berita/5800945/sering-stres-di-tempat-kerja-coba-6-cara-mengatasinya) — 07:58
+- [Kemnaker siap gelar InaSkills, jaring talenta keterampilan nasional](https://www.antaranews.com/berita/5800941/kemnaker-siap-gelar-inaskills-jaring-talenta-keterampilan-nasional) — 07:50
+- [Kualitas udara Jakarta tidak sehat pada Rabu pagi](https://www.antaranews.com/berita/5800937/kualitas-udara-jakarta-tidak-sehat-pada-rabu-pagi) — 07:47
+- [Sering stres di kantor? Kenali 6 penyebab utamanya](https://www.antaranews.com/berita/5800933/sering-stres-di-kantor-kenali-6-penyebab-utamanya) — 07:46
+- [Layanan Samsat keliling tersedia di 14 lokasi Jadetabek pada Rabu](https://www.antaranews.com/berita/5800929/layanan-samsat-keliling-tersedia-di-14-lokasi-jadetabek-pada-rabu) — 07:41
+- [Hasil Liga Champions: Paris Saint-Germain dan Liverpool masih sempurna](https://www.antaranews.com/berita/5800925/hasil-liga-champions-paris-saint-germain-dan-liverpool-masih-sempurna) — 07:39
+- [Lebih 100 titik api terpantau dalam kebakaran hutan dan lahan di kawasan Gunung Arjuno](https://www.antaranews.com/foto/5800921/lebih-100-titik-api-terpantau-dalam-kebakaran-hutan-dan-lahan-di-kawasan-gunung-arjuno) — 07:37
+- [Apa itu social jetlag? Ini dampaknya bagi kesehatan tubuh](https://www.antaranews.com/berita/5800917/apa-itu-social-jetlag-ini-dampaknya-bagi-kesehatan-tubuh) — 07:36
+- [Layanan SIM keliling tersedia di lima lokasi DKI Jakarta pada Rabu](https://www.antaranews.com/berita/5800913/layanan-sim-keliling-tersedia-di-lima-lokasi-dki-jakarta-pada-rabu) — 07:31
+- [Sering sulit tidur? Kenali 6 penyebab insomnia ini](https://www.antaranews.com/berita/5800909/sering-sulit-tidur-kenali-6-penyebab-insomnia-ini) — 07:26
+- [Blue light dari HP dan laptop bisa merusak kulit? Ini penjelasannya](https://www.antaranews.com/berita/5800905/blue-light-dari-hp-dan-laptop-bisa-merusak-kulit-ini-penjelasannya) — 07:21
+- [Kemarin, pemadaman karhutla hingga evakuasi penumpang KM Batumandi](https://www.antaranews.com/berita/5800901/kemarin-pemadaman-karhutla-hingga-evakuasi-penumpang-km-batumandi) — 07:15
+- [Rabu, BMKG: Mayoritas kota besar RI diguyur hujan ringan hingga lebat](https://www.antaranews.com/berita/5800893/rabu-bmkg-mayoritas-kota-besar-ri-diguyur-hujan-ringan-hingga-lebat) — 07:10
+- [Berapa kadar ideal SPF yang dibutuhkan wajah](https://www.antaranews.com/berita/5800889/berapa-kadar-ideal-spf-yang-dibutuhkan-wajah) — 07:08
+- [Kemarin, Khalid Basalamah jadi saksi hingga Kantor BNPB digeledah](https://www.antaranews.com/berita/5800885/kemarin-khalid-basalamah-jadi-saksi-hingga-kantor-bnpb-digeledah) — 06:56
+- [Kemarin, penghormatan terakhir Subagyo HS hingga ratas ekonomi](https://www.antaranews.com/berita/5800881/kemarin-penghormatan-terakhir-subagyo-hs-hingga-ratas-ekonomi) — 06:55
+- [Cuaca mendung dan di dalam rumah, perlukah pakai sunscreen?](https://www.antaranews.com/berita/5800877/cuaca-mendung-dan-di-dalam-rumah-perlukah-pakai-sunscreen) — 06:52
+- [Simak lagi warta tentang film baru Agnez Mo, pernikahan EJAE](https://www.antaranews.com/berita/5800873/simak-lagi-warta-tentang-film-baru-agnez-mo-pernikahan-ejae) — 06:49
+- [6 manfaat habbatussauda untuk kesehatan, dari imunitas hingga jantung](https://www.antaranews.com/berita/5800869/6-manfaat-habbatussauda-untuk-kesehatan-dari-imunitas-hingga-jantung) — 06:41
+- [Mahasiswa UNG manfaatkan tulang Sotong jadi bahan pembersih tangan](https://www.antaranews.com/berita/5800865/mahasiswa-ung-manfaatkan-tulang-sotong-jadi-bahan-pembersih-tangan) — 06:36
+- [Mewujudkan transformasi digital yang "terhubung, tumbuh dan terjaga"](https://www.antaranews.com/berita/5800861/mewujudkan-transformasi-digital-yang-terhubung-tumbuh-dan-terjaga) — 06:26
+- [Kedaruratan Cesium-137 di Cikande selesai](https://www.antaranews.com/infografik/5800849/kedaruratan-cesium-137-di-cikande-selesai) — 06:00
+- [Pemkot Samarinda perketat pengawasan pasokan cabai dan BBM subsidi](https://www.antaranews.com/berita/5800857/pemkot-samarinda-perketat-pengawasan-pasokan-cabai-dan-bbm-subsidi) — 05:55
+- [Prabowo terima saran DEN soal MSCI, reformasi pasar modal berlanjut](https://www.antaranews.com/berita/5800853/prabowo-terima-saran-den-soal-msci-reformasi-pasar-modal-berlanjut) — 05:50
+- [Kemarin, soal kebakaran KMP Batumandi hingga penyaluran gaji PNS](https://www.antaranews.com/berita/5800845/kemarin-soal-kebakaran-kmp-batumandi-hingga-penyaluran-gaji-pns) — 05:37
+- [Kalsel raih terbaik pertama inovasi layanan ekspor dari Kemendag](https://www.antaranews.com/berita/5800841/kalsel-raih-terbaik-pertama-inovasi-layanan-ekspor-dari-kemendag) — 05:35
+- [Hattrick Phill Foden warnai kemenangan telak Man City atas AEK](https://www.antaranews.com/berita/5800837/hattrick-phill-foden-warnai-kemenangan-telak-man-city-atas-aek) — 05:23
+- [Liverpool comeback dramatis dengan taklukkan Villarreal 4-3](https://www.antaranews.com/berita/5800833/liverpool-comeback-dramatis-dengan-taklukkan-villarreal-4-3) — 04:55
+- [Erik ten Hag sebut Cristiano Ronaldo mengecewakan Manchester United](https://www.antaranews.com/berita/5800829/erik-ten-hag-sebut-cristiano-ronaldo-mengecewakan-manchester-united) — 04:42
+- [Paris Saint-Germain hantam Barcelona 4-2](https://www.antaranews.com/berita/5800825/paris-saint-germain-hantam-barcelona-4-2) — 04:35
+- [DEN dan presiden bahas strategi fiskal untuk jaga harga BBM subsidi](https://www.antaranews.com/video/5800793/den-dan-presiden-bahas-strategi-fiskal-untuk-jaga-harga-bbm-subsidi) — 03:10
+- [Bahas antisipasi dampak El Nino, DEN tekankan mitigasi berbasis data](https://www.antaranews.com/video/5800805/bahas-antisipasi-dampak-el-nino-den-tekankan-mitigasi-berbasis-data) — 03:05
+- [DEN bahas reformasi pasar modal dan penegakan hukum bersama Presiden](https://www.antaranews.com/video/5800809/den-bahas-reformasi-pasar-modal-dan-penegakan-hukum-bersama-presiden) — 03:04
+- [Debut Asian Para Games 2026, Michael amankan medali perak tolak peluru](https://www.antaranews.com/video/5800789/debut-asian-para-games-2026-michael-amankan-medali-perak-tolak-peluru) — 03:01
+- [ASDP konsolidasi dengan Jasa Raharja hitung tanggungan kerugian](https://www.antaranews.com/video/5800781/asdp-konsolidasi-dengan-jasa-raharja-hitung-tanggungan-kerugian) — 03:00
+- [Polda Banten: KMP Batumandi muat 420 penumpang dan 89 unit kendaraan](https://www.antaranews.com/video/5800757/polda-banten-kmp-batumandi-muat-420-penumpang-dan-89-unit-kendaraan) — 02:58
+- [Kriminal kemarin, ledakan Cimanggis bukan bom hingga penembakan polisi](https://www.antaranews.com/berita/5800821/kriminal-kemarin-ledakan-cimanggis-bukan-bom-hingga-penembakan-polisi) — 02:47
+- [DKI kemarin, aksi mahasiswa hingga Jakarta menuju kota sinema](https://www.antaranews.com/berita/5800817/dki-kemarin-aksi-mahasiswa-hingga-jakarta-menuju-kota-sinema) — 02:41
+- [Bayern Muenchen tanpa Kompany, Neuer, dan Kimmich lawan Arsenal](https://www.antaranews.com/berita/5800813/bayern-muenchen-tanpa-kompany-neuer-dan-kimmich-lawan-arsenal) — 02:33
+- [BMKG: Jakarta berawan tebal Rabu pagi, suhu bisa capai 36 derajat](https://www.antaranews.com/berita/5800801/bmkg-jakarta-berawan-tebal-rabu-pagi-suhu-bisa-capai-36-derajat) — 02:29
+- [Serhou Guirassy bawa Dortmund menang 2-1 atas Sabah](https://www.antaranews.com/berita/5800797/serhou-guirassy-bawa-dortmund-menang-2-1-atas-sabah) — 02:26
+
+## Tribunnews
+
+- [Jorge Martin Kerucutkan Perburuan Gelar MotoGP 2026: Tinggal Marquez dan Bezzecchi](https://www.tribunnews.com/sport/7899959/jorge-martin-kerucutkan-perburuan-gelar-motogp-2026-tinggal-marquez-dan-bezzecchi) — 08:43
+- [Sosok Lu’lu Atunni’mah, Ibu Tunggal di Ponorogo yang Meninggal di Atas Motor, Tinggalkan 4 Anak](https://www.tribunnews.com/regional/7899958/sosok-lu-lu-atunni-mah-ibu-tunggal-di-ponorogo-yang-meninggal-di-atas-motor-tinggalkan-4-anak) — 08:36
+- [Hasil Olah TKP Kecelakaan Suporter PSS Sleman, Sopir Minibus jadi Tersangka, Ditemukan Botol Miras](https://www.tribunnews.com/regional/7899957/hasil-olah-tkp-kecelakaan-suporter-pss-sleman-sopir-minibus-jadi-tersangka-ditemukan-botol-miras) — 08:34
+- [Karhutla dan Ancaman Krisis Kesehatan Nasional: Ketika 306 Ribu Kasus ISPA Menguji Ketahanan Negara](https://www.tribunnews.com/tribunners/7899956/karhutla-dan-ancaman-krisis-kesehatan-nasional-ketika-306-ribu-kasus-ispa-menguji-ketahanan-negara) — 08:34
+- [Dua Tahun Prabowo–Gibran: Menjaga Stabilitas, Memperkuat Fondasi](https://www.tribunnews.com/tribunners/7899955/dua-tahun-prabowo-gibran-menjaga-stabilitas-memperkuat-fondasi) — 08:33
+- [Perlihatkan Asap Pekat di Kalimantan, Zaskia Adya Mecca Nangis: Tempat Nggak Layak Buat Hidup](https://www.tribunnews.com/seleb/7899954/perlihatkan-asap-pekat-di-kalimantan-zaskia-adya-mecca-nangis-tempat-nggak-layak-buat-hidup) — 08:28
+- [Cara Ikut Ujian Susulan TKA 2026 bagi Siswa yang Berhalangan, Ini Ketentuannya](https://www.tribunnews.com/pendidikan/7899953/cara-ikut-ujian-susulan-tka-2026-bagi-siswa-yang-berhalangan-ini-ketentuannya) — 08:25
+- [Insanul Fahmi Siap Resmikan Pernikahan dengan Inara Rusli usai Cerai dari Wardatina Mawa: Doain Aja](https://www.tribunnews.com/seleb/7899952/insanul-fahmi-siap-resmikan-pernikahan-dengan-inara-rusli-usai-cerai-dari-wardatina-mawa-doain-aja) — 08:25
+- [Jadwal French Open 2026: 6 Wakil Indonesia Beraksi, Raymond/Joaquin vs Sabar/Reza](https://www.tribunnews.com/sport/7899951/jadwal-french-open-2026-6-wakil-indonesia-beraksi-raymondjoaquin-vs-sabarreza) — 08:25
+- [Prakiraan Cuaca Yogyakarta, Rabu 21 Oktober 2026, BMKG: Didominasi Cerah](https://www.tribunnews.com/regional/7899950/prakiraan-cuaca-yogyakarta-rabu-21-oktober-2026-bmkg-didominasi-cerah) — 08:24
+- [Kemensos Padukan Pendidikan dan Pemberdayaan Ekonomi Keluarga Lewat Sekolah Rakyat](https://www.tribunnews.com/kilas-kementerian/7899949/kemensos-padukan-pendidikan-dan-pemberdayaan-ekonomi-keluarga-lewat-sekolah-rakyat) — 08:21
+- [Kumpulan Kode Redeem FF Terbaru Hari Ini, Rabu 21 Oktober 2026: Klaim Hadiahnya Gratis](https://www.tribunnews.com/techno/7899948/kumpulan-kode-redeem-ff-terbaru-hari-ini-rabu-21-oktober-2026-klaim-hadiahnya-gratis) — 08:21
+- [PPG Daljab Guru Madrasah Dibuka 21-27 Oktober 2026, Cek Syarat dan Prodinya](https://www.tribunnews.com/nasional/7899947/ppg-daljab-guru-madrasah-dibuka-21-27-oktober-2026-cek-syarat-dan-prodinya) — 08:21
+- [Mengenal Roket ZhuQue-2E, Serpihannya Jatuh di Kebun Sawit Kalteng dan Munculkan Dentuman](https://www.tribunnews.com/regional/7899946/mengenal-roket-zhuque-2e-serpihannya-jatuh-di-kebun-sawit-kalteng-dan-munculkan-dentuman) — 08:20
+- [Dua Tahun Prabowo–Gibran: Menjaga Stabilitas, Memperkuat Fondasi](https://www.tribunnews.com/tribunners/7899945/dua-tahun-prabowo-gibran-menjaga-stabilitas-memperkuat-fondasi) — 08:20
+- [Detik-Detik Pajero Tabrak 3 Pelajar di Mampang, Korban Sempat Bangun sebelum Dibawa ke RS](https://www.tribunnews.com/metropolitan/7899944/detik-detik-pajero-tabrak-3-pelajar-di-mampang-korban-sempat-bangun-sebelum-dibawa-ke-rs) — 08:18
+- [Pesan Idrus Marham di HUT ke-62 Golkar: Karya Kekaryaan Harus Kembali Jadi Landasan Perjuangan](https://www.tribunnews.com/nasional/7899943/pesan-idrus-marham-di-hut-ke-62-golkar-karya-kekaryaan-harus-kembali-jadi-landasan-perjuangan) — 08:16
+- [Rapor Lamine Yamal vs PSG: Sempat Redup di Paris, Rekor Gol Liga Champions Tetap Terukir](https://www.tribunnews.com/superskor/7899942/rapor-lamine-yamal-vs-psg-sempat-redup-di-paris-rekor-gol-liga-champions-tetap-terukir) — 08:15
+- [Malam Sial Cristiano Ronaldo: Gagal Penalti dan Buang Peluang, Pelatih Al Nassr Setia Membela](https://www.tribunnews.com/superskor/7899941/malam-sial-cristiano-ronaldo-gagal-penalti-buang-peluang-pelatih-al-nassr-setia-membela) — 08:14
+- [Ganjar Pranowo Minta Presiden Prabowo Tetapkan Karhutla Sebagai Bencana Nasional](https://www.tribunnews.com/nasional/7899940/ganjar-pranowo-minta-presiden-prabowo-tetapkan-karhutla-sebagai-bencana-nasional) — 08:12
+
+## Media Indonesia
+
+- [Prabowo Luncurkan Perlinsos Digital Nasional pada Hari Pahlawan](https://mediaindonesia.com/ekonomi/946836/prabowo-luncurkan-perlinsos-digital-nasional-pada-hari-pahlawan) — 08:35
+- [Rekap Hasil Liga Champions: PSG dan Liverpool Masih Sempurna](https://mediaindonesia.com/sepak-bola/946835/rekap-hasil-liga-champions-psg-dan-liverpool-masih-sempurna) — 08:35
+- [Asian Para Games 2026: Indonesia Berpotensi Tambah Medali Emas dari Panahan dan Atletik](https://mediaindonesia.com/olahraga/946833/asian-para-games-2026-indonesia-berpotensi-tambah-medali-emas-dari-panahan-dan-atletik) — 08:26
+- [Karhutla 2026, Muhammadiyah: Keselamatan Rakyat Prioritas Utama](https://mediaindonesia.com/humaniora/946834/karhutla-2026-muhammadiyah-keselamatan-rakyat-prioritas-utama) — 08:25
+- [Atasi Karhutla, BRIN dan TNI AU Siapkan Pengaktifan Kembali Konsol Hujan Buatan](https://mediaindonesia.com/humaniora/946832/atasi-karhutla-brin-dan-tni-au-siapkan-pengaktifan-kembali-konsol-hujan-buatan) — 08:20
+- [Kebakaran Pesanggrahan Jakarta Selatan, Perempuan Lansia Meninggal Dunia](https://mediaindonesia.com/megapolitan/946831/kebakaran-pesanggrahan-jakarta-selatan-perempuan-lansia-meninggal-dunia) — 08:13
+- [14 Lokasi Samsat Keliling Jadetabek Hari Ini Rabu 21 Oktober 2026](https://mediaindonesia.com/megapolitan/946830/14-lokasi-samsat-keliling-jadetabek-hari-ini-rabu-21-oktober-2026) — 08:11
+- [Warga Probolinggo Tewas Terbakar saat Bersihkan Sampah Barongan](https://mediaindonesia.com/nusantara/946829/warga-probolinggo-tewas-terbakar-saat-bersihkan-sampah-barongan) — 08:10
+- [Bertumpu pada Ketersediaan hingga Keberlanjutan](https://mediaindonesia.com/ekonomi/946828/bertumpu-pada-ketersediaan-hingga-keberlanjutan) — 08:10
+- [Kecelakaan Mampang: Mobil Tabrak Dua Kendaraan Lain, Siswa SMP Tewas](https://mediaindonesia.com/megapolitan/946827/kecelakaan-mampang-mobil-tabrak-dua-kendaraan-lain-siswa-smp-tewas) — 08:00
+- [Transformasi Pangan untuk Kesejahteraan Rakyat](https://mediaindonesia.com/ekonomi/946826/transformasi-pangan-untuk-kesejahteraan-rakyat) — 07:52
+- [Waspada Potensi Hujan Lebat dan Banjir Rob di Sejumlah Wilayah](https://mediaindonesia.com/humaniora/946822/waspada-potensi-hujan-lebat-dan-banjir-rob-di-sejumlah-wilayah) — 07:48
+- [Pelaku Penabrak Anggota DPR Australia Helen Haines Hadir Dipersidangan](https://mediaindonesia.com/internasional/946821/pelaku-penabrak-anggota-dpr-australia-helen-haines-hadir-dipersidangan) — 07:46
+- [9 Kasus Ebola Terkonfirmasi di Kenya, Pengawasan Diperketat](https://mediaindonesia.com/internasional/946820/9-kasus-ebola-terkonfirmasi-di-kenya-pengawasan-diperketat) — 07:45
+- [Ayu Ting Ting Siapkan Album Baru Tahun Depan, Soroti Regenerasi Musik Dangdut](https://mediaindonesia.com/hiburan/946824/ayu-ting-ting-siapkan-album-baru-tahun-depan-soroti-regenerasi-musik-dangdut) — 07:44
+- [Jangan Asal Makan! Urutan Mengonsumsi Makanan Memengaruhi Kadar Gula Darah](https://mediaindonesia.com/kesehatan/946823/jangan-asal-makan-urutan-mengonsumsi-makanan-memengaruhi-kadar-gula-darah) — 07:44
+- [Cek 5 Lokasi SIM Keliling Jakarta Hari Ini Rabu 21 Oktober 2026](https://mediaindonesia.com/megapolitan/946818/cek-5-lokasi-sim-keliling-jakarta-hari-ini-rabu-21-oktober-2026) — 07:38
+- [Nigeria Konfirmasi Kasus Perdana Ebola Usai Pasien Tiba dari Uganda](https://mediaindonesia.com/internasional/946817/nigeria-konfirmasi-kasus-perdana-ebola-usai-pasien-tiba-dari-uganda) — 07:33
+- [Serial Zona Merah Diadaptasi ke Layar Lebar Tayang Januari 2027](https://mediaindonesia.com/hiburan/946819/serial-zona-merah-diadaptasi-ke-layar-lebar-tayang-januari-2027) — 07:32
+- [Berkat CCTV, Polres Kuningan Ungkap Pembunuhan di Gunung Ciremai](https://mediaindonesia.com/nusantara/946816/berkat-cctv-polres-kuningan-ungkap-pembunuhan-di-gunung-ciremai) — 07:29
+- [Gelombang Protes Biaya Hidup Terjang Eropa: Militer Diterjunkan di Prancis dan Italia](https://mediaindonesia.com/internasional/946811/gelombang-protes-biaya-hidup-terjang-eropa-militer-diterjunkan-di-prancis-dan-italia) — 07:18
+- [Prakiraan Cuaca Jawa Tengah 21 Oktober 2026: Hujan di Enam Daerah](https://mediaindonesia.com/nusantara/946810/prakiraan-cuaca-jawa-tengah-21-oktober-2026-hujan-di-enam-daerah) — 07:17
+- [Raja Charles III Fasih Berbahasa Arab Sambut Sultan Oman di Windsor Castle](https://mediaindonesia.com/internasional/946807/raja-charles-iii-fasih-berbahasa-arab-sambut-sultan-oman-di-windsor-castle) — 07:00
+- [Ambisi Trump Menggandeng Rusia sambil Menekan Ukraina](https://mediaindonesia.com/internasional/946801/ambisi-trump-menggandeng-rusia-sambil-menekan-ukraina) — 07:00
+- [Pete Hegseth Siapkan Laporan Penarikan Pasukan Afghanistan, Jenderal Terancam Sanksi](https://mediaindonesia.com/internasional/946799/pete-hegseth-siapkan-laporan-penarikan-pasukan-afghanistan-jenderal-terancam-sanksi) — 06:45
+- [Mega-Merger Tesla dan SpaceX: Elon Musk Pertimbangkan Gabungkan Dua Raksasa Teknologi](https://mediaindonesia.com/teknologi/946798/mega-merger-tesla-dan-spacex-elon-musk-pertimbangkan-gabungkan-dua-raksasa-teknologi) — 06:33
+- [Trump Umumkan Bantuan Solar untuk Petani Senilai Rp144 Triliun](https://mediaindonesia.com/internasional/946797/trump-umumkan-bantuan-solar-untuk-petani-senilai-rp144-triliun) — 06:33
+- [Tradisi Baru NFL: U2 Tampil di Halftime Show Thanksgiving Eve Live di Netflix](https://mediaindonesia.com/hiburan/946793/tradisi-baru-nfl-u2-tampil-di-halftime-show-thanksgiving-eve-live-di-netflix) — 06:19
+- [Java United Imbang Lawan Isenmulang FC, Fabio Lefundes Soroti Pertahanan Rapat Lawan](https://mediaindonesia.com/sepak-bola/946795/java-united-imbang-lawan-isenmulang-fc-fabio-lefundes-soroti-pertahanan-rapat-lawan) — 06:16
+- [Iran Bantah Ekonomi Runtuh meski AS Klaim IRGC Bangkrut](https://mediaindonesia.com/internasional/946792/iran-bantah-ekonomi-runtuh-meski-as-klaim-irgc-bangkrut) — 06:15
+- [Borneo FC Incar Kemenangan Lawan Tainan City FC di AFC Challenge League](https://mediaindonesia.com/sepak-bola/946791/borneo-fc-incar-kemenangan-lawan-tainan-city-fc-di-afc-challenge-league) — 06:04
+- [Referendum Alberta: Warga Pilih Tetap Bersama Kanada, Mark Carney Tegaskan Persatuan](https://mediaindonesia.com/internasional/946789/referendum-alberta-warga-pilih-tetap-bersama-kanada-mark-carney-tegaskan-persatuan) — 06:04
+- [Bayern Muenchen vs Arsenal: Kompany, Neuer, dan Kimmich Diragukan Tampil](https://mediaindonesia.com/sepak-bola/946788/bayern-muenchen-vs-arsenal-kompany-neuer-dan-kimmich-diragukan-tampil) — 05:55
+- [2 Pria Ditangkap Polisi Anti-Teror Inggris Terkait Intelijen Iran](https://mediaindonesia.com/internasional/946785/2-pria-ditangkap-polisi-anti-teror-inggris-terkait-intelijen-iran) — 05:54
+- [Geledah Rumah Dinas Bupati Klaten, KPK Sita Dokumen, Uang Tunai, dan Perhiasan](https://mediaindonesia.com/politik-dan-hukum/946784/geledah-rumah-dinas-bupati-klaten-kpk-sita-dokumen-uang-tunai-dan-perhiasan) — 05:53
+- [Salah Diagnosis Multiple Sclerosis Selama 5 Tahun, Aktris Christina Applegate Merasa Hancur](https://mediaindonesia.com/hiburan/946783/salah-diagnosis-multiple-sclerosis-selama-5-tahun-aktris-christina-applegate-merasa-hancur) — 05:47
+- [Pascaledakan Pasar Cimanggis, Pemkot Janji Jembatani Relokasi Pedagang](https://mediaindonesia.com/megapolitan/946781/pascaledakan-pasar-cimanggis-pemkot-janji-jembatani-relokasi-pedagang) — 05:40
+- [Anggota DPR Australia Helen Haines Kritis Usai Ditabrak Mobil, Polisi Sebut Aksi Terencana](https://mediaindonesia.com/internasional/946779/anggota-dpr-australia-helen-haines-kritis-usai-ditabrak-mobil-polisi-sebut-aksi-terencana) — 05:31
+- [Pangeran Harry Buka Suara Soal Kepindahan ke Inggris dan Keinginan Rekonsiliasi Keluarga](https://mediaindonesia.com/hiburan/946778/pangeran-harry-buka-suara-soal-kepindahan-ke-inggris-dan-keinginan-rekonsiliasi-keluarga) — 05:27
+- [Hasil Liga Champions: Manchester City vs AEK Athens, Phil Foden Hat-trick, The Citizen Menang Telak](https://mediaindonesia.com/sepak-bola/946780/hasil-liga-champions-manchester-city-vs-aek-athens-phil-foden-hat-trick-the-citizen-menang-telak) — 05:26
+- [Hasil Liga Champions: Gol Pertama Julian Alvarez Selamatkan 10 Pemain Atletico Madrid dari Kekalahan](https://mediaindonesia.com/sepak-bola/946777/hasil-liga-champions-gol-pertama-julian-alvarez-selamatkan-10-pemain-atletico-madrid-dari-kekalahan) — 05:15
+- [Prakiraan Cuaca Rabu, 21 Oktober 2026: Waspada Hujan Lebat dan Siklon Champi](https://mediaindonesia.com/humaniora/946751/prakiraan-cuaca-rabu-21-oktober-2026-waspada-hujan-lebat-dan-siklon-champi) — 05:06
+- [Hasil Liga Champions: PSV Eindhoven Permalukan Porto 1-0 di Estádio do Dragão](https://mediaindonesia.com/sepak-bola/946775/hasil-liga-champions-psv-eindhoven-permalukan-porto-1-0-di-estdio-do-drago) — 05:04
+- [Hasil Liga Champions: AS Roma vs Slovan Bratislava, Il Lupi Mengamuk di Olimpico](https://mediaindonesia.com/sepak-bola/946776/hasil-liga-champions-as-roma-vs-slovan-bratislava-il-lupi-mengamuk-di-olimpico) — 05:00
+- [Status Halal dan Urgensi Pengendalian Tembakau](https://mediaindonesia.com/opini/946709/status-halal-dan-urgensi-pengendalian-tembakau) — 05:00
+- [Napoli vs Bodo Glimt: Scott McTominay Jadi Pahlawan Napoli Tekuk Bodo/Glimt 4-3](https://mediaindonesia.com/sepak-bola/946774/napoli-vs-bodo-glimt-scott-mctominay-jadi-pahlawan-napoli-tekuk-bodoglimt-4-3) — 04:53
+- [Pertemuan Rahasia Oslo: Intelijen AS Kembali Buka Akses untuk Ukraina Saat Usulan Damai Disiapkan](https://mediaindonesia.com/internasional/946773/pertemuan-rahasia-oslo-intelijen-as-kembali-buka-akses-untuk-ukraina-saat-usulan-damai-disiapkan) — 04:50
+- [Hasil Liga Champions: Liverpool vs Villarreal, The Reds Menangi Drama 7 Gol di Anfield](https://mediaindonesia.com/sepak-bola/946772/hasil-liga-champions-liverpool-vs-villarreal-the-reds-menangi-drama-7-gol-di-anfield) — 04:36
+- [Hasil Liga Champions: PSG vs Barcelona, Menang, Les Parisiens Puncaki Klasemen](https://mediaindonesia.com/sepak-bola/946771/hasil-liga-champions-psg-vs-barcelona-menang-les-parisiens-puncaki-klasemen) — 04:10
+- [Hasil Liga Champions: Fenerbahce vs Slavia Praha, Gol Larut Pavel Kacor Buyarkan Kemenangan Sarı Kanaryalar](https://mediaindonesia.com/sepak-bola/946769/hasil-liga-champions-fenerbahce-vs-slavia-praha-gol-larut-pavel-kacor-buyarkan-kemenangan-sar-kanaryalar) — 03:35
+- [Hasil Liga Champions: Sabah FK vs Borussia Dortmund, Serhou Guirassy Borong Dua Gol, Die Borussen Menang Tipis](https://mediaindonesia.com/sepak-bola/946768/hasil-liga-champions-sabah-fk-vs-borussia-dortmund-serhou-guirassy-borong-dua-gol-die-borussen-menang-tipis) — 03:16
+- [Ketahanan Ekonomi Masyarakat Adat Diperkuat lewat Pembentukan Kelompok Tani](https://mediaindonesia.com/ekonomi/946767/ketahanan-ekonomi-masyarakat-adat-diperkuat-lewat-pembentukan-kelompok-tani) — 01:08
+- [15 Tips Menghilangkan Bekas Luka di Kaki](https://mediaindonesia.com/kesehatan/946766/15-tips-menghilangkan-bekas-luka-di-kaki) — 23:59
+- [KPK Dalami Dugaan Potongan Insentif Pegawai Pemkab Bogor melalui Koperasi](https://mediaindonesia.com/politik-dan-hukum/946764/kpk-dalami-dugaan-potongan-insentif-pegawai-pemkab-bogor-melalui-koperasi) — 23:55
+- [BNPT: Pelajar Harus Jadi Agen Perdamaian untuk Lawan Konten Kekerasan Digital](https://mediaindonesia.com/politik-dan-hukum/946765/bnpt-pelajar-harus-jadi-agen-perdamaian-untuk-lawan-konten-kekerasan-digital) — 23:50
+- [Ramalan Shio Tikus, Kerbau, Macan dan Kelinci Rabu, 21 Oktober 2026](https://mediaindonesia.com/humaniora/946761/ramalan-shio-tikus-kerbau-macan-dan-kelinci-rabu-21-oktober-2026) — 23:50
+- [BPJS Ketenagakerjaan Sosialisasikan MLT Perumahan kepada Guru dan Karyawan](https://mediaindonesia.com/ekonomi/946762/bpjs-ketenagakerjaan-sosialisasikan-mlt-perumahan-kepada-guru-dan-karyawan) — 23:49
+- [Susunan Lengkap Pembalap MotoGP 2027: Marc Marquez Duet dengan Pedro Acosta](https://mediaindonesia.com/olahraga/946748/susunan-lengkap-pembalap-motogp-2027-marc-marquez-duet-dengan-pedro-acosta) — 23:49
+- [Forek Hulu Migas 2026 Perkuat Kolaborasi Investasi untuk Dorong Produksi](https://mediaindonesia.com/ekonomi/946763/forek-hulu-migas-2026-perkuat-kolaborasi-investasi-untuk-dorong-produksi) — 23:47
+- [Dukungan Ibu Jadi Fondasi Penting bagi Tumbuh Kembang dan Prestasi Anak](https://mediaindonesia.com/humaniora/946760/dukungan-ibu-jadi-fondasi-penting-bagi-tumbuh-kembang-dan-prestasi-anak) — 23:45
+- [Link Live Streaming Liga Champions PSG vs Barcelona, Kick Off 02.00 WIB](https://mediaindonesia.com/sepak-bola/946758/link-live-streaming-liga-champions-psg-vs-barcelona-kick-off-0200-wib) — 23:45
+- [Menteri Ekraf Bidik Produk Kreatif Batam Tembus Pasar Global](https://mediaindonesia.com/ekonomi/946759/menteri-ekraf-bidik-produk-kreatif-batam-tembus-pasar-global) — 23:42
+- [Fakta Aliansi Trafalgar Law dan Bajak Laut Topi Jerami di One Piece](https://mediaindonesia.com/hiburan/946757/fakta-aliansi-trafalgar-law-dan-bajak-laut-topi-jerami-di-one-piece) — 23:40
+- [Kalahkan Jojo, Ubed Akui Masih Harus Banyak Belajar](https://mediaindonesia.com/olahraga/946756/kalahkan-jojo-ubed-akui-masih-harus-banyak-belajar) — 23:35
+- [Tata Cara Sholat Dhuha Lengkap dengan Niat dan Keutamaan](https://mediaindonesia.com/humaniora/946755/tata-cara-sholat-dhuha-lengkap-dengan-niat-dan-keutamaan) — 23:30
+- [Real Madrid Tuntut Javier Tebas Mundur dari Jabatan Presiden La Liga](https://mediaindonesia.com/sepak-bola/946754/real-madrid-tuntut-javier-tebas-mundur-dari-jabatan-presiden-la-liga) — 23:25
+- [Rute Penerbangan Batam-Penang Perluas Peluang Bisnis dan Investasi](https://mediaindonesia.com/nusantara/946742/rute-penerbangan-batam-penang-perluas-peluang-bisnis-dan-investasi) — 23:25
+- [Reza Rahadian Soroti Isu Pengkhianatan di Film Laut Bercerita](https://mediaindonesia.com/hiburan/946744/reza-rahadian-soroti-isu-pengkhianatan-di-film-laut-bercerita) — 23:24
+- [Ramalan Zodiak Capricorn, Aquarius, Pisces dan Aries Rabu, 21 Oktober 2026](https://mediaindonesia.com/humaniora/946753/ramalan-zodiak-capricorn-aquarius-pisces-dan-aries-rabu-21-oktober-2026) — 23:20
+- [Jelang PSG vs Barcelona, Nuno Mendes Dipastikan Absen karena Cedera Paha](https://mediaindonesia.com/sepak-bola/946752/jelang-psg-vs-barcelona-nuno-mendes-dipastikan-absen-karena-cedera-paha) — 23:15
+- [Dorong Pengelolaan Sampah Organik Horeka Berbasis Ekonomi Sirkular](https://mediaindonesia.com/humaniora/946740/dorong-pengelolaan-sampah-organik-horeka-berbasis-ekonomi-sirkular) — 23:15
+- [Profil Caesar Clown, Ilmuwan Gila yang Ciptakan Gas Beracun di One Piece](https://mediaindonesia.com/hiburan/946750/profil-caesar-clown-ilmuwan-gila-yang-ciptakan-gas-beracun-di-one-piece) — 23:10
+- [Jadwal Liga Champions Pekan ini: PSG vs Barcelona dan Bayern Munchen vs Arsenal](https://mediaindonesia.com/sepak-bola/946749/jadwal-liga-champions-pekan-ini-psg-vs-barcelona-dan-bayern-munchen-vs-arsenal) — 23:05
+- [Kumpulan Trik Cricket Run Out 3D Lengkap](https://mediaindonesia.com/hiburan/946746/kumpulan-trik-cricket-run-out-3d-lengkap) — 23:00
+- [Belanja Kesehatan Indonesia Hanya 3% dari PDB, Tertinggal dari Malaysia dan Tiongkok](https://mediaindonesia.com/humaniora/946737/belanja-kesehatan-indonesia-hanya-3-dari-pdb-tertinggal-dari-malaysia-dan-tiongkok) — 23:00
+- [Kompolnas Desak Polri Perketat Pengawasan Senjata Api Buntut Penembakan di Pondok Cabe](https://mediaindonesia.com/politik-dan-hukum/946734/kompolnas-desak-polri-perketat-pengawasan-senjata-api-buntut-penembakan-di-pondok-cabe) — 23:00
+
+## JPNN
+
+- [Cuaca Jawa Timur 21 Oktober 2026, Pagi Sampai Malam Cerah Hingga Berangin](https://jatim.jpnn.com/jatim-terkini/49547/cuaca-jawa-timur-21-oktober-2026-pagi-sampai-malam-cerah-hingga-berangin) — 08:33
+- [Jorge Martin Ungkap Tiga Kandidat Juara MotoGP 2026](https://www.jpnn.com/news/jorge-martin-ungkap-tiga-kandidat-juara-motogp-2026) — 08:25
+- [KPK Sita Uang dari PCNU Nias, Diduga terkait Politik Uang Muktamar NU](https://www.jpnn.com/news/kpk-sita-uang-dari-pcnu-nias-diduga-terkait-politik-uang-muktamar-nu) — 08:15
+- [6 Bahaya Minum Teh Hijau, Tidur Anda Bakalan Terganggu](https://www.jpnn.com/news/6-bahaya-minum-teh-hijau-tidur-anda-bakalan-terganggu) — 08:15
+- [Persija Vs Arema FC Malam Ini, Shin Tae Yong Bicara Rekor](https://www.jpnn.com/news/persija-vs-arema-fc-malam-ini-shin-tae-yong-bicara-rekor) — 08:11
+- [Ya Tidak](https://www.jpnn.com/news/ya-tidak) — 08:00
+- [Prakiraan Cuaca Jawa Barat 21 Oktober 2026: Bogor hingga Sukabumi Berpotensi Hujan](https://jabar.jpnn.com/jabar-terkini/33902/prakiraan-cuaca-jawa-barat-21-oktober-2026-bogor-hingga-sukabumi-berpotensi-hujan) — 08:00
+- [Hasil Liga Champions: PSG & Liverpool Pertahankan Rekor Sempurna](https://www.jpnn.com/news/hasil-liga-champions-psg-liverpool-pertahankan-rekor-sempurna) — 07:55
+- [Teknologi Y-AMT Bermasalah, Ribuan Big Bike Yamaha Ditarik Kembali](https://www.jpnn.com/news/teknologi-y-amt-bermasalah-ribuan-big-bike-yamaha-ditarik-kembali) — 07:52
+- [SIM Keliling Bandung Hari Ini, Rabu 21 Oktober 2026](https://jabar.jpnn.com/jabar-terkini/33903/sim-keliling-bandung-hari-ini-rabu-21-oktober-2026) — 07:47
+- [Jadwal & Harga Tiket Bus AKAP dari Bali ke Pulau Jawa Rabu (21/10), Cek!](https://bali.jpnn.com/destinasi/45137/jadwal-harga-tiket-bus-akap-dari-bali-ke-pulau-jawa-rabu-2110-cek) — 07:42
+- [6 Manfaat Buncis, Wanita Wajib Mengonsumsinya](https://www.jpnn.com/news/6-manfaat-buncis-wanita-wajib-mengonsumsinya) — 07:41
+- [Pesan Fery Insani untuk PPPK Paruh Waktu: Jaga Integritas, Jangan Melakukan Pelanggaran](https://www.jpnn.com/news/pesan-fery-insani-untuk-pppk-paruh-waktu-jaga-integritas-jangan-melakukan-pelanggaran) — 07:40
+- [Begini Jawaban Airlangga soal Isu Pembagian Handphone Gratis untuk Masyarakat](https://www.jpnn.com/news/begini-jawaban-airlangga-soal-isu-pembagian-handphone-gratis-untuk-masyarakat) — 07:39
+- [Upacara Piodalan Pura di Bali Rabu (21/10), Cek Jadwal & Lokasinya!](https://bali.jpnn.com/bali-terkini/45136/upacara-piodalan-pura-di-bali-rabu-2110-cek-jadwal-lokasinya) — 07:32
+- [Fraksi Demokrat: Tanpa Regulasi Kuat Keberlanjutan Pembangunan Sulit Diwujudkan](https://www.jpnn.com/news/fraksi-demokrat-tanpa-regulasi-kuat-keberlanjutan-pembangunan-sulit-diwujudkan) — 07:30
+- [Klasemen Liga Champions Bergolak, Barcelona Merosot, PSG Kukuh di Puncak](https://www.jpnn.com/news/klasemen-liga-champions-bergolak-barcelona-merosot-psg-kukuh-di-puncak) — 07:27
+- [Cuaca Hari Ini 21 Oktober, Hujan Ringan hingga Lebat Mengguyur Mayoritas RI](https://www.jpnn.com/news/cuaca-hari-ini-21-oktober-hujan-ringan-hingga-lebat-mengguyur-mayoritas-ri) — 07:26
+- [Dampak Karhutla tak Sampai ke Bali, Udara Kabur di Denpasar ternyata Karena Ini](https://bali.jpnn.com/bali-terkini/45135/dampak-karhutla-tak-sampai-ke-bali-udara-kabur-di-denpasar-ternyata-karena-ini) — 07:21
+- [5 Berita Terpopuler: 3.342 PPPK Paruh Waktu Dialihkan ke ASN Penuh, Dirjen Nunuk Minta Guru & Tendik Siaga](https://www.jpnn.com/news/5-berita-terpopuler-3342-pppk-paruh-waktu-dialihkan-ke-asn-penuh-dirjen-nunuk-minta-guru-tendik-siaga) — 07:10
+- [5 Khasiat Kopi Campur Cengkeh yang Luar Biasa](https://www.jpnn.com/news/5-khasiat-kopi-campur-cengkeh-yang-luar-biasa) — 07:09
+- [Ayu Ting Ting Ungkap Rencana Setelah Tampil Menghebohkan di Synchronize Fest 2026](https://www.jpnn.com/news/ayu-ting-ting-ungkap-rencana-setelah-tampil-menghebohkan-di-synchronize-fest-2026) — 07:07
+- [Bantu Warga Terdampak Gempa di Manggarai, Untar Beri Pelayanan Kesehatan dan Pendampingan](https://www.jpnn.com/news/bantu-warga-terdampak-gempa-di-manggarai-untar-beri-pelayanan-kesehatan-dan-pendampingan) — 07:03
+- [Jadwal Samsat Keliling di Bali Rabu (21/10), Cek Lokasinya!](https://bali.jpnn.com/hukum/45134/jadwal-samsat-keliling-di-bali-rabu-2110-cek-lokasinya) — 07:02
+- [Jadwal SIM Keliling di Bali Rabu (21/10), Silakan Cek Lokasinya!](https://bali.jpnn.com/hukum/45133/jadwal-sim-keliling-di-bali-rabu-2110-silakan-cek-lokasinya) — 06:50
+- [Begini Sanksi yang Diberikan OJK pada 3 Perusahaan Nakal Pemain Saham](https://www.jpnn.com/news/begini-sanksi-yang-diberikan-ojk-pada-3-perusahaan-nakal-pemain-saham) — 06:42
+- [Kalender Bali Rabu (21/10): Baik untuk Menangkap Ikan, Berburu & Potong Rambut](https://bali.jpnn.com/bali-terkini/45132/kalender-bali-rabu-2110-baik-untuk-menangkap-ikan-berburu-potong-rambut) — 06:41
+- [Milos Joksic Puji Skema High Pressing Bali United, Siap Bikin Kejutan](https://bali.jpnn.com/sport/45131/milos-joksic-puji-skema-high-pressing-bali-united-siap-bikin-kejutan) — 06:29
+- [Klasemen Super League: Dewa United Lagi Ganteng, Cuma Persija yang Bisa Menyalip](https://www.jpnn.com/news/klasemen-super-league-dewa-united-lagi-ganteng-cuma-persija-yang-bisa-menyalip) — 06:10
+- [Peringati HUT Ke-62, Golkar Diingatkan Perkuat Inovasi & Doktrin Kekaryaan](https://www.jpnn.com/news/peringati-hut-ke-62-golkar-diingatkan-perkuat-inovasi-doktrin-kekaryaan) — 06:04
+- [Bayangkan kalau Tiba-tiba Ribuan PPPK Paruh Waktu Kehilangan Pekerjaan, Oh](https://www.jpnn.com/news/bayangkan-kalau-tiba-tiba-ribuan-pppk-paruh-waktu-kehilangan-pekerjaan-oh) — 06:03
+- [French Open 2026: Sempat Tertekan, Ubed Paksa Jonatan Christie Angkat Koper](https://www.jpnn.com/news/french-open-2026-sempat-tertekan-ubed-paksa-jonatan-christie-angkat-koper) — 06:00
+- [STY tak Habis Pikir Persija Keok dari Persita, Siap Bangkit Kontra Arema FC](https://bali.jpnn.com/sport/45130/sty-tak-habis-pikir-persija-keok-dari-persita-siap-bangkit-kontra-arema-fc) — 05:59
+- [5 Makanan untuk Mengatasi Sembelit dengan Cepat](https://www.jpnn.com/news/5-makanan-untuk-mengatasi-sembelit-dengan-cepat) — 05:58
+- [Dua Tahun, Delapan Capaian, dan Satu Strategi Utuh Merengkuh Kedaulatan](https://www.jpnn.com/news/dua-tahun-delapan-capaian-dan-satu-strategi-utuh-merengkuh-kedaulatan) — 05:57
+- [6 Makanan Pemicu Sakit Kepala yang Harus Anda Ketahui](https://www.jpnn.com/news/6-makanan-pemicu-sakit-kepala-yang-harus-anda-ketahui) — 05:53
+- [Dewa United Gusur Persija di Puncak Klasemen, Osmar Loss Buka Suara](https://bali.jpnn.com/sport/45129/dewa-united-gusur-persija-di-puncak-klasemen-osmar-loss-buka-suara) — 05:46
+- [Sama-Sama Terluka, Persija Jakarta dan Arema FC Berebut Kebangkitan](https://www.jpnn.com/news/sama-sama-terluka-persija-jakarta-dan-arema-fc-berebut-kebangkitan) — 05:40
+- [Ada Program Baru, MenPANRB Rini Minta Seluruh PNS dan PPPK Terlibat](https://www.jpnn.com/news/ada-program-baru-menpanrb-rini-minta-seluruh-pns-dan-pppk-terlibat) — 05:40
+- [Berikut Ini Pesan Pak Fery Ditujukan Khusus untuk PPPK Paruh Waktu](https://www.jpnn.com/news/berikut-ini-pesan-pak-fery-ditujukan-khusus-untuk-pppk-paruh-waktu) — 05:28
+- [Dicari Tim yang Bisa Mengalahkan Bhayangkara Presisi Lampung FC](https://www.jpnn.com/news/dicari-tim-yang-bisa-mengalahkan-bhayangkara-presisi-lampung-fc) — 05:24
+- [Ruko Pasar Cimanggis Bakal Dibongkar, Pemkot Janji Menjembatani Relokasi Pedagang](https://www.jpnn.com/news/ruko-pasar-cimanggis-bakal-dibongkar-pemkot-janji-menjembatani-relokasi-pedagang) — 05:20
+- [Rudy Memuji Presiden Prabowo soal Honorer jadi PPPK, Berharap Ada Lagi Terobosan Besar](https://www.jpnn.com/news/rudy-memuji-presiden-prabowo-soal-honorer-jadi-pppk-berharap-ada-lagi-terobosan-besar) — 05:18
+- [Awan Hitam Belum Pergi, PSIM Yogyakarta Kian Terpuruk Seusai Kalah dari Bhayangkara FC](https://www.jpnn.com/news/awan-hitam-belum-pergi-psim-yogyakarta-kian-terpuruk-seusai-kalah-dari-bhayangkara-fc) — 05:15
+- [Gustavo Almeida Selamatkan Java United dari Kekalahan, Fabio Lefundes Tetap Kecewa](https://www.jpnn.com/news/gustavo-almeida-selamatkan-java-united-dari-kekalahan-fabio-lefundes-tetap-kecewa) — 05:04
+- [Info Terbaru soal Rencana Gaji PNS Disalurkan Lewat Kopdes, Semoga Polemik Berakhir](https://www.jpnn.com/news/info-terbaru-soal-rencana-gaji-pns-disalurkan-lewat-kopdes-semoga-polemik-berakhir) — 04:58
+- [Komplotan Perampok Bersenjata Api Incar Toko yang Mau Tutup](https://www.jpnn.com/news/komplotan-perampok-bersenjata-api-incar-toko-yang-mau-tutup) — 04:00
+- [Perluas Penyaluran Kredit, Easycash dan Krom Bank Jalin Kemitraan Loan Channeling](https://www.jpnn.com/news/perluas-penyaluran-kredit-easycash-dan-krom-bank-jalin-kemitraan-loan-channeling) — 03:46
+- [KM Dorolonda Bakal Melayani Pelabuhan Donggala, Pelni Imbau Hal Ini](https://www.jpnn.com/news/km-dorolonda-bakal-melayani-pelabuhan-donggala-pelni-imbau-hal-ini) — 03:21
+- [Jadi Dokter di Film Begu Ganjang, Randy Pangalila Ungkap Tantangannya](https://www.jpnn.com/news/jadi-dokter-di-film-begu-ganjang-randy-pangalila-ungkap-tantangannya) — 03:05
+- [Bareskrim Dalami Dugaan Sabotase Blackout di Batam, CCTV Jadi Petunjuk](https://www.jpnn.com/news/bareskrim-dalami-dugaan-sabotase-blackout-di-batam-cctv-jadi-petunjuk) — 02:50
+- [French Open 2026: 5 Wakil Indonesia Masuk 16 Besar, Kejutan Ubed Singkirkan Jojo](https://www.jpnn.com/news/french-open-2026-5-wakil-indonesia-masuk-16-besar-kejutan-ubed-singkirkan-jojo) — 02:02
+- [Ini Respons Anggota Kompolnas soal Polisi Tembak Polisi di Pondok Cabe](https://www.jpnn.com/news/ini-respons-anggota-kompolnas-soal-polisi-tembak-polisi-di-pondok-cabe) — 02:02
+- [Bermain dengan 10 Orang, PSIM Tak Mampu Menahan Gempuran Bhayangkara Lampung FC](https://jogja.jpnn.com/olahraga/15118/bermain-dengan-10-orang-psim-tak-mampu-menahan-gempuran-bhayangkara-lampung-fc) — 01:45
+- [Nadeo Kecewa Persija Menjamu Arema FC di Bekasi](https://www.jpnn.com/news/nadeo-kecewa-persija-menjamu-arema-fc-di-bekasi) — 01:21
+- [Program HP Gratis Berpotensi Membebani Keuangan Negara Hingga Puluhan Triliun](https://jogja.jpnn.com/jogja-terkini/15117/program-hp-gratis-berpotensi-membebani-keuangan-negara-hingga-puluhan-triliun) — 01:17
+- [Basarnas Terus Sisir Perairan Kalimantan Cari Sisa Korban KM Virgo Transport](https://www.jpnn.com/news/basarnas-terus-sisir-perairan-kalimantan-cari-sisa-korban-km-virgo-transport) — 01:03
+- [Industri Kemasan Didorong Naik Kelas, ALLPack Indonesia 2026 Bidik 90 Ribu Pengunjung](https://www.jpnn.com/news/industri-kemasan-didorong-naik-kelas-allpack-indonesia-2026-bidik-90-ribu-pengunjung) — 00:39
+- [Kronologi Kapal Feri Terbakar di Pelabuhan Merak](https://banten.jpnn.com/banten-terkini/5210/kronologi-kapal-feri-terbakar-di-pelabuhan-merak) — 00:27
+- [Dokter di Bandung Cabuli Anak Kandung Usia 3 Tahun, Hasil Visum Korban Bikin Kaget](https://www.jpnn.com/news/dokter-di-bandung-cabuli-anak-kandung-usia-3-tahun-hasil-visum-korban-bikin-kaget) — 00:21
+- [LippoLand Meluncurkan Brentwood Villas di OAZE Cikarang, Harga Mulai Rp1,86 Miliar](https://www.jpnn.com/news/lippoland-meluncurkan-brentwood-villas-di-oaze-cikarang-harga-mulai-rp186-miliar) — 00:14
+- [Truk Polisi Diserang Massa Berpakaian Hitam-Hitam di Bandung, 3 Petugas Terluka](https://www.jpnn.com/news/truk-polisi-diserang-massa-berpakaian-hitam-hitam-di-bandung-3-petugas-terluka) — 00:02
+- [Analis Mirae: Saham MNC Group Diprediksi Bakal Menguat Ditopang Monetisasi Digital](https://www.jpnn.com/news/analis-mirae-saham-mnc-group-diprediksi-bakal-menguat-ditopang-monetisasi-digital) — 00:02
+- [Seskab Teddy Memamerkan Capaian Program 2 Tahun Pemerintahan Prabowo](https://www.jpnn.com/news/seskab-teddy-memamerkan-capaian-program-2-tahun-pemerintahan-prabowo) — 00:01
+- [Wendi Cagur: Cuma Menyampaikan Apa yang Menjadi Keresahan Gue](https://www.jpnn.com/news/wendi-cagur-cuma-menyampaikan-apa-yang-menjadi-keresahan-gue) — 00:00
+- [Pejabat Polda Banten Dimutasi, Wakapolda hingga 2 Kapolres Berganti](https://banten.jpnn.com/banten-terkini/5209/pejabat-polda-banten-dimutasi-wakapolda-hingga-2-kapolres-berganti) — 23:27
+- [Pemkab Sleman Fokus Pelihara 6 Mata Air Prioritas](https://jogja.jpnn.com/jogja-terkini/15116/pemkab-sleman-fokus-pelihara-6-mata-air-prioritas) — 23:27
+- [Sektor Bisnis yang Mendominasi Investasi di Sleman](https://jogja.jpnn.com/jogja-terkini/15115/sektor-bisnis-yang-mendominasi-investasi-di-sleman) — 23:09
+
+## CNBC Indonesia
+
+- [Asing Kompak Buru 10 Saham Ini Kala IHSG Lompat 5,6%](https://www.cnbcindonesia.com/market/20261021080712-17-778039/asing-kompak-buru-10-saham-ini-kala-ihsg-lompat-56) — 08:42
+- [Jepang Mulai Loyo, Data Baru Tunjukkan Perlambatan](https://www.cnbcindonesia.com/news/20261021083924-4-778051/jepang-mulai-loyo-data-baru-tunjukkan-perlambatan) — 08:42
+- [MUI Minta Umat Islam Boikot Habib Penceramah yang Rendahkan Perempuan](https://www.cnbcindonesia.com/lifestyle/20261020170144-33-777927/mui-minta-umat-islam-boikot-habib-penceramah-yang-rendahkan-perempuan) — 08:39
+- [Saham Teknologi Rebound, Bursa Asia Dibuka Menguat](https://www.cnbcindonesia.com/market/20261021082136-17-778044/saham-teknologi-rebound-bursa-asia-dibuka-menguat) — 08:35
+- [Pengumuman BI Rate Bakal Lebih Cepat, Cek Jadwalnya di Sini?](https://www.cnbcindonesia.com/market/20261021082900-17-778047/pengumuman-bi-rate-bakal-lebih-cepat-cek-jadwalnya-di-sini) — 08:31
+- [BMKG Prediksi Hujan Lebat di 9 Wilayah RI Hari Ini, 21 Oktober](https://www.cnbcindonesia.com/tech/20261021081734-37-778042/bmkg-prediksi-hujan-lebat-di-9-wilayah-ri-hari-ini-21-oktober) — 08:30
+- [Harga Batu Bara Turun Usai Terbang, Tapi Banyak Kabar Baik Menanti](https://www.cnbcindonesia.com/research/20261021065615-128-778010/harga-batu-bara-turun-usai-terbang-tapi-banyak-kabar-baik-menanti) — 08:25
+- [RI Dapat Durian Runtuh! Nilai Ekspor Ini Bisa Tembus Rp900-an Triliun](https://www.cnbcindonesia.com/news/20261021071906-4-778016/ri-dapat-durian-runtuh-nilai-ekspor-ini-bisa-tembus-rp900-an-triliun) — 08:20
+- [Ekspor Hilirisasi RI Diramal Tembus US$50 M, Aluminium Bisa Melesat](https://www.cnbcindonesia.com/news/20261021071938-4-778015/ekspor-hilirisasi-ri-diramal-tembus-us-50-m-aluminium-bisa-melesat) — 08:15
+- [Harga Emas Galeri 24, UBS, Antam dan Antam Retro Hari Ini Turun Semua](https://www.cnbcindonesia.com/research/20261021072158-128-778013/harga-emas-galeri-24-ubs-antam-antam-retro-hari-ini-turun-semua) — 08:10
+- [DSN MUI Berharap Danantara Syariah Terbentuk Tahun Depan](https://www.cnbcindonesia.com/market/20261021074714-17-778028/dsn-mui-berharap-danantara-syariah-terbentuk-tahun-depan) — 08:05
+- [Negara Ini Paling Bahagia di Dunia, Padahal Pajaknya Nyaris 60%](https://www.cnbcindonesia.com/lifestyle/20261020164708-33-777923/negara-ini-paling-bahagia-di-dunia-padahal-pajaknya-nyaris-60) — 08:00
+- [Harga BBM Subsidi Dijaga hingga Akhir Tahun, Danantara Ikut Dilibatkan](https://www.cnbcindonesia.com/news/20261021071619-4-778012/harga-bbm-subsidi-dijaga-hingga-akhir-tahun-danantara-ikut-dilibatkan) — 07:55
+- [PNS Dilarang Pakai AI China, Amerika Makin Ketakutan](https://www.cnbcindonesia.com/tech/20261021054651-37-777994/pns-dilarang-pakai-ai-china-amerika-makin-ketakutan) — 07:50
+- [IHSG Rebound! Tapi Asing Masih Net Sell Jumbo di 10 Saham Ini](https://www.cnbcindonesia.com/market/20261021074004-17-778019/ihsg-rebound-tapi-asing-masih-net-sell-jumbo-di-10-saham-ini) — 07:44
+- [Prancis Masih Membara! Polisi Dikerahkan Besar-besaran, Ada Jam Malam](https://www.cnbcindonesia.com/news/20261021073545-4-778017/prancis-masih-membara-polisi-dikerahkan-besar-besaran-ada-jam-malam) — 07:41
+- [Cadangan Beras Melimpah: Dari Gudang ke Meja Makan Semua Aman](https://www.cnbcindonesia.com/research/20261020223932-131-777989/cadangan-beras-melimpah-dari-gudang-ke-meja-makan-semua-aman) — 07:35
+- [Pagar Nusa dan DPN Indonesia Teken MoU Beasiswa 2.000 Profesi Advokat](https://www.cnbcindonesia.com/syariah/20261021072233-29-778014/pagar-nusa-dpn-indonesia-teken-mou-beasiswa-2000-profesi-advokat) — 07:32
+- [Ahli Jelaskan Perbedaan Tikus vs Curut, Mana Lebih Berbahaya?](https://www.cnbcindonesia.com/lifestyle/20261020143044-33-777868/ahli-jelaskan-perbedaan-tikus-vs-curut-mana-lebih-berbahaya) — 07:30
+- [Airlangga Bantah Ada Bagi-Bagi HP Gratis Buat Bansos Digital](https://www.cnbcindonesia.com/news/20261021064916-4-777998/airlangga-bantah-ada-bagi-bagi-hp-gratis-buat-bansos-digital) — 07:25
+- [Keluarga Thohir Borong Saham Alamtri (ADRO) Senilai Rp 1 Miliar](https://www.cnbcindonesia.com/market/20261021071135-17-778011/keluarga-thohir-borong-saham-alamtri--adro--senilai-rp-1-miliar) — 07:16
+- [Raffi Ahmad dan Boy Thohir Kompak Suntik Modal di Emiten VISI](https://www.cnbcindonesia.com/market/20261021070716-17-778009/raffi-ahmad-dan-boy-thohir-kompak-suntik-modal-di-emiten-visi) — 07:11
+- [Arab Mau Tebus Mata-Mata di OpenAI dari Penjara, Berapa Pun Dibayar](https://www.cnbcindonesia.com/tech/20261021054102-37-777993/arab-mau-tebus-mata-mata-di-openai-dari-penjara-berapa-pun-dibayar) — 07:10
+- [Harga Emas Ambruk, Perak Malah Terbang: Apa Penyebabnya?](https://www.cnbcindonesia.com/research/20261021055935-128-777996/harga-emas-ambruk-perak-malah-terbang-apa-penyebabnya) — 07:05
+- [Temui Prabowo, Luhut Cs Sampaikan 7 Rekomendasi Buat Ekonomi RI](https://www.cnbcindonesia.com/news/20261021063307-4-777997/temui-prabowo-luhut-cs-sampaikan-7-rekomendasi-buat-ekonomi-ri) — 06:55
+- [Panen Zaitun Palestina Terusik, Pemukim Israel Rusak Rumah dan Kendaraan](https://www.cnbcindonesia.com/news/20261020105145-7-777757/panen-zaitun-palestina-terusik-pemukim-israel-rusak-rumah-kendaraan) — 06:45
+- [Astronom Kaget Temukan Bintang Warna Hijau](https://www.cnbcindonesia.com/tech/20261021055220-37-777995/astronom-kaget-temukan-bintang-warna-hijau) — 06:40
+- [Misi Selamatkan IHSG Mulai Berhasil, Bola Panas Kini Ada di Tangan BI!](https://www.cnbcindonesia.com/research/20261020182146-128-777957/misi-selamatkan-ihsg-mulai-berhasil-bola-panas-kini-ada-di-tangan-bi) — 06:25
+- [Bus Pariwisata Hancur Dihantam Truk, 13 Orang Tewas](https://www.cnbcindonesia.com/news/20261020210459-7-777982/bus-pariwisata-hancur-dihantam-truk-13-orang-tewas) — 06:15
+- [Rudal Houthi Ancam Saudi, Inggris Kirim Jet Tempur](https://www.cnbcindonesia.com/news/20261021015350-4-777990/rudal-houthi-ancam-saudi-inggris-kirim-jet-tempur) — 06:05
+- [Geger! Jutaan Pengangguran Ketahuan Pura-pura Berangkat Kerja](https://www.cnbcindonesia.com/news/20261020162205-4-777910/geger-jutaan-pengangguran-ketahuan-pura-pura-berangkat-kerja) — 05:30
+- [Eskalator Skybridge Bojonggede Mati dan Tanggung Jawab Pelayanan Publik](https://www.cnbcindonesia.com/opini/20261021045811-14-777992/eskalator-skybridge-bojonggede-mati-tanggung-jawab-pelayanan-publik) — 05:15
+- [Geger! Serpihan Roket China Sebesar Mobil Jatuh di Kebun Sawit RI](https://www.cnbcindonesia.com/news/20261020204641-7-777975/geger-serpihan-roket-china-sebesar-mobil-jatuh-di-kebun-sawit-ri) — 05:00
+- [Anjloknya IHSG: Belajar dari Pemulihan Ekonomi di Era Megawati](https://www.cnbcindonesia.com/opini/20261021044845-14-777991/anjloknya-ihsg-belajar-dari-pemulihan-ekonomi-di-era-megawati) — 04:55
+
+## Republika
+
+- [Menkeu Bantah Gaji PNS Lewat Kopdes: Tetap Lewat Bank](https://news.republika.co.id/berita/tn8i2r484/menkeu-bantah-gaji-pns-lewat-kopdes-tetap-lewat-bank) — 08:42
+- [Gubernur Kalteng Bagikan 1.200 Paket Bantuan Pangan untuk Pekerja Transportasi](https://rejogja.republika.co.id/berita/tn8hpq291/gubernur-kalteng-bagikan-1200-paket-bantuan-pangan-untuk-pekerja-transportasi) — 08:34
+- [Anak Telanjur Minum Vitamin Palsu, Orang Tua Harus Gimana?](https://ameera.republika.co.id/berita/tn8hm7425/anak-telanjur-minum-vitamin-palsu-orang-tua-harus-gimana) — 08:32
+- [Inovasi Pengelolaan Sampah SCG Raih ESG Now Awards 2026](https://esgnow.republika.co.id/berita/tn8hcr423/inovasi-pengelolaan-sampah-scg-raih-esg-now-awards-2026) — 08:26
+- [DPRD Bandung Dorong Sosialisasi Bencana Sesuai Potensi Risiko Wilayah](https://rejabar.republika.co.id/berita/tn8h0h423/dprd-bandung-dorong-sosialisasi-bencana-sesuai-potensi-risiko-wilayah) — 08:19
+- [Hasil Liga Champions: PSG dan Liverpool Pertahankan Rekor Sempurna](https://news.republika.co.id/berita/tn8gwt348/hasil-liga-champions-psg-dan-liverpool-pertahankan-rekor-sempurna) — 08:17
+- [12 Tahun Beroperasi, Bisnis Togel Miliaran Rupiah di Jateng Dibongkar Polisi](https://rejogja.republika.co.id/berita/tn8ggn282/12-tahun-beroperasi-bisnis-togel-miliaran-rupiah-di-jateng-dibongkar-polisi) — 08:07
+- [Pasar Keuangan Volatil, OCBC Imbau Nasabah Evaluasi Portofolio](https://ekonomi.republika.co.id/berita/tn8g4l423/pasar-keuangan-volatil-ocbc-imbau-nasabah-evaluasi-portofolio) — 08:06
+- [14 Abad Silam Alquran Isyaratkan Bentuk Bumi Bulat Bukan Datar, Bantah Argumentasi Ateis](https://khazanah.republika.co.id/berita/tn8gba320/14-abad-silam-alquran-isyaratkan-bentuk-bumi-bulat-bukan-datar-bantah-argumentasi-ateis) — 08:04
+- [Jadwal French Open 2026 Hari Ini: Fajar/Fikri dan Alwi Farhan Hadapi Wakil China Taipei](https://news.republika.co.id/berita/tn8g7o348/jadwal-french-open-2026-hari-ini-fajarfikri-dan-alwi-farhan-hadapi-wakil-china-taipei) — 08:02
+- [Bank Jakarta Perkuat Tata Kelola Keuangan dan Manajemen Risiko](https://ekonomi.republika.co.id/berita/tn7owq416/bank-jakarta-perkuat-tata-kelola-keuangan-dan-manajemen-risiko) — 08:00
+- [Mahasiswa Bandung Suarakan Kritik Dua Tahun Pemerintahan Prabowo-Gibran](https://visual.republika.co.id/berita/tn7s4n375/mahasiswa-bandung-suarakan-kritik-dua-tahun-pemerintahan-prabowogibran) — 08:00
+- [Kebijakan Pemerintah Jadi Peluang Baru Pasar Properti Indonesia](https://ekonomi.republika.co.id/berita/tn8fzv484/kebijakan-pemerintah-jadi-peluang-baru-pasar-properti-indonesia) — 07:57
+- [Jadwal Asian Para Games 2026 Hari ini: Indonesia Bidik Medali dari Para Anggar Sampai Boccia](https://news.republika.co.id/berita/tn8fy5348/jadwal-asian-para-games-2026-hari-ini-indonesia-bidik-medali-dari-para-anggar-sampai-boccia) — 07:56
+- [Suku Bunga BI Diprediksi Tetap 5,75 Persen di Tengah Tekanan Rupiah](https://ekonomi.republika.co.id/berita/tn8fm7423/suku-bunga-bi-diprediksi-tetap-575-persen-di-tengah-tekanan-rupiah) — 07:49
+
+## CNN Indonesia
+
+- [Suara Guardiola Bela Palestina Kian Lantang: Jangan Lupakan Mereka!](https://www.cnnindonesia.com/olahraga/20261021082423-142-1417793/suara-guardiola-bela-palestina-kian-lantang-jangan-lupakan-mereka) — 08:44
+- [Apa Itu <i>Tipping Point</i> dan Ancaman bagi Gambut Indonesia?](https://www.cnnindonesia.com/teknologi/20261020160909-641-1417584/apa-itu-tipping-point-dan-ancaman-bagi-gambut-indonesia) — 08:36
+- [Bagaimana Status Pernikahan Insanul Fahmi dan Inara Rusli?](https://www.cnnindonesia.com/hiburan/20261021075741-234-1417778/bagaimana-status-pernikahan-insanul-fahmi-dan-inara-rusli) — 08:30
+- [FOTO: Kebakaran Gunung Arjuno, Lawu dan Sumbing Kian Meluas](https://www.cnnindonesia.com/nasional/20261021065029-22-1417744/foto-kebakaran-gunung-arjuno-lawu-dan-sumbing-kian-meluas) — 08:23
+- [NATO Kirim Drone-Pesawat ke Laut Hitam Hadapi 'Teror' Sabotase Rusia](https://www.cnnindonesia.com/internasional/20261021060918-120-1417730/nato-kirim-drone-pesawat-ke-laut-hitam-hadapi-teror-sabotase-rusia) — 08:20
+- [IHSG Loyo Gegara MSCI, Apakah Sekarang Momentum Tepat Investasi Saham?](https://www.cnnindonesia.com/ekonomi/20261021070535-92-1417754/ihsg-loyo-gegara-msci-apakah-sekarang-momentum-tepat-investasi-saham) — 08:19
+- [Head to Head Ubed vs Watanabe di French Open 2026](https://www.cnnindonesia.com/olahraga/20261021075858-170-1417779/head-to-head-ubed-vs-watanabe-di-french-open-2026) — 08:19
+- [Kenapa Nyeri Perut Berulang Bisa Terjadi? Ini Alasannya](https://www.cnnindonesia.com/gaya-hidup/20261021073256-255-1417771/kenapa-nyeri-perut-berulang-bisa-terjadi-ini-alasannya) — 08:15
+- [Ratusan Siswa di Cirebon Diduga Keracunan MBG, SPPG Di-suspend](https://www.cnnindonesia.com/nasional/20261021075650-20-1417777/ratusan-siswa-di-cirebon-diduga-keracunan-mbg-sppg-di-suspend) — 08:01
+- [Menimbang Hukuman yang Layak Bagi Perusahaan Terlibat Karhutla](https://www.cnnindonesia.com/ekonomi/20261021070757-92-1417755/menimbang-hukuman-yang-layak-bagi-perusahaan-terlibat-karhutla) — 08:00
+- [BYD Digugat Balik Pemegang Merek Denza Rp9,5 T, Ini Isinya](https://www.cnnindonesia.com/otomotif/20261020230653-579-1417720/byd-digugat-balik-pemegang-merek-denza-rp95-t-ini-isinya) — 08:00
+- [Lesti Kejora Klarifikasi Isu dengan Menantu Siti Nurhaliza](https://www.cnnindonesia.com/hiburan/20261021074555-234-1417774/lesti-kejora-klarifikasi-isu-dengan-menantu-siti-nurhaliza) — 08:00
+- [Cara Membuat Kartu Kuning Pencari Kerja Online, Syarat, dan Langkahnya](https://www.cnnindonesia.com/edukasi/20261012172220-561-1414523/cara-membuat-kartu-kuning-pencari-kerja-online-syarat-dan-langkahnya) — 08:00
+- [Fabregas Sebut Como Pakai 'Parkir Bus' Lawan MU yang Terpuruk](https://www.cnnindonesia.com/olahraga/20261021071417-142-1417757/fabregas-sebut-como-pakai-parkir-bus-lawan-mu-yang-terpuruk) — 07:58
+- [Tim SAR Evakuasi 460 Orang dari KMP Batumandi, 11 Orang Dibawa ke RS](https://www.cnnindonesia.com/nasional/20261021074255-20-1417773/tim-sar-evakuasi-460-orang-dari-kmp-batumandi-11-orang-dibawa-ke-rs) — 07:49
+- [4 Pemimpin Dunia yang Pernah Diisukan Meninggal Padahal Sehat](https://www.cnnindonesia.com/internasional/20261020124958-134-1417484/4-pemimpin-dunia-yang-pernah-diisukan-meninggal-padahal-sehat) — 07:45
+- [Ronaldo Terus Kena Apes, Kini Menendang Penalti pun Tidak Gol](https://www.cnnindonesia.com/olahraga/20261021073610-142-1417772/ronaldo-terus-kena-apes-kini-menendang-penalti-pun-tidak-gol) — 07:42
+- [Permintaan Membludak, Pengiriman iPhone Duo Mundur ke 2027](https://www.cnnindonesia.com/teknologi/20261020195015-206-1417668/permintaan-membludak-pengiriman-iphone-duo-mundur-ke-2027) — 07:34
+- [5 Ciri Kepribadian Orang yang Bangun Subuh, Siap Setiap Saat](https://www.cnnindonesia.com/gaya-hidup/20261021065950-284-1417752/5-ciri-kepribadian-orang-yang-bangun-subuh-siap-setiap-saat) — 07:30
+- [Kemenkeu Waspadai Efek MSCI, Defisit APBN Berisiko Melebar](https://www.cnnindonesia.com/ekonomi/20261021064151-532-1417739/kemenkeu-waspadai-efek-msci-defisit-apbn-berisiko-melebar) — 07:25
+- [Ada Keuntungan buat Veda Ega di Balik Sisa 5 Balapan Moto3 2026](https://www.cnnindonesia.com/olahraga/20261020114843-156-1417421/ada-keuntungan-buat-veda-ega-di-balik-sisa-5-balapan-moto3-2026) — 07:23
+- [Kepergian Nusron Wahid ke Singapura dan Malaysia Diungkap Imigrasi](https://www.cnnindonesia.com/nasional/20261021063310-12-1417736/kepergian-nusron-wahid-ke-singapura-dan-malaysia-diungkap-imigrasi) — 07:16
+- [FWD Economic Outlook 2027: Kolaborasi untuk Siap Hadapi 2027](https://www.cnnindonesia.com/ekonomi/20261021070930-625-1417756/fwd-economic-outlook-2027-kolaborasi-untuk-siap-hadapi-2027) — 07:13
+- [Netanyahu soal Demo Rusuh Prancis: Gegara Invasi Islam Ekstremis](https://www.cnnindonesia.com/internasional/20261021054743-120-1417728/netanyahu-soal-demo-rusuh-prancis-gegara-invasi-islam-ekstremis) — 07:10
+- [Jadwal Wakil Indonesia di French Open Hari Ini: Fajar/Fikri Beraksi](https://www.cnnindonesia.com/olahraga/20261021070048-170-1417753/jadwal-wakil-indonesia-di-french-open-hari-ini-fajar-fikri-beraksi) — 07:07
+- [JPPI Minta Pemerintah Kaji Ulang Wacana Tak Naik Kelas di Sekolah](https://www.cnnindonesia.com/nasional/20261021065104-20-1417743/jppi-minta-pemerintah-kaji-ulang-wacana-tak-naik-kelas-di-sekolah) — 06:58
+- [Fakta-fakta Kebakaran KMP Batumandi di dekat Pelabuhan Merak](https://www.cnnindonesia.com/nasional/20261021063740-20-1417737/fakta-fakta-kebakaran-kmp-batumandi-di-dekat-pelabuhan-merak) — 06:52
+- [Minyak Dunia Melambung, Setoran ke RI Diramal Melonjak 109 Persen](https://www.cnnindonesia.com/ekonomi/20261020151724-85-1417555/minyak-dunia-melambung-setoran-ke-ri-diramal-melonjak-109-persen) — 06:50
+- [Respons Nadeo Soal Suporter Rusuh: Sangat Sedih](https://www.cnnindonesia.com/olahraga/20261021062626-142-1417734/respons-nadeo-soal-suporter-rusuh-sangat-sedih) — 06:46
+- [Nasi Beku Tahan Berapa Lama di Kulkas? Ini Cara Menyimpannya](https://www.cnnindonesia.com/gaya-hidup/20261020145149-262-1417549/nasi-beku-tahan-berapa-lama-di-kulkas-ini-cara-menyimpannya) — 06:45
+- [Ratusan Sekolah di Tiga Negara Eropa Dapat Ancaman Bom](https://www.cnnindonesia.com/internasional/20261020181222-134-1417616/ratusan-sekolah-di-tiga-negara-eropa-dapat-ancaman-bom) — 06:35
+- [KSP Listyo Kawal Program Industrialisasi: Buka Lapangan Kerja Baru](https://www.cnnindonesia.com/nasional/20261021061334-20-1417729/ksp-listyo-kawal-program-industrialisasi-buka-lapangan-kerja-baru) — 06:34
+- [Daftar 10 Daerah Berpotensi Hujan Hari Ini](https://www.cnnindonesia.com/teknologi/20261020195705-641-1417671/bmkg-ungkap-daftar-10-wilayah-indonesia-berpotensi-hujan-hari-ini) — 06:30
+- [Masih Ada Daerah Gelar Pemutihan Pajak Kendaraan, Ini Daftarnya](https://www.cnnindonesia.com/otomotif/20261020141459-584-1417506/masih-ada-daerah-gelar-pemutihan-pajak-kendaraan-ini-daftarnya) — 06:30
+- [IHSG Berpeluang Menguat Hari Ini](https://www.cnnindonesia.com/ekonomi/20261021062228-92-1417732/ihsg-berpeluang-menguat-hari-ini) — 06:30
+- [Rentetan Sindiran Upin Ipin soal Kabut Asap dari Indonesia](https://www.cnnindonesia.com/hiburan/20261020193046-234-1417659/rentetan-sindiran-upin-ipin-soal-kabut-asap-dari-indonesia) — 06:30
+- [Muhammadiyah: Usut Tuntas Dugaan Pelanggaran yang Sebabkan Karhutla](https://www.cnnindonesia.com/nasional/20261021062305-20-1417733/muhammadiyah-usut-tuntas-dugaan-pelanggaran-yang-sebabkan-karhutla) — 06:27
+- [Top 3 Sports: Messi vs Ronaldo Kejar 1.000 Gol, Ubed Tekuk Jonatan](https://www.cnnindonesia.com/olahraga/20261021061639-178-1417731/top-3-sports-messi-vs-ronaldo-kejar-1000-gol-ubed-tekuk-jonatan) — 06:27
+- [Lirik Lagu Mars Hari Santri Nasional, Sudah Hafal?](https://www.cnnindonesia.com/edukasi/20261020105953-561-1417401/lirik-lagu-mars-hari-santri-nasional-sudah-hafal) — 06:15
+- [Jadwal Siaran Langsung Liga Champions: Como vs MU, Bayern vs Arsenal](https://www.cnnindonesia.com/olahraga/20261020162814-142-1417586/jadwal-siaran-langsung-liga-champions-como-vs-mu-bayern-vs-arsenal) — 06:11
+- [Kebiasaan Makan bisa Cerminkan Kepribadian, Benarkah?](https://www.cnnindonesia.com/gaya-hidup/20260710121600-284-1379110/kebiasaan-makan-bisa-cerminkan-kepribadian-benarkah) — 06:01
+- [Jejak Nusron Wahid di Malaysia saat Mangkir Panggilan KPK](https://www.cnnindonesia.com/nasional/20261020064902-12-1417314/jejak-nusron-wahid-di-malaysia-saat-mangkir-panggilan-kpk) — 06:00
+- [Kim Jong Un Dirumorkan Meninggal sampai Kanada Siaga Ancaman Invasi AS](https://www.cnnindonesia.com/internasional/20261021053047-113-1417726/kim-jong-un-dirumorkan-meninggal-sampai-kanada-siaga-ancaman-invasi-as) — 06:00
+- [Klasemen Liga Champions usai PSG Sikat Barcelona](https://www.cnnindonesia.com/olahraga/20261021054022-142-1417727/klasemen-liga-champions-usai-psg-sikat-barcelona) — 05:49
+- [Kota-kota di Prancis Berlakukan Jam Malam Pascademo](https://www.cnnindonesia.com/internasional/20261020170654-139-1417601/kota-kota-di-prancis-berlakukan-jam-malam-pascademo) — 05:30
+- [Rekap Liga Champions: Liverpool dan Man City Kompak Menang](https://www.cnnindonesia.com/olahraga/20261021051426-142-1417725/rekap-liga-champions-liverpool-dan-man-city-kompak-menang) — 05:23
+- [Kebakaran 4 Gunung di Jatim, Dekati Permukiman-Perkebunan Warga](https://www.cnnindonesia.com/nasional/20261020193746-20-1417666/kebakaran-4-gunung-di-jatim-dekati-permukiman-perkebunan-warga) — 05:15
+- [Hasil Liga Champions: PSG Hajar Barcelona 4-2](https://www.cnnindonesia.com/olahraga/20261021045042-142-1417724/hasil-liga-champions-psg-hajar-barcelona-4-2) — 05:01
+- [Alasan Film The Intern Versi Korea Wajib Ditonton Akhir Oktober](https://www.cnnindonesia.com/hiburan/20261019192408-220-1417249/hal-hal-bikin-the-intern-korea-menarik-ditonton-akhir-oktober-2026) — 05:00
+- [MUI Tak Setuju Wajib Halal Ditunda, Ini Alasannya](https://www.cnnindonesia.com/ekonomi/20261020180714-92-1417615/mui-tak-setuju-wajib-halal-ditunda-ini-alasannya) — 04:45
+- [Mengungkap Tabir Kamp Penjara Laogai China di Era 90-an](https://www.cnnindonesia.com/internasional/20261020201223-113-1417678/mengungkap-tabir-kamp-penjara-laogai-china-di-era-90-an) — 04:30
+- [Jadwal Siaran Langsung Persija vs Arema di Super League](https://www.cnnindonesia.com/olahraga/20261020155732-142-1417568/jadwal-siaran-langsung-persija-vs-arema-di-super-league) — 04:25
+- [4 Gunung Jatim Terbakar, Medan Terjal Jadi Kendala Padamkan Api](https://www.cnnindonesia.com/nasional/20261020204033-20-1417694/4-gunung-jatim-terbakar-medan-terjal-jadi-kendala-padamkan-api) — 04:15
+- [Nasi Sisa Semalam Dibuat Nasi Goreng, Apakah Lebih Sehat?](https://www.cnnindonesia.com/gaya-hidup/20261020150429-262-1417548/nasi-sisa-semalam-dibuat-nasi-goreng-apakah-lebih-sehat) — 04:00
+- [BGN Uji Coba CCTV Berbasis AI di 70 Dapur MBG](https://www.cnnindonesia.com/ekonomi/20261019181433-92-1417212/bgn-uji-coba-cctv-berbasis-ai-di-70-dapur-mbg) — 03:45
+- [Fadona dan Fitriani Optimistis Tatap Kualifikasi Piala Dunia Padel](https://www.cnnindonesia.com/olahraga/20261021000950-178-1417722/fadona-dan-fitriani-optimistis-tatap-kualifikasi-piala-dunia-padel) — 03:30
+- [FOTO: Sebelum Jam Diputar Mundur, Frankfurt Masih Hangat 16 Derajat](https://www.cnnindonesia.com/internasional/20261019202536-136-1417260/foto-sebelum-jam-diputar-mundur-frankfurt-masih-hangat-16-derajat) — 03:30
+- [FOTO: Hitam Pekat dan Bau Tak Sedap Sungai Cileungsi Bogor](https://www.cnnindonesia.com/nasional/20261020145721-22-1417540/foto-hitam-pekat-dan-bau-tak-sedap-sungai-cileungsi-bogor) — 03:15
+- [KPK Terima Rp250 Juta dari PCNU Nias Terkait Kasus Korupsi di ATR/BPN](https://www.cnnindonesia.com/nasional/20261020203954-12-1417690/kpk-terima-rp250-juta-dari-pcnu-nias-terkait-kasus-korupsi-di-atr-bpn) — 03:00
+- [Kata-kata Ubed usai Singkirkan Jonatan Christie di French Open 2026](https://www.cnnindonesia.com/olahraga/20261021021044-170-1417723/kata-kata-ubed-usai-singkirkan-jonatan-christie-di-french-open-2026) — 02:45
+- [Polisi Tangkap 2 Orang di Kasus Cartridge Vape Isi Etomidate Jakbar](https://www.cnnindonesia.com/nasional/20261020132450-12-1417467/polisi-tangkap-2-orang-di-kasus-cartridge-vape-isi-etomidate-jakbar) — 01:30
+- [STY Kaget Tahu Rekor Buruk Persija saat Jamu Arema](https://www.cnnindonesia.com/olahraga/20261020235509-142-1417721/sty-kaget-tahu-rekor-buruk-persija-saat-jamu-arema) — 01:15
+- [Turis Belanda Sayangkan Pemandangan Labuan Bajo Tertutup Kabut Asap](https://www.cnnindonesia.com/gaya-hidup/20261020191125-269-1417653/turis-belanda-sayangkan-pemandangan-labuan-bajo-tertutup-kabut-asap) — 01:00
+- [Polisi Tembak Polisi di Pondok Cabe, Selongsong hingga Sajam Disita](https://www.cnnindonesia.com/nasional/20261020140921-12-1417505/polisi-tembak-polisi-di-pondok-cabe-selongsong-hingga-sajam-disita) — 01:00
+- [BNPT Ungkap 4.000 Anak Terpapar Ideologi Kekerasan](https://www.cnnindonesia.com/nasional/20261020141049-12-1417518/bnpt-ungkap-4000-anak-terpapar-ideologi-kekerasan) — 00:30
+- [Timnas Padel Indonesia Intip Peluang Lolos ke Piala Dunia 2026](https://www.cnnindonesia.com/olahraga/20261020180035-178-1417611/timnas-padel-indonesia-intip-peluang-lolos-ke-piala-dunia-2026) — 00:10
+- [Polisi Usut Geger Puluhan Pocong Kecil Isi 'Kerangka' di Magelang](https://www.cnnindonesia.com/nasional/20261020201140-12-1417682/polisi-usut-geger-puluhan-pocong-kecil-isi-kerangka-di-magelang) — 00:01
+- [KPK Tetapkan 2 Tersangka Baru Kasus Korupsi Rejang Lebong](https://www.cnnindonesia.com/nasional/20261020223538-12-1417719/kpk-tetapkan-2-tersangka-baru-kasus-korupsi-rejang-lebong) — 23:30
+- [Mitchell Baker Bersinar saat Georgetown Menang Telak 6-1](https://www.cnnindonesia.com/olahraga/20261020144518-142-1417533/mitchell-baker-bersinar-saat-georgetown-menang-telak-6-1) — 23:23
+- [Karhutla Jatim Tembus 7.363 Hektare, 79 Persen di Kawasan Konservasi](https://www.cnnindonesia.com/nasional/20261020163814-20-1417589/karhutla-jatim-tembus-7363-hektare-79-persen-di-kawasan-konservasi) — 23:15
+- [Akhirnya Rumah Ashanty dan Anang di Cinere Ada yang DP](https://www.cnnindonesia.com/hiburan/20261020115039-220-1417425/akhirnya-rumah-ashanty-anang-di-cinere-ada-yang-dp) — 23:00
