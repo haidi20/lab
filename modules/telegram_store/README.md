@@ -23,13 +23,22 @@ Jangan commit `.env` berisi kredensial asli.
 python -m modules.telegram_store
 ```
 
+Saat bot dijalankan, daftar perintah otomatis didaftarkan ke Telegram
+melalui `setMyCommands`, sehingga tombol menu dan saran perintah muncul
+di aplikasi Telegram.
+
 ## Perintah bot
 
-- `/start` atau `/help`: bantuan.
+- `/start`, `/help`, atau `/bantuan`: menampilkan menu tombol interaktif.
 - `/produk [kata kunci]`: cari produk.
 - `/beli <SKU> <nomor/id tujuan>`: buat transaksi.
-- `/status <invoice>`: cek status transaksi.
-- `/saldo`: cek saldo Digiflazz.
+- `/cekstatus <invoice>` atau `/status <invoice>`: cek status transaksi.
+
+`/saldo` dinonaktifkan sampai payment gateway aktif. Perintah itu hanya
+menampilkan pesan bahwa fitur belum tersedia.
+
+Tombol menu di pesan `/start` memicu perintah yang sama melalui
+callback query, jadi pengguna bisa memilih fitur tanpa mengetik.
 
 ## Catatan
 

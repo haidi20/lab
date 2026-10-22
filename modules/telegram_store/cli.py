@@ -9,6 +9,17 @@ from .client import DigiflazzClient
 from .service import TelegramStoreService
 
 
+class UnconfiguredDigiflazzClient:
+    def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+        return []
+
+    def create_transaction(self, buyer_sku_code: str, customer_no: str, ref_id: str, testing: bool = False) -> dict[str, object]:
+        raise ValueError("Kredensial Digiflazz belum diisi")
+
+    def balance(self) -> int:
+        return 0
+
+
 def build_bot_from_env(
     env_path: str | Path = ".env",
     send_message: Callable[[int, str], None] | None = None,
@@ -18,19 +29,13 @@ def build_bot_from_env(
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     digiflazz_username = os.environ.get("DIGIFLAZZ_USERNAME", "")
     digiflazz_api_key = os.environ.get("DIGIFLAZZ_API_KEY", "")
-    missing = [
-        name
-        for name, value in (
-            ("TELEGRAM_BOT_TOKEN", token),
-            ("DIGIFLAZZ_USERNAME", digiflazz_username),
-            ("DIGIFLAZZ_API_KEY", digiflazz_api_key),
-        )
-        if not value
-    ]
-    if missing:
-        raise RuntimeError(f"Environment belum lengkap: {', '.join(missing)}")
+    if not token:
+        raise RuntimeError("Environment belum lengkap: TELEGRAM_BOT_TOKEN")
 
-    digiflazz = DigiflazzClient(digiflazz_username, digiflazz_api_key)
+    if digiflazz_username and digiflazz_api_key:
+        digiflazz = DigiflazzClient(digiflazz_username, digiflazz_api_key)
+    else:
+        digiflazz = UnconfiguredDigiflazzClient()
     service = TelegramStoreService(
         digiflazz,
         markup_percent=float(os.environ.get("STORE_MARKUP_PERCENT", "0")),
