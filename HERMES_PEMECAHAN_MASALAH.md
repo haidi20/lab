@@ -132,6 +132,34 @@ Solusi:
 - Reasoning effort cron diturunkan dari medium ke low agar fase berpikir tidak
   mendominasi waktu eksekusi.
 
+### 10. Proses Hermes hidup tetapi tidak ada progress
+
+Permasalahan: cron dan gateway masih terlihat running, tetapi worker hanya
+melakukan API call atau terminal eksplorasi tanpa patch, commit, atau perubahan
+Trello.
+
+Solusi:
+
+- Modul `modules.hermes_watchdog` memeriksa log Hermes dan status git.
+- Progress sah adalah event `tool patch`, `tool write_file`, atau perubahan
+  fingerprint `git status`.
+- Jika tidak ada progress selama 15 menit, watchdog mengirim notifikasi.
+- Jika stale berulang, watchdog menjalankan `hermes gateway restart --yes`.
+- Scheduled Task `Hermes Watchdog` menjalankan mode `--once` tiap 5 menit
+  secara hidden dengan kebijakan `IgnoreNew`.
+- Watchdog juga membersihkan session cron Hermes yang sudah ended dengan
+  `hermes sessions prune --older-than 1d --yes`.
+- Prune hanya berjalan maksimal sekali per 6 jam melalui state
+  `last_prune_at`, sehingga tidak menambah beban pada setiap siklus.
+- Interval dan umur session dapat diubah lewat
+  `HERMES_WATCHDOG_PRUNE_INTERVAL_MINUTES` dan
+  `HERMES_WATCHDOG_PRUNE_OLDER_THAN`.
+- Perintah Hermes di-resolve dengan `shutil.which` sebelum dieksekusi karena
+  Windows menjumpai `hermes.CMD`; tanpa resolver, `subprocess.run` bisa gagal
+  dengan `FileNotFoundError`.
+- Notifikasi Telegram aktif setelah `.env` berisi
+  `HERMES_WATCHDOG_TELEGRAM_CHAT_ID`.
+
 ## Konfigurasi Final
 
 - Gateway: satu proses di session user, hidden, auto-start lewat VBS Startup.
@@ -151,6 +179,8 @@ hermes cron list
 hermes cron resume 442bba7081d8
 hermes cron runs 442bba7081d8
 D:\learns\random\hermes-log.bat
+python -m modules.hermes_watchdog --once
+Get-ScheduledTask -TaskName 'Hermes Watchdog'
 ```
 
 ## Pelajaran Penting
