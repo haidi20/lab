@@ -76,7 +76,7 @@
   lighting, dan transisi yang hidup. Implementasinya ada di
   `EMOTION_MOTION_STYLE` beserta fungsi `_emotion_camera`,
   `_emotion_parallax`, dan `_emotion_stage` pada
-  `modules/video_producer/renderer.py`.
+  `modules/ui_animation/renderer.py`.
 - Gaya motion spasial ini hanya berlaku untuk pipeline video Python; ini
   bukan pengganti Emotion untuk UI/UX web.
 - Tiga detik pertama video WAJIB memakai hook konkret sesuai skill

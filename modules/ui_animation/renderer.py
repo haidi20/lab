@@ -7,7 +7,7 @@ import subprocess
 
 from PIL import Image, ImageDraw, ImageFont
 
-from modules.video_producer.producer import (
+from modules.ui_animation.producer import (
     Scene,
     VideoPlan,
     adjust_plan_to_audio,

@@ -1,6 +1,6 @@
 import unittest
 
-from modules.video_producer.article_details import (
+from modules.ui_animation.article_details import (
     enrich_articles,
     extract_article_content,
     fetch_article_details,

@@ -1,6 +1,6 @@
 # Animation Skill
 
-Skill ini dipakai untuk semua video informatif di modul `video_producer`.
+Skill ini dipakai untuk semua video informatif di modul `ui_animation`.
 
 ## Emotion Motion Graphic (Video Only)
 

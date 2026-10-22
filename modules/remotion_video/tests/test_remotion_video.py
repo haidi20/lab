@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 import tempfile
 
-from modules.video_producer.producer import build_video_plan
+from modules.ui_animation.producer import build_video_plan
 from modules.remotion_video.converter import plan_to_remotion_props
 from modules.remotion_video.pipeline import (
     resolve_executable,

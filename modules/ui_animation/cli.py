@@ -6,11 +6,11 @@ from typing import Any
 
 import pymysql
 
-from modules.video_producer.article_details import enrich_articles
+from modules.ui_animation.article_details import enrich_articles
 from modules.telegram_group_reader import load_env_file
-from modules.video_producer.article_provider import load_latest_kaltim_articles
-from modules.video_producer.producer import build_news_roundup_plan
-from modules.video_producer.renderer import render_article_video
+from modules.ui_animation.article_provider import load_latest_kaltim_articles
+from modules.ui_animation.producer import build_news_roundup_plan
+from modules.ui_animation.renderer import render_article_video
 
 
 DEFAULT_DURATION_SECONDS = 60

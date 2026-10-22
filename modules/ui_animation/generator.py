@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 
@@ -64,16 +66,13 @@ class KlingBackend:
         }
         if request.negative_prompt:
             payload["negative_prompt"] = request.negative_prompt
-        req = Request(
+        request_obj = Request(
             f"{self.BASE_URL}/videos/text2video",
             data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}",
-            },
+            headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"},
             method="POST",
         )
-        with urlopen(req, timeout=self._timeout) as response:
+        with urlopen(request_obj, timeout=self._timeout) as response:
             data = json.loads(response.read().decode("utf-8"))
         return data["data"]["task_id"]
 
@@ -81,11 +80,11 @@ class KlingBackend:
         import json
         from urllib.request import Request, urlopen
 
-        req = Request(
+        request_obj = Request(
             f"{self.BASE_URL}/videos/text2video/{task_id}",
             headers={"Authorization": f"Bearer {api_key}"},
         )
-        with urlopen(req, timeout=self._timeout) as response:
+        with urlopen(request_obj, timeout=self._timeout) as response:
             data = json.loads(response.read().decode("utf-8"))
         task_data = data["data"]["task_result"]
         status = data["data"]["task_status"]
@@ -95,7 +94,13 @@ class KlingBackend:
 
 
 class VideoGenerator:
-    def __init__(self, backend: Any, api_key: str, poll_interval: int = 5, max_wait: int = 600) -> None:
+    def __init__(
+        self,
+        backend: Any,
+        api_key: str,
+        poll_interval: int = 5,
+        max_wait: int = 600,
+    ) -> None:
         self._backend = backend
         self._api_key = api_key
         self._poll_interval = poll_interval

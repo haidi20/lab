@@ -1,10 +1,8 @@
+from __future__ import annotations
+
 import unittest
 
-from modules.video_generator import (
-    FakeKlingBackend,
-    VideoGenerator,
-    VideoRequest,
-)
+from modules.ui_animation import FakeKlingBackend, VideoGenerator, VideoRequest
 
 
 class TestVideoGenerator(unittest.TestCase):
@@ -58,7 +56,3 @@ class TestVideoGenerator(unittest.TestCase):
         generator.submit(request)
 
         self.assertEqual(backend.last_request.negative_prompt, "blur, distorsi")
-
-
-if __name__ == "__main__":
-    unittest.main()

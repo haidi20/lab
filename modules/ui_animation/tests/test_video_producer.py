@@ -1,6 +1,6 @@
 import unittest
 
-from modules.video_producer.producer import (
+from modules.ui_animation.producer import (
     Scene,
     build_ffmpeg_scene_args,
     build_concat_args,
@@ -10,32 +10,32 @@ from modules.video_producer.producer import (
     html_to_text,
     layout_text,
 )
-from modules.video_producer.renderer import render_scene_image
-from modules.video_producer.renderer import ease_out_cubic
-from modules.video_producer.renderer import _extract_metrics
-from modules.video_producer.renderer import split_process_steps
-from modules.video_producer.renderer import _layout_motion
-from modules.video_producer.renderer import footer_text
-from modules.video_producer.renderer import MOTION_TOKENS
-from modules.video_producer.renderer import ease_in_out_strong
-from modules.video_producer.renderer import ease_out_strong
-from modules.video_producer.renderer import stagger_step
-from modules.video_producer.renderer import hook_for_frame
-from modules.video_producer.renderer import _layout_motif_motion
-from modules.video_producer.renderer import EMOTION_MOTION_STYLE
-from modules.video_producer.renderer import REMOTION_UI_STYLE
-from modules.video_producer.renderer import _emotion_camera
-from modules.video_producer.renderer import _emotion_parallax
-from modules.video_producer.renderer import _emotion_stage
-from modules.video_producer.renderer import EdgeTTSEngine as RendererEdgeTTSEngine
-from modules.video_producer.article_provider import load_article, load_latest_kaltim_articles
-from modules.video_producer import (
+from modules.ui_animation.renderer import render_scene_image
+from modules.ui_animation.renderer import ease_out_cubic
+from modules.ui_animation.renderer import _extract_metrics
+from modules.ui_animation.renderer import split_process_steps
+from modules.ui_animation.renderer import _layout_motion
+from modules.ui_animation.renderer import footer_text
+from modules.ui_animation.renderer import MOTION_TOKENS
+from modules.ui_animation.renderer import ease_in_out_strong
+from modules.ui_animation.renderer import ease_out_strong
+from modules.ui_animation.renderer import stagger_step
+from modules.ui_animation.renderer import hook_for_frame
+from modules.ui_animation.renderer import _layout_motif_motion
+from modules.ui_animation.renderer import EMOTION_MOTION_STYLE
+from modules.ui_animation.renderer import REMOTION_UI_STYLE
+from modules.ui_animation.renderer import _emotion_camera
+from modules.ui_animation.renderer import _emotion_parallax
+from modules.ui_animation.renderer import _emotion_stage
+from modules.ui_animation.renderer import EdgeTTSEngine as RendererEdgeTTSEngine
+from modules.ui_animation.article_provider import load_article, load_latest_kaltim_articles
+from modules.ui_animation import (
     EdgeTTSEngine,
     EMOTION_MOTION_STYLE,
     render_article_video,
     render_scene_image,
 )
-from modules.video_producer.cli import build_roundup_plan
+from modules.ui_animation.cli import build_roundup_plan
 
 
 class VideoProducerTests(unittest.TestCase):

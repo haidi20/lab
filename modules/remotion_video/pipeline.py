@@ -6,7 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from modules.video_producer.producer import adjust_plan_to_audio, VideoPlan
+from modules.ui_animation.producer import adjust_plan_to_audio, VideoPlan
 from .converter import plan_to_remotion_props
 
 

@@ -11,6 +11,8 @@ tersimpan di tabel `news_articles`. Alurnya:
 4. Render animasi lokal dengan Pillow.
 5. Encoding dan concat video dengan ffmpeg dari `imageio-ffmpeg`.
 
+Modul ini juga menampung generator video AI **Kling AI** sebagai bagian dari pipeline.
+
 Skill animasi modul ini mengikuti `ANIMATION_GUIDE.md`: layout berbeda tiap
 scene, easing halus, reveal bertahap, parallax ringan, data key, dan transisi
 lembut. Palet wajib putih-biru agar hasilnya clean dan soft.
@@ -18,7 +20,7 @@ lembut. Palet wajib putih-biru agar hasilnya clean dan soft.
 ## Menjalankan
 
 ```powershell
-python -m modules.video_producer
+python -m modules.ui_animation
 ```
 
 Output default:
@@ -30,7 +32,7 @@ public/generated_video/kaltim_video_YYYYMMDD.mp4
 Untuk memilih artikel lain:
 
 ```powershell
-python -m modules.video_producer --url "https://..."
+python -m modules.ui_animation --url "https://..."
 ```
 
 ## Parameter
@@ -43,8 +45,33 @@ python -m modules.video_producer --url "https://..."
 ## Testing
 
 ```powershell
-python -m unittest modules.video_producer.tests.test_video_producer -v
+python -m unittest modules.ui_animation.tests.test_video_producer -v
 ```
 
 Test mencakup pembersihan HTML, pembagian scene 30 detik, layout teks vertikal,
 argumen ffmpeg, frame 720x1280, dan pengambilan artikel dari MySQL.
+
+## Generator Kling AI
+
+```python
+from modules.ui_animation import KlingBackend, VideoGenerator, VideoRequest
+
+generator = VideoGenerator(backend=KlingBackend(), api_key="KLING_API_KEY")
+task = generator.submit(
+    VideoRequest(prompt="Kucing oren bermain di taman", mode="std", duration="5")
+)
+result = generator.wait_for_result(task.task_id)
+print(result.video_url)
+```
+
+Gunakan `FakeKlingBackend` untuk pengujian tanpa API asli. Parameter `VideoRequest`:
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `prompt` | teks | Deskripsi video yang diinginkan |
+| `mode` | `std` / `pro` | Lebih cepat/murah atau kualitas lebih tinggi |
+| `duration` | `5` / `10` | Durasi dalam detik |
+| `aspect_ratio` | `9:16` / `16:9` / `1:1` | `9:16` untuk TikTok |
+| `negative_prompt` | teks opsional | Hal yang perlu dihindari |
+
+Simpan `KLING_API_KEY` di `.env` dan jangan commit kredensial asli.

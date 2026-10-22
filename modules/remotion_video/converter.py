@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from modules.video_producer.producer import VideoPlan
+from modules.ui_animation.producer import VideoPlan
 
 
 def plan_to_remotion_props(

@@ -12,10 +12,10 @@ from modules.remotion_video.pipeline import (
     prepare_remotion_project,
 )
 from modules.telegram_group_reader import load_env_file
-from modules.video_producer.article_details import enrich_articles
-from modules.video_producer.article_provider import load_latest_kaltim_articles
-from modules.video_producer.producer import build_news_roundup_plan
-from modules.video_producer.renderer import EdgeTTSEngine
+from modules.ui_animation.article_details import enrich_articles
+from modules.ui_animation.article_provider import load_latest_kaltim_articles
+from modules.ui_animation.producer import build_news_roundup_plan
+from modules.ui_animation.renderer import EdgeTTSEngine
 
 
 def create_connection() -> pymysql.connections.Connection:
