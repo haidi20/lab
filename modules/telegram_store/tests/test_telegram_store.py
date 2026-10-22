@@ -438,6 +438,26 @@ class TelegramStoreTests(unittest.TestCase):
             ],
         )
 
+    def test_perintah_shows_menu_buttons(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str, dict[str, object] | None]] = []
+        bot = TelegramStoreBot(
+            token='token',
+            service=service,
+            bot_username='@hn_assistent_bot',
+            send_message=lambda chat_id, text, reply_markup=None: sent.append(
+                (chat_id, text, reply_markup)
+            ),
+        )
+
+        bot.handle_update({'message': {'chat': {'id': 101}, 'text': '/perintah'}})
+
+        markup = sent[0][2]
+        assert markup is not None
+        row_texts = {button['text'] for row in markup['inline_keyboard'] for button in row}
+        self.assertIn('Lihat Produk', row_texts)
+        self.assertIn('Status Hermes', row_texts)
+
     def test_bot_shows_hermes_status(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
         sent: list[tuple[int, str]] = []

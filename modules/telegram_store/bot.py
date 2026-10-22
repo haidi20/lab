@@ -24,6 +24,7 @@ BOT_COMMANDS = [
     {"command": "hubungihermes", "description": "Hubungi Hermes"},
     {"command": "akhirihermes", "description": "Akhiri komunikasi Hermes"},
 ]
+BOT_COMMANDS.insert(1, {'command': 'perintah', 'description': 'Daftar perintah bot'})
 
 MENU_KEYBOARD = {
     "inline_keyboard": [
@@ -153,6 +154,13 @@ class TelegramStoreBot:
     def _handle_text(self, chat_id: int, text: str) -> None:
         command, args = self._command(text)
         try:
+            if command == 'perintah':
+                self.send_message(
+                    chat_id,
+                    f'Selamat datang di {self.bot_username}. Silakan pilih menu:',
+                    reply_markup=MENU_KEYBOARD,
+                )
+                return
             if not text.strip().startswith("/") and chat_id in self._hermes_chat_sessions:
                 self._contact_hermes(chat_id, text.strip())
                 return
