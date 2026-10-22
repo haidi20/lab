@@ -6,3 +6,4 @@ modules/remotion_video/remotion/public/
 modules/remotion_video/remotion/out/
 __pycache__/
 *.py[cod]
+**/.hermes-tmp*
