@@ -7,3 +7,4 @@ modules/remotion_video/remotion/out/
 __pycache__/
 *.py[cod]
 **/.hermes-tmp*
+config/secret_key
