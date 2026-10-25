@@ -397,7 +397,7 @@ class TelegramStoreTests(unittest.TestCase):
         markup = sent[0][2]
         self.assertIsNotNone(markup)
         rows = markup["inline_keyboard"]
-        self.assertEqual(len(rows), 5)
+        self.assertEqual(len(rows), 4)
         self.assertEqual(len(rows[0]), 2)
         self.assertEqual(len(rows[1]), 1)
         row_texts = {button["text"] for row in rows for button in row}
@@ -406,7 +406,7 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIn("Cek Status", row_texts)
         self.assertNotIn("Saldo", row_texts)
 
-    def test_start_shows_hermes_monitoring_buttons(self) -> None:
+    def test_start_omits_hermes_monitoring_buttons(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
         sent: list[tuple[int, str, dict[str, object] | None]] = []
         bot = TelegramStoreBot(
@@ -423,11 +423,14 @@ class TelegramStoreTests(unittest.TestCase):
         markup = sent[0][2]
         assert markup is not None
         rows = markup['inline_keyboard']
+        row_texts = {button['text'] for row in rows for button in row}
+        self.assertNotIn('Hermes Live', row_texts)
+        self.assertNotIn('Stop Live', row_texts)
         self.assertEqual(
-            rows[-2],
+            rows[-1],
             [
-                {'text': 'Hermes Live', 'callback_data': '/hermeslive'},
-                {'text': 'Stop Live', 'callback_data': '/hermesstop'},
+                {'text': 'Hubungi Hermes', 'callback_data': '/hubungihermes'},
+                {'text': 'Tutup Hermes', 'callback_data': '/akhirihermes'},
             ],
         )
         self.assertEqual(

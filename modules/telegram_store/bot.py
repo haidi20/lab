@@ -35,10 +35,6 @@ MENU_KEYBOARD = {
         [{"text": "Cek Status", "callback_data": "/cekstatus"}],
         [{"text": "Status Hermes", "callback_data": "/hermes"}],
         [
-            {"text": "Hermes Live", "callback_data": "/hermeslive"},
-            {"text": "Stop Live", "callback_data": "/hermesstop"},
-        ],
-        [
             {"text": "Hubungi Hermes", "callback_data": "/hubungihermes"},
             {"text": "Tutup Hermes", "callback_data": "/akhirihermes"},
         ],
