@@ -856,6 +856,21 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertEqual(commands['hermesstop'], 'Hentikan monitoring Hermes')
         self.assertEqual(commands['hubungihermes'], 'Hubungi Hermes')
 
+    def test_help_command_shows_menu(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent = []
+        bot = TelegramStoreBot(
+            token='token',
+            service=service,
+            bot_username='@hn_assistent_bot',
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text, reply_markup)),
+        )
+
+        bot.handle_update({'message': {'chat': {'id': 101}, 'text': '/help'}})
+
+        self.assertEqual(sent[0][1], 'Selamat datang di @hn_assistent_bot. Silakan pilih menu:')
+        self.assertIn('inline_keyboard', sent[0][2])
+
     def test_set_my_commands_registers_indonesian_menu(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
         bot = TelegramStoreBot(
