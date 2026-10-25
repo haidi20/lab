@@ -783,7 +783,7 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertEqual(sent[-1][1], 'Jawaban Hermes')
         self.assertNotIn(101, bot._hermes_chat_busy)
 
-    def test_bot_rejects_parallel_hermes_questions(self) -> None:
+    def test_bot_queues_latest_hermes_question_while_busy(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
         sent: list[tuple[int, str]] = []
         hermes_chat = FakeHermesChat()
@@ -804,13 +804,21 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update(
             {'message': {'chat': {'id': 101}, 'text': '/hubungihermes Pertanyaan kedua'}}
         )
+        bot.handle_update(
+            {'message': {'chat': {'id': 101}, 'text': 'Pertanyaan ketiga'}}
+        )
         hermes_chat.release.set()
         deadline = time.time() + 2
-        while 101 in bot._hermes_chat_busy and time.time() < deadline:
+        while len(hermes_chat.questions) < 2 and time.time() < deadline:
+            time.sleep(0.01)
+        hermes_chat.release.set()
+        deadline = time.time() + 2
+        while len(sent) < 5 and time.time() < deadline:
             time.sleep(0.01)
 
-        self.assertEqual(len(hermes_chat.questions), 1)
-        self.assertIn('Hermes sedang menjawab pertanyaan sebelumnya.', [text for _, text in sent])
+        self.assertEqual(hermes_chat.questions, ['Pertanyaan pertama', 'Pertanyaan ketiga'])
+        self.assertIn('Hermes sedang menjawab pertanyaan sebelumnya. Pesan ini akan dikirim setelah selesai.', [text for _, text in sent])
+        self.assertNotIn(101, bot._hermes_chat_busy)
 
     def test_callback_query_triggers_command(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)

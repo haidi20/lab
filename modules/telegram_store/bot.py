@@ -86,6 +86,7 @@ class TelegramStoreBot:
         self.live_duration_seconds = live_duration_seconds
         self._hermes_live: dict[int, threading.Event] = {}
         self._hermes_chat_busy: set[int] = set()
+        self._hermes_chat_pending: dict[int, str] = {}
         self._hermes_chat_sessions: set[int] = set()
 
     def _send_message(
@@ -295,7 +296,11 @@ class TelegramStoreBot:
             self.send_message(chat_id, "Hermes belum tersedia.")
             return
         if chat_id in self._hermes_chat_busy:
-            self.send_message(chat_id, "Hermes sedang menjawab pertanyaan sebelumnya.")
+            self._hermes_chat_pending[chat_id] = question
+            self.send_message(
+                chat_id,
+                "Hermes sedang menjawab pertanyaan sebelumnya. Pesan ini akan dikirim setelah selesai.",
+            )
             return
 
         self._hermes_chat_busy.add(chat_id)
@@ -315,6 +320,9 @@ class TelegramStoreBot:
             self.send_message(chat_id, f"Gagal menghubungi Hermes: {error}")
         finally:
             self._hermes_chat_busy.discard(chat_id)
+            pending_question = self._hermes_chat_pending.pop(chat_id, None)
+        if pending_question:
+            self._contact_hermes(chat_id, pending_question)
 
     def get_updates(self, offset: int = 0) -> list[dict[str, object]]:
         url = f"{self.api_base_url}/bot{self.token}/getUpdates?offset={offset}&timeout=25"
