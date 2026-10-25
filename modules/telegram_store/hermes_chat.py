@@ -44,7 +44,7 @@ class HermesChatClient:
             '--run-budget',
             str(int(self.timeout)),
             '--source',
-            'telegram',
+            'oneshot',
             '--in',
             str(self.workdir),
         ]
@@ -57,14 +57,14 @@ class HermesChatClient:
                 return self._ask_provider(clean_question)
             raise
 
-        stdout = str(getattr(completed, 'stdout', '') or '')
-        stderr = str(getattr(completed, 'stderr', '') or '')
+        stdout = self._decode_output(getattr(completed, 'stdout', ''))
+        stderr = self._decode_output(getattr(completed, 'stderr', ''))
         if int(getattr(completed, 'returncode', 1)) != 0:
             message = stderr.strip() or stdout.strip() or 'Hermes gagal menjawab.'
             if self.provider_post is not None and self._can_use_provider_fallback(message):
                 return self._ask_provider(clean_question)
             raise RuntimeError(message)
-        answer = stdout.strip()
+        answer = self._clean_answer(stdout)
         if not answer:
             raise RuntimeError('Hermes mengembalikan jawaban kosong.')
         return self._limited(answer)
@@ -81,6 +81,34 @@ class HermesChatClient:
         if not answer:
             raise RuntimeError('Provider Hermes mengembalikan jawaban kosong.')
         return self._limited(answer)
+
+    @staticmethod
+    def _decode_output(value: object) -> str:
+        if isinstance(value, bytes):
+            return value.decode('utf-8', errors='replace')
+        return str(value or '')
+
+    @staticmethod
+    def _clean_answer(text: str) -> str:
+        lines = []
+        blank_count = 0
+        for raw_line in text.splitlines():
+            line = raw_line.strip()
+            if line.lower().startswith('session_id:'):
+                continue
+            line = line.replace('**', '').replace('`', '')
+            if line.startswith('- '):
+                line = '• ' + line[2:].lstrip()
+            elif line.startswith('* '):
+                line = '• ' + line[2:].lstrip()
+            if not line:
+                blank_count += 1
+                if blank_count > 1:
+                    continue
+            else:
+                blank_count = 0
+            lines.append(line)
+        return '\n'.join(lines).strip()
 
     @staticmethod
     def _can_use_provider_fallback(message: str) -> bool:
@@ -109,7 +137,9 @@ class HermesChatClient:
     def _query(self, question: str) -> str:
         lines = [
             'Kamu dihubungi lewat bot Telegram.',
-            'Jawab dalam Bahasa Indonesia dengan ringkas dan langsung.',
+            'Jawab dalam Bahasa Indonesia yang baik dan benar, ringkas, dan langsung.',
+            'Format jawaban untuk Telegram: gunakan teks biasa tanpa markdown, poin diawali •, dan hindari baris metadata seperti session_id.',
+            'Buat jawaban mudah dibaca di chat: maksimal 5 poin, tanpa log mentah, tanpa nama field teknis kecuali diminta, dan gunakan kalimat yang natural.',
             'Pengguna memberi akses penuh untuk menjalankan tugas ini.',
             'Setiap kali mulai bekerja, langkah pertama membaca AGENTS.md di workspace sebelum tindakan lain.',
             'Boleh menambah todo Trello berdasarkan temuan atau kebutuhan MVP, dengan checklist spesifik dan tanpa duplikat.',

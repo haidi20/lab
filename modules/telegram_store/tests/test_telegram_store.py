@@ -624,6 +624,8 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIn('--yolo', command)
         self.assertIn('--run-budget', command)
         self.assertIn('90', command)
+        source_index = command.index('--source') + 1
+        self.assertEqual(command[source_index], 'oneshot')
         self.assertIn('--in', command)
         self.assertIn(str(Path('D:/projects/klinik-git')), command)
         self.assertIn('Status Hermes', input_bytes.decode('utf-8'))
@@ -635,6 +637,40 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIn('akses penuh', input_bytes.decode('utf-8'))
         self.assertNotIn('Jangan mengubah file', input_bytes.decode('utf-8'))
         self.assertEqual(status.calls, 1)
+
+    def test_hermes_chat_client_decodes_bytes_and_removes_session_id(self) -> None:
+        calls = []
+
+        def runner(command: list[str], input_bytes: bytes, timeout: float) -> object:
+            calls.append((command, input_bytes))
+            return type(
+                'Completed',
+                (),
+                {
+                    'returncode': 0,
+                    'stdout': '**Jawaban rapi.**\r\n\r\n- `Status`: 0\r\n- `Cron`: kosong\r\n\r\nsession_id: local-123'.encode('utf-8'),
+                    'stderr': ''.encode('utf-8'),
+                },
+            )()
+
+        client = HermesChatClient(
+            runner=runner,
+            hermes_binary='hermes.exe',
+            workdir=Path('D:/projects/klinik-git'),
+            status_provider=None,
+            timeout=30,
+        )
+
+        answer = client.ask('Halo')
+
+        self.assertEqual(answer, 'Jawaban rapi.\n\n• Status: 0\n• Cron: kosong')
+        _, input_bytes = calls[0]
+        query = input_bytes.decode('utf-8')
+        self.assertIn('Bahasa Indonesia yang baik dan benar', query)
+        self.assertIn('poin diawali •', query)
+        self.assertIn('tanpa markdown', query)
+        self.assertIn('maksimal 5 poin', query)
+        self.assertIn('tanpa log mentah', query)
 
     def test_hermes_chat_client_reports_command_failure(self) -> None:
         def runner(command: list[str], input_bytes: bytes, timeout: float) -> object:
