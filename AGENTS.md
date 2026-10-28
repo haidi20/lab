@@ -16,6 +16,22 @@
 - Expose a module through its `__init__.py`.
 - Place module-specific tests inside the module under a `tests/` folder, for example `modules/<module_name>/tests/test_<feature>.py`.
 
+## Accurate Automation
+
+- Before automating, accessing, testing, or analyzing Accurate, you MUST
+  read and follow `skills/accurate-human-automation/SKILL.md`.
+- Accurate analysis MUST use REA MCP or the REA CLI command
+  `capture-browser-scenario`; do not rely on assumptions alone.
+- Accurate automation must run at a human pace and MUST NOT appear bot-like
+  through rapid sequential actions.
+- The browser may run headless, but timing, action order, and interaction
+  must remain natural.
+- Credentials may only come from `ACCURATE_EMAIL` and `ACCURATE_PASSWORD`
+  in `.env`; do not write actual values into scenarios, skills, or
+  documentation.
+- Retries MUST NOT run quickly; use randomized delays and limit the number
+  of attempts.
+
 ## UI/UX Animation Standard: Emotion
 
 - **Emotion adalah standar WAJIB untuk semua styling dan animasi UI/UX**
