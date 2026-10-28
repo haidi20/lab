@@ -35,17 +35,17 @@
 ## UI/UX Animation Standard: Emotion
 
 - **Emotion adalah standar WAJIB untuk semua styling dan animasi UI/UX**
-  di repositori ini. Gunakan `@emotion/css` untuk HTML statis dan
-  `@emotion/react` untuk React.
-- Standar ini WAJIB dipakai bersama skill
-  `skills/emotion-ui-ux/SKILL.md`.
+  (Emotion is the mandatory standard for all UI/UX styling and animation)
+  in this repository. Use `@emotion/css` for static HTML and
+  `@emotion/react` for React.
+- This standard MUST be used together with the
+  `skills/emotion-ui-ux/SKILL.md` skill.
 - Agent TIDAK BOLEH memakai blok `<style>` lama, file CSS global manual,
   inline `style`, atau framework styling lain untuk UI tanpa keputusan
   baru dari user.
-- Animasi UI WAJIB memakai `css`, `keyframes`, dan/atau `injectGlobal`
-  dari Emotion, tetap mudah dibaca, dan menghormati
-  `prefers-reduced-motion`.
-- Untuk UI/UX, animasi, kehalusan gerak, dan interaktivitas, WAJIB
-  mengikuti `public/ssstik.io_1793164540873.mp4` sebagai acuan motion
-  100%. Jangan mengganti gaya, timing, easing, atau feedback interaktif
-  tanpa keputusan baru dari user.
+- UI animation MUST use Emotion's `css`, `keyframes`, and/or
+  `injectGlobal`, remain readable, and respect `prefers-reduced-motion`.
+- For UI/UX, animation, motion smoothness, and interactivity, you MUST
+  follow `public/ssstik.io_1793164540873.mp4` as the 100% motion reference.
+  Do not change style, timing, easing, or interactive feedback without a
+  new user decision.
