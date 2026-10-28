@@ -22,3 +22,16 @@ export type RemotionProps = {
   durationInFrames: number;
   scenes: RemotionScene[];
 };
+
+export type CoverArticle = {
+  index: number;
+  title: string;
+  source: string;
+};
+
+export type CoverProps = {
+  width: number;
+  height: number;
+  title: string;
+  articles: CoverArticle[];
+};

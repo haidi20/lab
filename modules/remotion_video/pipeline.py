@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -35,12 +36,39 @@ def build_render_command(
         "--port=3100",
     ]
 
+def build_still_command(
+    props_path: str | Path,
+    output_path: str | Path,
+) -> list[str]:
+    executable = resolve_executable("bunx")
+    return [
+        executable,
+        "remotion",
+        "still",
+        "KaltimCover",
+        str(Path(output_path).resolve()),
+        f"--props={Path(props_path).resolve()}",
+        "--frame=150",
+        "--port=3100",
+    ]
+
 
 def resolve_executable(name: str) -> str:
     executable = shutil.which(name)
-    if not executable:
-        raise RuntimeError(f"Executable tidak ditemukan: {name}")
-    return executable
+    if executable:
+        return executable
+
+    legacy_prefix = Path(os.environ.get("NPM_LEGACY_PREFIX", "E:/npm-legacy"))
+    candidates = [
+        legacy_prefix / f"{name}.cmd",
+        legacy_prefix / name,
+        legacy_prefix / "node_modules" / "bun" / "bin" / f"{name}.exe",
+    ]
+    for candidate in candidates:
+        if candidate.is_file():
+            return str(candidate)
+
+    raise RuntimeError(f"Executable tidak ditemukan: {name}")
 
 
 def _ffmpeg_executable() -> str:

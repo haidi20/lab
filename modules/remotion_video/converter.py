@@ -1,6 +1,29 @@
 from __future__ import annotations
 
+from typing import Any, Mapping
+
 from modules.ui_animation.producer import VideoPlan
+
+
+def articles_to_cover_props(
+    articles: list[Mapping[str, Any]],
+) -> dict[str, object]:
+    if len(articles) != 3:
+        raise ValueError("Cover membutuhkan tepat 3 artikel")
+
+    return {
+        "width": 1080,
+        "height": 1350,
+        "title": "3 Berita Terbaru Kaltim",
+        "articles": [
+            {
+                "index": index,
+                "title": str(article.get("title", "")).strip(),
+                "source": str(article.get("source", "")).strip(),
+            }
+            for index, article in enumerate(articles, start=1)
+        ],
+    }
 
 
 def plan_to_remotion_props(
