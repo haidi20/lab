@@ -5,6 +5,7 @@ from modules.ui_animation.producer import (
     build_ffmpeg_scene_args,
     build_concat_args,
     build_video_plan,
+    build_single_news_plan,
     adjust_plan_to_audio,
     build_news_roundup_plan,
     html_to_text,
@@ -131,7 +132,7 @@ class VideoProducerTests(unittest.TestCase):
                 "url": "https://example.test/1",
             }
         ] * 3
-        plan = build_news_roundup_plan(articles, duration_seconds=60)
+        plan = build_news_roundup_plan(articles, duration_seconds=180)
         scene = plan.scenes[1]
 
         image = render_scene_image(
@@ -348,7 +349,7 @@ class VideoProducerTests(unittest.TestCase):
             for index in range(1, 4)
         ]
 
-        plan = build_news_roundup_plan(articles, duration_seconds=60)
+        plan = build_news_roundup_plan(articles, duration_seconds=180)
 
         self.assertEqual(len(plan.scenes), 7)
         self.assertEqual(
@@ -373,6 +374,26 @@ class VideoProducerTests(unittest.TestCase):
         self.assertTrue(all(len(scene.narration) >= 300 for scene in plan.scenes[1::2]))
         self.assertGreaterEqual(len(plan.scenes[6].narration), 260)
 
+    def test_short_roundup_keeps_discussion_within_sixty_second_target(self):
+        articles = [
+            {
+                "title": f"Berita Kaltim {index}",
+                "summary": f"<p>Isi berita {index}.</p>",
+                "content": f"Latar belakang berita {index} menjelaskan kondisi awal dan pihak terkait. Fakta utama menunjukkan dampak langsung bagi masyarakat. Tindak lanjut dilakukan melalui pemantauan dan koordinasi instansi.",
+                "source": "Antara Kaltim",
+                "url": f"https://example.test/{index}",
+            }
+            for index in range(1, 4)
+        ]
+
+        plan = build_news_roundup_plan(articles, duration_seconds=60)
+
+        self.assertEqual(len(plan.scenes), 7)
+        self.assertLessEqual(sum(len(scene.narration) for scene in plan.scenes), 1150)
+        self.assertTrue(all(len(scene.narration) >= 100 for scene in plan.scenes[1::2]))
+        self.assertIn("dampak", plan.scenes[6].narration.lower())
+        self.assertIn("tindak lanjut", plan.scenes[6].narration.lower())
+
     def test_roundup_narration_discusses_content_without_reading_titles(self):
         articles = [
             {
@@ -385,7 +406,7 @@ class VideoProducerTests(unittest.TestCase):
             for index in range(1, 4)
         ]
 
-        plan = build_news_roundup_plan(articles, duration_seconds=60)
+        plan = build_news_roundup_plan(articles, duration_seconds=180)
 
         for index, article in enumerate(articles):
             intro = plan.scenes[index * 2].narration.lower()
@@ -394,6 +415,25 @@ class VideoProducerTests(unittest.TestCase):
             self.assertNotIn(article["title"].lower(), detail)
             self.assertGreaterEqual(len(plan.scenes[index * 2].narration), 180)
             self.assertGreaterEqual(len(detail), 300)
+
+    def test_single_news_plan_creates_one_minute_discussion(self):
+        article = {
+            "title": "Judul Khusus Nomor Satu",
+            "summary": "Isi berita satu.",
+            "content": "Latar belakang berita menjelaskan kondisi awal, pihak yang terlibat, dan alasan peristiwa ini penting. Fakta utama menjelaskan dampak langsung bagi masyarakat, termasuk perubahan aktivitas dan risiko yang perlu diantisipasi. Tindak lanjut mencakup pemantauan lapangan, koordinasi instansi, layanan alternatif, serta evaluasi berkala.",
+            "source": "Antara Kaltim",
+            "url": "https://example.test/satu",
+        }
+
+        plan = build_single_news_plan(article, duration_seconds=60)
+
+        self.assertEqual(len(plan.scenes), 3)
+        self.assertEqual([scene.layout for scene in plan.scenes], ["headline", "detail", "conclusion"])
+        self.assertTrue(plan.scenes[0].hook)
+        self.assertFalse(any(scene.hook for scene in plan.scenes[1:]))
+        self.assertLessEqual(sum(len(scene.narration) for scene in plan.scenes), 800)
+        self.assertIn("dampak", plan.narration.lower())
+        self.assertIn("tindak lanjut", plan.narration.lower())
 
     def test_footer_does_not_show_scene_counter(self):
         scene = build_video_plan(

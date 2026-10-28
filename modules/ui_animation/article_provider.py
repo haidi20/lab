@@ -21,11 +21,16 @@ def load_article(connection: Any, url: str | None = None) -> dict[str, Any]:
     return dict(row)
 
 
-def load_latest_kaltim_articles(connection: Any, limit: int = 3) -> list[dict[str, Any]]:
+def load_latest_kaltim_articles(
+    connection: Any,
+    limit: int = 3,
+    today_only: bool = True,
+) -> list[dict[str, Any]]:
     query = (
         "SELECT url, title, source, region, summary, published_at "
         "FROM news_articles WHERE region = 'kaltim' "
-        "AND published_date = CURDATE() "
+        + ("AND published_date = CURDATE() " if today_only else "")
+        +
         "ORDER BY published_at DESC LIMIT %s"
     )
     with connection.cursor() as cursor:

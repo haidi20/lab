@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from modules.telegram_group_reader import load_env_file
 from modules.ui_animation.article_details import enrich_articles
 from modules.ui_animation.article_provider import load_latest_kaltim_articles
 from modules.ui_animation.producer import build_news_roundup_plan
+from modules.ui_animation.producer import build_single_news_plan
 from modules.ui_animation.renderer import EdgeTTSEngine
 
 
@@ -39,6 +41,8 @@ def default_output() -> Path:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Render video Kaltim dengan Remotion")
     parser.add_argument("--output", default="")
+    parser.add_argument("--duration", type=int, default=60)
+    parser.add_argument("--limit", type=int, default=3)
     parser.add_argument("--fps", type=int, default=24)
     return parser.parse_args()
 
@@ -48,11 +52,14 @@ def main() -> None:
     args = parse_args()
     connection = create_connection()
     try:
-        articles = enrich_articles(load_latest_kaltim_articles(connection, limit=3))
+        articles = enrich_articles(load_latest_kaltim_articles(connection, limit=args.limit))
     finally:
         connection.close()
 
-    plan = build_news_roundup_plan(articles, duration_seconds=180)
+    if args.limit == 1:
+        plan = build_single_news_plan(articles[0], duration_seconds=args.duration)
+    else:
+        plan = build_news_roundup_plan(articles, duration_seconds=args.duration)
     output = Path(args.output) if args.output else default_output()
     build_dir = output.parent / f"{output.stem}_remotion_build"
     build_dir.mkdir(parents=True, exist_ok=True)

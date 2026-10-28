@@ -154,15 +154,18 @@ def build_news_roundup_plan(
 
     hook = "Tiga kabar Kaltim hari ini bisa mengubah rencanamu."
 
+    short_mode = duration_seconds <= 90
+    intro_limit = 115 if short_mode else 240
+    detail_limit = 165 if short_mode else 500
     article_intros = [
-        f"Pembahasan pertama kita mulai dari konteksnya. {_detailed_text(cleaned[0]['content'], 240)}",
-        f"Pembahasan kedua dimulai dari latar belakangnya. {_detailed_text(cleaned[1]['content'], 240)}",
-        f"Pembahasan ketiga berfokus pada situasinya. {_detailed_text(cleaned[2]['content'], 240)}",
+        f"Pembahasan pertama kita mulai dari konteksnya. {_detailed_text(cleaned[0]['content'], intro_limit)}",
+        f"Pembahasan kedua dimulai dari latar belakangnya. {_detailed_text(cleaned[1]['content'], intro_limit)}",
+        f"Pembahasan ketiga berfokus pada situasinya. {_detailed_text(cleaned[2]['content'], intro_limit)}",
     ]
     article_details = [
-        f"Kita masuk ke pembahasan lengkapnya. {_detailed_text(cleaned[0]['content'])}",
-        f"Sekarang kita uraikan fakta dan dampaknya. {_detailed_text(cleaned[1]['content'])}",
-        f"Bagian ini menjelaskan kronologi dan tindak lanjutnya. {_detailed_text(cleaned[2]['content'])}",
+        f"Kita masuk ke pembahasan lengkapnya. {_detailed_text(cleaned[0]['content'], detail_limit)}",
+        f"Sekarang kita uraikan fakta dan dampaknya. {_detailed_text(cleaned[1]['content'], detail_limit)}",
+        f"Bagian ini menjelaskan kronologi dan tindak lanjutnya. {_detailed_text(cleaned[2]['content'], detail_limit)}",
     ]
     conclusion = (
         "Kesimpulan dari tiga berita Kaltim hari ini: ketiganya menunjukkan dinamika yang perlu diikuti "
@@ -172,6 +175,12 @@ def build_news_roundup_plan(
         "melalui sumber resmi, evaluasi kebijakan terbaru, dan informasi operasional agar tidak salah "
         "memahami situasi."
     )
+    if short_mode:
+        conclusion = (
+            "Kesimpulan tiga berita Kaltim: kondisinya berdampak langsung pada mobilitas, layanan publik, "
+            "dan ekonomi warga. Tindak lanjutnya adalah pemantauan berkala, koordinasi instansi, dan "
+            "pembaruan informasi resmi."
+        )
     narrations = []
     for index in range(3):
         narrations.append(article_intros[index])
@@ -222,6 +231,59 @@ def build_news_roundup_plan(
         title=cleaned[0]["title"],
         source=", ".join(dict.fromkeys(article["source"] for article in cleaned)),
         url=cleaned[0]["url"],
+        duration_seconds=duration_seconds,
+        voice=voice,
+        narration=" ".join(narrations),
+        scenes=tuple(scenes),
+    )
+
+def build_single_news_plan(
+    article: Mapping[str, str],
+    duration_seconds: float = 60,
+    voice: str = MALE_INDONESIAN_VOICE,
+) -> VideoPlan:
+    cleaned = {
+        "title": html_to_text(str(article["title"])),
+        "summary": html_to_text(str(article.get("summary", ""))),
+        "content": html_to_text(str(article.get("content", article.get("summary", "")))),
+        "source": html_to_text(str(article.get("source", "Sumber berita"))),
+        "url": str(article.get("url", "")),
+    }
+    hook = "Satu perubahan Kaltim berdampak langsung pada hari ini."
+    context = _detailed_text(cleaned["content"], 190)
+    detail = _detailed_text(cleaned["content"], 240)
+    closing = _detailed_text(cleaned["content"], 190)
+    narrations = [
+        f"{hook} Konteksnya, {context}",
+        f"Fakta dan dampaknya, {detail}",
+        f"Tindak lanjutnya, {closing}",
+    ]
+    headings = ["Konteks", "Fakta & Dampak", "Tindak Lanjut"]
+    layouts = ["headline", "detail", "conclusion"]
+    scene_duration = duration_seconds / len(narrations)
+    scenes = []
+    for index, narration in enumerate(narrations):
+        start = index * scene_duration
+        scenes.append(
+            Scene(
+                index=index + 1,
+                start=start,
+                end=start + scene_duration,
+                duration=scene_duration,
+                heading=headings[index],
+                narration=narration,
+                caption=narration,
+                layout=layouts[index],
+                title=cleaned["title"],
+                source=cleaned["source"],
+                hook=hook if index == 0 else "",
+            )
+        )
+
+    return VideoPlan(
+        title=cleaned["title"],
+        source=cleaned["source"],
+        url=cleaned["url"],
         duration_seconds=duration_seconds,
         voice=voice,
         narration=" ".join(narrations),
