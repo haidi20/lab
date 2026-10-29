@@ -1,0 +1,13 @@
+{
+  "menu": "Anggaran",
+  "module": "#accurate__budget-target__accountbudget-target",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "not_captured"
+}

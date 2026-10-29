@@ -1,0 +1,58 @@
+{
+  "menu": "Log Aktifitas Jurnal",
+  "menu_key": "audit_journal",
+  "module": "#accurate__company__audit-journal",
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Lihat log aktifitas jurnal",
+    "Cari log",
+    "Detail versi perubahan",
+    "Filter versi",
+    "Buka transaksi terkait"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/company/audit-journal.do",
+    "initUrl": "/accurate/company/init-audit-journal.do",
+    "selectUrl": "/accurate/company/detail-audit-journal.do",
+    "searchUrl": "/accurate/company/search-audit-journal.do",
+    "helpUrl": "fitur-buku-besar/log-aktifitas-jurnal",
+    "formHelpUrl": "/accurate/company/help-audit-journal.do"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [
+      {
+        "key": "filterVersion",
+        "label": "Versi Pembaruan",
+        "type": "LIST",
+        "defaultFilter": true
+      }
+    ],
+    "toolbar_buttons": [],
+    "search": null,
+    "capture_status": "model_only",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Model menetapkan canAddNew = false; modul hanya menampung dan menampilkan log."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/audit_journal.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

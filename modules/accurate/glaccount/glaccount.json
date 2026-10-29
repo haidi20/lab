@@ -1,0 +1,455 @@
+{
+  "menu": "Akun Perkiraan",
+  "menu_key": "glaccount",
+  "module": "#accurate__general-ledger__glaccount",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Data Baru",
+    "Perbarui daftar",
+    "Impor XLS",
+    "Ekspor XLS",
+    "Cetak",
+    "Pengaturan kolom",
+    "Hapus akun",
+    "Histori akun pada form"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/general-ledger/glaccount.do",
+    "initUrl": "/accurate/general-ledger/init-glaccount.do",
+    "printListUrl": "/accurate/general-ledger/print-list-glaccount.do",
+    "exportXlsUrl": "/accurate/general-ledger/export-xls-glaccount.do",
+    "importXlsModule": "accurate__general-ledger__glaccount-import",
+    "selectUrl": "/accurate/general-ledger/detail-glaccount.do",
+    "searchUrl": "/accurate/general-ledger/search-glaccount.do",
+    "deleteUrl": "/accurate/general-ledger/delete-glaccount.do",
+    "submitUrl": "/accurate/general-ledger/save-glaccount.do",
+    "helpUrl": "fitur-buku-besar/akun-perkiraan",
+    "formHelpUrl": "/accurate/general-ledger/help-glaccount.do"
+  },
+  "list_view": {
+    "columns": [
+      {
+        "key": "noWithIndent",
+        "label": "Kode Perkiraan",
+        "visible": true,
+        "type": null
+      },
+      {
+        "key": "nameWithIndent",
+        "label": "Nama",
+        "visible": true,
+        "type": null
+      },
+      {
+        "key": "accountTypeName",
+        "label": "Tipe Akun",
+        "visible": true,
+        "type": null
+      },
+      {
+        "key": "currency.name",
+        "label": "Mata Uang",
+        "visible": false,
+        "type": "LOOKUP"
+      },
+      {
+        "key": "suspended",
+        "label": "Non Aktif",
+        "visible": false,
+        "type": "BOOLEAN"
+      },
+      {
+        "key": "memo",
+        "label": "Catatan",
+        "visible": false,
+        "type": "TEXT"
+      },
+      {
+        "key": "balance",
+        "label": "Saldo",
+        "visible": true,
+        "type": "MONEY_BALANCE"
+      },
+      {
+        "key": "bankAccount",
+        "label": "Rekening Gaji",
+        "visible": false,
+        "type": "TEXT"
+      },
+      {
+        "key": "bankAccountName",
+        "label": "Atas Nama Rekening",
+        "visible": false,
+        "type": "TEXT"
+      },
+      {
+        "key": "checked",
+        "label": "[Pilih]",
+        "visible": false,
+        "type": "CHECKBOX"
+      },
+      {
+        "key": "userListName",
+        "label": "Daftar Pengguna",
+        "visible": false,
+        "type": null
+      },
+      {
+        "key": "parentName",
+        "label": "Sub dari",
+        "visible": false,
+        "type": null
+      }
+    ],
+    "filters": [
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "type": "BOOLEAN",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Ya",
+            "key": "true"
+          },
+          {
+            "value": "Tidak",
+            "key": "false"
+          }
+        ]
+      },
+      {
+        "key": "currencyFilter",
+        "label": "Mata Uang",
+        "type": "LIST",
+        "defaultFilter": false,
+        "valueList": [
+          {
+            "value": "Indonesian Rupiah, IDR",
+            "key": "50"
+          }
+        ]
+      },
+      {
+        "key": "accountTypeFilter",
+        "label": "Tipe Akun",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Akumulasi Penyusutan",
+            "key": "ACCUMULATED_DEPRECIATION"
+          },
+          {
+            "value": "Aset Lainnya",
+            "key": "OTHER_ASSET"
+          },
+          {
+            "value": "Aset Lancar Lainnya",
+            "key": "OTHER_CURRENT_ASSET"
+          },
+          {
+            "value": "Aset Tetap",
+            "key": "FIXED_ASSET"
+          },
+          {
+            "value": "Beban",
+            "key": "EXPENSE"
+          },
+          {
+            "value": "Beban Lainnya",
+            "key": "OTHER_EXPENSE"
+          },
+          {
+            "value": "Beban Pokok Penjualan",
+            "key": "COGS"
+          },
+          {
+            "value": "Kas & Bank",
+            "key": "CASH_BANK"
+          },
+          {
+            "value": "Liabilitas Jangka Panjang",
+            "key": "LONG_TERM_LIABILITY"
+          },
+          {
+            "value": "Liabilitas Jangka Pendek",
+            "key": "OTHER_CURRENT_LIABILITY"
+          },
+          {
+            "value": "Modal",
+            "key": "EQUITY"
+          },
+          {
+            "value": "Pendapatan",
+            "key": "REVENUE"
+          },
+          {
+            "value": "Pendapatan Lainnya",
+            "key": "OTHER_INCOME"
+          },
+          {
+            "value": "Persediaan",
+            "key": "INVENTORY"
+          },
+          {
+            "value": "Piutang Usaha",
+            "key": "ACCOUNT_RECEIVABLE"
+          },
+          {
+            "value": "Utang Usaha",
+            "key": "ACCOUNT_PAYABLE"
+          }
+        ]
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "Tambah"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "Perbarui"
+      }
+    ],
+    "search": {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    "capture_status": "captured",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Data Baru",
+        "sections": [
+          {
+            "section": "Informasi Akun",
+            "fields": [
+              {
+                "label": "Sub Akun",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "sub",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "DOM capture; jika aktif akun menjadi anak akun induk."
+              },
+              {
+                "label": "Kode Perkiraan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "no",
+                    "type": "text"
+                  }
+                ],
+                "source": "DOM capture; input manual atau otomatis dari akun induk."
+              },
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              },
+              {
+                "label": "Tipe Akun",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "accountType",
+                    "type": "select"
+                  }
+                ],
+                "source": "DOM capture; daftar tipe akun dari init modul."
+              },
+              {
+                "label": "Mata Uang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "currency",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "DOM capture; lookup search-currency.do."
+              },
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "memo",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Informasi Bank",
+            "fields": [
+              {
+                "label": "Nama Bank",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bank",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "DOM capture; lookup search-bank-code-type.do."
+              },
+              {
+                "label": "No Rekening",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bankAccount",
+                    "type": "text"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              },
+              {
+                "label": "Atas Nama Rekening",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bankAccountName",
+                    "type": "text"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Saldo Awal",
+            "fields": [
+              {
+                "label": "Cabang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "branchId",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "DOM capture; lookup search-branch.do."
+              },
+              {
+                "label": "Nilai",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "openBalance",
+                    "type": "number"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              },
+              {
+                "label": "Per Tgl",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "asOf",
+                    "type": "date"
+                  }
+                ],
+                "source": "DOM capture; input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Akses Pengguna",
+            "fields": [
+              {
+                "label": "Semua Pengguna",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "usedAllUser",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "DOM capture; aktif berarti semua pengguna dapat mengakses akun."
+              },
+              {
+                "label": "Daftar Pengguna",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "useUserAccessList",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "DOM capture; akses pengguna/grup perusahaan."
+              },
+              {
+                "label": "Daftar Role Pengguna",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "useUserRoleAccessList",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "DOM capture; akses role/grup perusahaan."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": null
+  },
+  "related_forms": [
+    {
+      "module": "#accurate__general-ledger__glaccount-import",
+      "purpose": "Impor XLS Akun Perkiraan"
+    }
+  ],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/glaccount.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

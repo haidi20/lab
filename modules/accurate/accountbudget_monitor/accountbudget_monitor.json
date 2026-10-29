@@ -1,0 +1,90 @@
+{
+  "menu": "Monitor Anggaran",
+  "menu_key": "accountbudget_monitor",
+  "module": "#accurate__budget-target__accountbudget-monitor",
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Monitor anggaran",
+    "Filter lingkup dan periode",
+    "Ringkasan anggaran/terpakai/tersedia",
+    "Detail akun anggaran"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/budget-target/accountbudget-monitor.do",
+    "initUrl": "/accurate/budget-target/init-accountbudget-monitor.do",
+    "helpUrl": "fitur-persediaan/barang-per-gudang"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [
+      {
+        "key": "scopeType",
+        "label": "Lingkup",
+        "type": "LIST",
+        "defaultFilter": true
+      },
+      {
+        "key": "period",
+        "label": "Periode",
+        "type": "LOOKUP",
+        "defaultFilter": false
+      },
+      {
+        "key": "budgetYear",
+        "label": "Tahun Anggaran",
+        "type": "NUMBER",
+        "defaultFilter": true
+      },
+      {
+        "key": "budgetMonth",
+        "label": "Bulan Anggaran",
+        "type": "NUMBER",
+        "defaultFilter": true
+      },
+      {
+        "key": "department",
+        "label": "Departemen",
+        "type": "LOOKUP",
+        "defaultFilter": false
+      },
+      {
+        "key": "project",
+        "label": "Proyek",
+        "type": "LOOKUP",
+        "defaultFilter": false
+      },
+      {
+        "key": "branch",
+        "label": "Cabang",
+        "type": "LOOKUP",
+        "defaultFilter": false
+      }
+    ],
+    "toolbar_buttons": [],
+    "search": null,
+    "capture_status": "model_only",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Menu informasi/monitor; model tidak memiliki endpoint simpan atau tombol tambah data."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/accountbudget_monitor.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

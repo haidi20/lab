@@ -1,0 +1,252 @@
+{
+  "menu": "Transfer Anggaran",
+  "menu_key": "accountbudget_transfer",
+  "module": "#accurate__budget-target__accountbudget-transfer",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Data Baru",
+    "Simpan",
+    "Hapus",
+    "Cari",
+    "Persetujuan/Tolak/Batalkan"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/budget-target/accountbudget-transfer.do",
+    "initUrl": "/accurate/budget-target/init-accountbudget-transfer.do",
+    "selectUrl": "/accurate/budget-target/view-accountbudget-transfer.do",
+    "searchUrl": "/accurate/budget-target/search-accountbudget-transfer.do",
+    "deleteUrl": "/accurate/budget-target/delete-accountbudget-transfer.do",
+    "submitUrl": "/accurate/budget-target/save-accountbudget-transfer.do",
+    "approveUrl": "/accurate/budget-target/approve-accountbudget-transfer.do",
+    "rejectUrl": "/accurate/budget-target/reject-accountbudget-transfer.do",
+    "cancelApprovalUrl": "/accurate/budget-target/cancel-approval-accountbudget-transfer.do"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "Tambah"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "Perbarui"
+      }
+    ],
+    "search": null,
+    "capture_status": "not_captured",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Data Baru",
+        "sections": [
+          {
+            "section": "Field Model",
+            "fields": [
+              {
+                "label": "Id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "id",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Opt lock",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "optLock",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Number",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "number",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Trans date",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Type auto number",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Budget year",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "budgetYear",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Scope type",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "scopeType",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Department",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "department",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Project",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "project",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Branch id",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "branchId",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transfer from month",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transferFromMonth",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transfer from account",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transferFromAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transfer amount",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transferAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transfer to month",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transferToMonth",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transfer to account",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transferToAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Description",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": null
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/accountbudget_transfer.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

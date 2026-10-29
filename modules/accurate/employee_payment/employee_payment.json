@@ -1,0 +1,1077 @@
+{
+  "menu": "Pencatatan Gaji",
+  "menu_key": "employee_payment",
+  "module": "#accurate__cash-bank__employee-payment",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Data Baru",
+    "Simpan",
+    "Hapus",
+    "Cetak daftar",
+    "Ekspor CSV",
+    "Hitung detail",
+    "Persetujuan/Tolak/Batalkan",
+    "Draft",
+    "Transaksi berulang",
+    "Lampiran",
+    "Komentar"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/cash-bank/employee-payment.do",
+    "initUrl": "/accurate/cash-bank/init-employee-payment.do",
+    "printListUrl": "/accurate/cash-bank/print-list-employee-payment.do",
+    "exportCsvUrl": "/accurate/cash-bank/export-csv-employee-payment.do",
+    "selectUrl": "/accurate/cash-bank/search-employee-for-payment.do",
+    "searchUrl": "/accurate/cash-bank/search-employee-payment.do",
+    "deleteUrl": "/accurate/cash-bank/delete-employee-payment.do",
+    "submitUrl": "/accurate/cash-bank/bg-save-employee-payment.do",
+    "helpUrl": "fitur-buku-besar/pencatatan-gaji",
+    "formHelpUrl": "/accurate/cash-bank/help-employee-payment.do",
+    "approveUrl": "/accurate/cash-bank/approve-employee-payment.do",
+    "rejectUrl": "/accurate/cash-bank/reject-employee-payment.do",
+    "cancelApprovalUrl": "/accurate/cash-bank/cancel-approval-employee-payment.do",
+    "calculateUrl": "/accurate/cash-bank/calculate-employee-payment-detail.do"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "Tambah"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "Perbarui"
+      }
+    ],
+    "search": null,
+    "capture_status": "not_captured",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Data Baru",
+        "sections": [
+          {
+            "section": "Field Model",
+            "fields": [
+              {
+                "label": "Unique data number",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "uniqueDataNumber",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Need detail result",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "needDetailResult",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Attachment count",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "attachmentCount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Comment count",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "commentCount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Approval description",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "approvalDescription",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Rejection reason",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rejectionReason",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Approval is urgent",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "approvalIsUrgent",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Created by",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "createdBy",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "id",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Opt lock",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "optLock",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Employee payment type",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "employeePaymentType",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Trans date",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Due date",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "dueDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pph due date",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pphDueDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pension due date",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pensionDueDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Health insurance due date",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "healthInsuranceDueDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Number",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "number",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Type auto number",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Count auto number",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "countAutoNumber",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Expense payable",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "expensePayable",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Rate",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rate",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Description",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Income amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "incomeAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "amount",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pph amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pphAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Exceed pph amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "exceedPphAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pension amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pensionAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Health insurance amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "healthInsuranceAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Says",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "says",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Journal id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "journalId",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transaction currency id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "transactionCurrencyId",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Detail employee payment",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "detailEmployeePayment",
+                    "type": "complex_array"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Summary employee payment",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "summaryEmployeePayment",
+                    "type": "complex_array"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Comment",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "comment",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Attachments",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "attachments",
+                    "type": "complex_array"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Payment history",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentHistory",
+                    "type": "complex_array"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Payment year",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentYear",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Payment month",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentMonth",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Period month name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "periodMonthName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Salary paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salaryPaidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pph paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pphPaidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Exceed pph paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "exceedPphPaidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pension paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pensionPaidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Health insurance paid amount",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "healthInsurancePaidAmount",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Return exceed pph to allowance",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "returnExceedPphToAllowance",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Status",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "status",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Status name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "statusName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Branch name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "branchName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pph account",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pphAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Health insurance account",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "healthInsuranceAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Pension account",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pensionAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Return exceed pph to allowance account",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "returnExceedPphToAllowanceAccount",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field1",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField1",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field2",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField2",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field3",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField3",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field4",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField4",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field5",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField5",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field6",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField6",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field7",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField7",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field8",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField8",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field9",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField9",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Search char field10",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchCharField10",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field1",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField1",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field2",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField2",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field3",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField3",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field4",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField4",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field5",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField5",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field6",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField6",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field7",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField7",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field8",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField8",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field9",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField9",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Char field10",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "charField10",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field1",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField1",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field2",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField2",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field3",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField3",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field4",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField4",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field5",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField5",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field6",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField6",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field7",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField7",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field8",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField8",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field9",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField9",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Numeric field10",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "numericField10",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Date field1",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "dateField1",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Date field2",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "dateField2",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Employee payable type",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "employeePayableType",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Approval detail list",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "approvalDetailList",
+                    "type": "complex_array"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Approval status",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "approvalStatus",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Save as status type",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "saveAsStatusType",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Branch id",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "branchId",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": null
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/employee_payment.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

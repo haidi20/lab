@@ -1,0 +1,71 @@
+{
+  "menu": "Histori Akun",
+  "menu_key": "account_history",
+  "module": "#accurate__general-ledger__account-history",
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Tampilkan histori akun",
+    "Filter akun dan periode",
+    "Toggle Debit/Kredit",
+    "Ekspor XLS",
+    "Buka transaksi sumber"
+  ],
+  "endpoints": {
+    "helpUrl": "fitur-buku-besar/histori-akun"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [
+      {
+        "key": "account",
+        "label": "Akun Perkiraan",
+        "type": "LOOKUP",
+        "defaultFilter": true
+      },
+      {
+        "key": "fromDate",
+        "label": "Dari Tanggal",
+        "type": "DATE",
+        "defaultFilter": true
+      },
+      {
+        "key": "toDate",
+        "label": "s/d Tanggal",
+        "type": "DATE",
+        "defaultFilter": true
+      },
+      {
+        "key": "toggleDrCr",
+        "label": "Tampilkan Debit/Kredit",
+        "type": "BOOLEAN",
+        "defaultFilter": false
+      }
+    ],
+    "toolbar_buttons": [],
+    "search": null,
+    "capture_status": "model_only",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Menu informasi histori; tidak ada endpoint tambah atau model data baru."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/account_history.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "menu": "Anggaran",
+  "menu_key": "accountbudget_target",
+  "module": "#accurate__budget-target__accountbudget-target",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T12:05:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA analyze-javascript-application + capture-browser-scenario",
+  "features": [
+    "Data Baru",
+    "Simpan",
+    "Hapus",
+    "Cari",
+    "Cetak daftar",
+    "Hitung anggaran"
+  ],
+  "endpoints": {
+    "htmlUrl": "/accurate/budget-target/accountbudget-target.do",
+    "initUrl": "/accurate/budget-target/init-accountbudget-target.do",
+    "printListUrl": "/accurate/budget-target/print-list-account-budget-target.do",
+    "selectUrl": "/accurate/budget-target/detail-accountbudget-target.do",
+    "searchUrl": "/accurate/budget-target/search-accountbudget-target.do",
+    "deleteUrl": "/accurate/budget-target/delete-accountbudget-target.do",
+    "submitUrl": "/accurate/budget-target/save-accountbudget-target.do",
+    "helpUrl": "fitur-buku-besar/anggaran",
+    "formHelpUrl": "/accurate/budget-target/help-accountbudget-target.do",
+    "calculateUrl": "/accurate/budget-target/calculate-accountbudget-target.do"
+  },
+  "list_view": {
+    "columns": [],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "Tambah"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "Perbarui"
+      }
+    ],
+    "search": null,
+    "capture_status": "not_captured",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Data Baru",
+        "sections": [
+          {
+            "section": "Field Model",
+            "fields": [
+              {
+                "label": "Id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "id",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Opt lock",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "optLock",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Budget year",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "budgetYear",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Budget month",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "budgetMonth",
+                    "type": "number"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Analyst name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "analystName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Trans date",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Notes",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "notes",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Scope type",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "scopeType",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Cost center name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "costCenterName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Department",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "department",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Project",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "project",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Branch id",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "branchId",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Transaction currency id",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "transactionCurrencyId",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Title tab name",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "titleTabName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              },
+              {
+                "label": "Detail account",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "detailAccount",
+                    "type": "lookup"
+                  }
+                ],
+                "source": "Field model defaultData; label UI belum terekam dari DOM."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": null
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Logika modul, form, endpoint",
+      "source": "tmp_rea/accurate_models/accountbudget_target.js",
+      "evidence": "REA analyze-javascript-application: tmp_rea/accurate_models_rea.json"
+    },
+    {
+      "scope": "Perusahaan aktif",
+      "source": "Sesi Accurate perusahaan cy (database 3058374)",
+      "evidence": "REA capture-browser-scenario"
+    }
+  ]
+}
