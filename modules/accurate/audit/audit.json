@@ -1,0 +1,37 @@
+{
+  "buttons": [],
+  "labels": [
+    "Tgl Transaksi : Semua",
+    "Tanggal : Semua",
+    "Tipe Transaksi : Semua",
+    "Pengguna : Semua",
+    "Tipe Tindakan : Semua",
+    "Tgl Transaksi",
+    "No/Nama Referensi",
+    "Tipe Tindakan",
+    "Tipe Transaksi",
+    "Tanggal",
+    "Pengguna",
+    "Email",
+    "Alamat IP"
+  ],
+  "inputs": [
+    {
+      "name": "searchFilter",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "selectedColumn",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

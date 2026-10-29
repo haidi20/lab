@@ -1,0 +1,39 @@
+{
+  "menu": "Karyawan",
+  "module": "#accurate__company__employee",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "columns": [
+    "Nama",
+    "Posisi Jabatan",
+    "Email",
+    "Handphone",
+    "Tgl Masuk",
+    "Dikenakan PTKP",
+    "No. KTP",
+    "Non Aktif",
+    "Rekening Gaji",
+    "Atas Nama Rekening",
+    "Nama Bank",
+    "Cabang",
+    "No. NPWP",
+    "Memiliki dokumen",
+    "Penjual",
+    "ID Karyawan",
+    "No. Telp. Bisnis",
+    "No. Telp. Rumah",
+    "Status PTKP",
+    "Status Pekerja",
+    "Utang",
+    "Login Penjual"
+  ],
+  "filters": [
+    "Non Aktif : Semua",
+    "Status Pekerja : Semua",
+    "Penjual : Semua",
+    "Cabang"
+  ],
+  "record_count": 0,
+  "records": []
+}

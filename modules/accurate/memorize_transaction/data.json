@@ -1,0 +1,18 @@
+{
+  "menu": "Transaksi Favorit",
+  "module": "#accurate__company__memorize-transaction",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "columns": [
+    "Nama Favorit",
+    "Tipe Transaksi",
+    "Daftar Pengguna"
+  ],
+  "filters": [
+    "Tipe Transaksi : Semua"
+  ],
+  "status": "Belum ada data",
+  "record_count": 0,
+  "records": []
+}

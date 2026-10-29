@@ -1,0 +1,62 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Non Aktif : Semua",
+    "Tipe Gaji/Tunjangan : Semua",
+    "Info Umum",
+    "Nama",
+    "Tipe Gaji/Tunjangan",
+    "Bayar/Potong",
+    "Bulanan",
+    "Akun Beban",
+    "Non Aktif",
+    "Ya"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "feeType",
+      "type": "select",
+      "placeholder": ""
+    },
+    {
+      "name": "expenseAccount",
+      "type": "text",
+      "placeholder": "Cari/Pilih Akun Perkiraan..."
+    },
+    {
+      "name": "suspended",
+      "type": "checkbox",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {
+    "feeType": [
+      "Gaji/Pensiun atau THT/JHT",
+      "Tunjangan PPh",
+      "Subsidi PPh",
+      "Tunjangan Lainnya, Uang lembur dan sebagainya",
+      "Tunjangan Jaminan Kecelakaan Kerja, Jaminan Kematian",
+      "Honorarium dan Imbalan lain sejenisnya",
+      "Premi asuransi kesehatan yang dibayarkan pemberi kerja",
+      "Penerimaan dalam bentuk natura dan kenikmatan lainnya",
+      "Tantiem, Bonus, Rapel, Gratifikasi, Jasa Produksi dan THR",
+      "Tunjangan Iuran Pensiun/THT/JHT dibayarkan Pemberi Kerja",
+      "Potongan Gaji (Tidak Mengurangi PPh)",
+      "Pengurangan Gaji (Mengurangi PPh)",
+      "Premi asuransi kesehatan dibayarkan pekerja",
+      "Iuran Pensiun/THT/JHT dibayarkan Pekerja"
+    ]
+  }
+}

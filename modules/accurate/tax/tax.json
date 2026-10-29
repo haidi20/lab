@@ -1,0 +1,63 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Tipe Pajak : Semua",
+    "Keterangan",
+    "Tipe Pajak",
+    "Persentase",
+    "Akun Pajak Penjualan",
+    "Akun Pajak Pembelian",
+    "Info Umum"
+  ],
+  "inputs": [
+    {
+      "name": "searchFilter",
+      "type": "text",
+      "placeholder": "Cari/Pilih..."
+    },
+    {
+      "name": "selectedColumn",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "taxType",
+      "type": "select",
+      "placeholder": ""
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "salesTaxGlAccount",
+      "type": "text",
+      "placeholder": "Cari/Pilih Akun Perkiraan..."
+    },
+    {
+      "name": "purchaseTaxGlAccount",
+      "type": "text",
+      "placeholder": "Cari/Pilih Akun Perkiraan..."
+    }
+  ],
+  "tables": [],
+  "selects": {
+    "taxType": [
+      "- Pilih Tipe Pajak -",
+      "Pajak Pertambahan Nilai",
+      "Pajak Pertambahan Barang Mewah",
+      "Pajak Penghasilan Ps.4(2)",
+      "Pajak Penghasilan Ps.15",
+      "Pajak Penghasilan Ps.21",
+      "Pajak Penghasilan Ps.22",
+      "Pajak Penghasilan Ps.23"
+    ]
+  }
+}

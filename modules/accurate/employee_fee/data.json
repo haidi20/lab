@@ -1,0 +1,17 @@
+{
+  "menu": "Gaji/Tunjangan",
+  "module": "#accurate__company__employee-fee",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [
+      "Nama",
+      "Tipe Gaji/Tunjangan",
+      "Non Aktif"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "empty"
+}

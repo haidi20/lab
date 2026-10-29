@@ -1,0 +1,22 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Info Umum",
+    "Nama"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

@@ -1,0 +1,70 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Non Aktif : Semua",
+    "Nama",
+    "Diskon (%)",
+    "Masa Diskon (hari)",
+    "Masa Jatuh Tempo (hari)",
+    "Keterangan",
+    "Non Aktif",
+    "Default",
+    "Info Umum",
+    "Jika membayar antara",
+    "Hari",
+    "Akan mendapat diskon",
+    "Masa Jatuh Tempo",
+    "Default Syarat Pembayaran",
+    "Ya"
+  ],
+  "inputs": [
+    {
+      "name": "searchFilter",
+      "type": "text",
+      "placeholder": "Cari/Pilih..."
+    },
+    {
+      "name": "selectedColumn",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "discDays",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "discPC",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "netDays",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "memo",
+      "type": "textarea",
+      "placeholder": ""
+    },
+    {
+      "name": "isDefault",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "suspended",
+      "type": "checkbox",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

@@ -1,0 +1,20 @@
+{
+  "buttons": [
+    "Jalankan"
+  ],
+  "labels": [
+    "Kategori : Semua",
+    "Tipe Transaksi : Semua",
+    "Status : Semua",
+    "Cabang"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

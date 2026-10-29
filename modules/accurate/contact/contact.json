@@ -1,0 +1,38 @@
+{
+  "buttons": [],
+  "labels": [
+    "Tipe : Semua",
+    "Cabang",
+    "Nama Lengkap",
+    "Tipe",
+    "Perusahaan",
+    "Email",
+    "Handphone",
+    "No. Telp. Bisnis",
+    "No. Telp. Rumah",
+    "Faximili",
+    "Catatan",
+    "No. WhatsApp",
+    "Website",
+    "Posisi Jabatan"
+  ],
+  "inputs": [
+    {
+      "name": "searchFilter",
+      "type": "text",
+      "placeholder": "Cari/Pilih..."
+    },
+    {
+      "name": "selectedColumn",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

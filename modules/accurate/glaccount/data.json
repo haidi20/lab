@@ -1,0 +1,589 @@
+{
+  "menu": "Akun Perkiraan",
+  "module": "#accurate__general-ledger__glaccount",
+  "captured_at": "2026-10-29T08:30:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [
+      "Kode Perkiraan",
+      "Nama",
+      "Tipe Akun",
+      "Saldo"
+    ],
+    "record_count": 95,
+    "records": [
+      {
+        "kode_perkiraan": "1101",
+        "nama": "Kas & Bank",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110101",
+        "nama": "Kas Kecil",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110102",
+        "nama": "Bank",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110103",
+        "nama": "Tunai",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "1102",
+        "nama": "Setara Kas",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110201",
+        "nama": "Deposito Bank",
+        "tipe_akun": "Kas & Bank",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "1103",
+        "nama": "Piutang Usaha",
+        "tipe_akun": "Piutang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110301",
+        "nama": "Piutang Usaha IDR",
+        "tipe_akun": "Piutang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110302",
+        "nama": "Uang Muka Pembelian IDR",
+        "tipe_akun": "Piutang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "1104",
+        "nama": "Persediaan",
+        "tipe_akun": "Persediaan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110401",
+        "nama": "Persediaan",
+        "tipe_akun": "Persediaan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110402",
+        "nama": "Persediaan Terkirim",
+        "tipe_akun": "Persediaan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110403",
+        "nama": "Persediaan Dalam Proses",
+        "tipe_akun": "Persediaan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "1105",
+        "nama": "Aset Lancar Lainnya",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110501",
+        "nama": "Perlengkapan Kantor",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110502",
+        "nama": "Sewa Gedung Dibayar Dimuka",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110503",
+        "nama": "Asuransi Dibayar Dimuka",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110504",
+        "nama": "PPN Masukan",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "110505",
+        "nama": "PPh 23 Penjualan",
+        "tipe_akun": "Aset Lancar Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "1200",
+        "nama": "Aset Tetap",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120001",
+        "nama": "Tanah",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120002",
+        "nama": "Gedung",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120003",
+        "nama": "Kendaraan",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120004",
+        "nama": "Peralatan",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120005",
+        "nama": "Inventaris Kantor",
+        "tipe_akun": "Aset Tetap",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "120006",
+        "nama": "Akumulasi Depresiasi Aset Tetap",
+        "tipe_akun": "Akumulasi Penyusutan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "12000601",
+        "nama": "Akumulasi Penyusutan Gedung",
+        "tipe_akun": "Akumulasi Penyusutan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "12000602",
+        "nama": "Akumulasi Penyusutan Kendaraan",
+        "tipe_akun": "Akumulasi Penyusutan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "12000603",
+        "nama": "Akumulasi Penyusutan Peralatan",
+        "tipe_akun": "Akumulasi Penyusutan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "12000604",
+        "nama": "Akumulasi Penyusutan Inventaris Kantor",
+        "tipe_akun": "Akumulasi Penyusutan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "2101",
+        "nama": "Utang Usaha",
+        "tipe_akun": "Utang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "210101",
+        "nama": "Utang Usaha IDR",
+        "tipe_akun": "Utang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "210102",
+        "nama": "Uang Muka Penjualan IDR",
+        "tipe_akun": "Utang Usaha",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "2102",
+        "nama": "Kewajiban Jangka Pendek Lainnya",
+        "tipe_akun": "Liabilitas Jangka Pendek",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "210201",
+        "nama": "PPN Keluaran",
+        "tipe_akun": "Liabilitas Jangka Pendek",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "210202",
+        "nama": "PPh 23 Pembelian",
+        "tipe_akun": "Liabilitas Jangka Pendek",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "210203",
+        "nama": "Hutang Pembelian Belum Ditagih",
+        "tipe_akun": "Liabilitas Jangka Pendek",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "2201",
+        "nama": "Hutang Jangka Panjang",
+        "tipe_akun": "Liabilitas Jangka Panjang",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "3000",
+        "nama": "Modal",
+        "tipe_akun": "Modal",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "300001",
+        "nama": "Equitas Saldo Awal",
+        "tipe_akun": "Modal",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "300002",
+        "nama": "Laba Ditahan",
+        "tipe_akun": "Modal",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "300003",
+        "nama": "Modal Saham",
+        "tipe_akun": "Modal",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "4000",
+        "nama": "Pendapatan Operasional",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "400001",
+        "nama": "Penjualan",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "400002",
+        "nama": "Pendapatan Jasa",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "400003",
+        "nama": "Retur Penjualan",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "400004",
+        "nama": "Diskon Penjualan",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "4401",
+        "nama": "Diskon Penjualan",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "440101",
+        "nama": "Diskon Penjualan IDR",
+        "tipe_akun": "Pendapatan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "5101",
+        "nama": "Beban Pokok Penjualan",
+        "tipe_akun": "Beban Pokok Penjualan",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "6000",
+        "nama": "Beban Operasional",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600001",
+        "nama": "Beban Iklan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600002",
+        "nama": "Beban Komisi",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600003",
+        "nama": "Beban Bensin, Parkir, Tol Kendaraan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600004",
+        "nama": "Beban Gaji, Upah & Honorer",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600005",
+        "nama": "Beban Bonus, Pesangon & Kompensasi",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600006",
+        "nama": "Beban Transportasi Karyawan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600007",
+        "nama": "Beban Katering & Makan Karyawan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600008",
+        "nama": "Beban Tunjangan Kesehatan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600009",
+        "nama": "Beban Asuransi Karyawan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600010",
+        "nama": "Beban THR",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600011",
+        "nama": "Beban Listrik",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600012",
+        "nama": "Beban PAM",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600013",
+        "nama": "Beban Telekomunikasi",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600014",
+        "nama": "Beban Ekspedisi, Pos & Materai",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600015",
+        "nama": "Beban Perjalanan Dinas",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600016",
+        "nama": "Beban Perlengkapan Kantor",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600017",
+        "nama": "Beban Pajak Penghasilan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600018",
+        "nama": "Beban Retribusi & Sumbangan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600019",
+        "nama": "Beban Sewa Gedung",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600020",
+        "nama": "Beban Operasional Lainnya",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600021",
+        "nama": "Beban Penyusutan Gedung",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600022",
+        "nama": "Beban Penyusutan Kendaraan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600023",
+        "nama": "Beban Penyusutan Peralatan",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "600024",
+        "nama": "Beban Penyusutan Inventaris Kantor",
+        "tipe_akun": "Beban",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "7100",
+        "nama": "Pendapatan Diluar Usaha",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710001",
+        "nama": "Pendapatan Jasa Giro",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710002",
+        "nama": "Pendapatan Bunga Deposito",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710003",
+        "nama": "Penjualan Persediaan / Perlengkapan",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710004",
+        "nama": "Laba/Rugi Revaluasi Aset",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710005",
+        "nama": "Pendapatan Diluar Usaha Lainnya",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "710006",
+        "nama": "Selisih Pengembalian Retur",
+        "tipe_akun": "Pendapatan Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "7200",
+        "nama": "Beban Diluar Usaha",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720001",
+        "nama": "Beban Bunga Pinjaman",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720002",
+        "nama": "Beban Adm. Bank & Buku Cek/Giro",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720003",
+        "nama": "Pajak Jasa Giro",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720004",
+        "nama": "Laba/Rugi Terealisasi",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720005",
+        "nama": "Laba/Rugi Belum Terealisasi",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720006",
+        "nama": "Laba/Rugi Disposisi Aset",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720007",
+        "nama": "Beban Diluar Usaha Lainnya",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720008",
+        "nama": "Beban Pembulatan Transaksi",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "7201",
+        "nama": "Laba/Rugi Terealisasi",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720101",
+        "nama": "Laba/Rugi Terealisasi IDR",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "7202",
+        "nama": "Laba/Rugi Belum Terealisasi",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      },
+      {
+        "kode_perkiraan": "720201",
+        "nama": "Laba/Rugi Belum Terealisasi IDR",
+        "tipe_akun": "Beban Lainnya",
+        "saldo": "0"
+      }
+    ]
+  },
+  "status": "loaded"
+}

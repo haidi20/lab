@@ -1,0 +1,1230 @@
+{
+  "branch": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Non Aktif : Semua",
+      "Info Umum",
+      "Nama",
+      "No. Telepon",
+      "Non Aktif",
+      "Ya",
+      "Info Lainnya",
+      "Alamat",
+      "Akses Pengguna",
+      "Semua Pengguna"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "phoneNumber",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "suspended",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "street",
+        "type": "textarea",
+        "placeholder": ""
+      },
+      {
+        "name": "city",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "zipCode",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "province",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "country",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "usedAllUser",
+        "type": "checkbox",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "tax": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Tipe Pajak : Semua",
+      "Keterangan",
+      "Tipe Pajak",
+      "Persentase",
+      "Akun Pajak Penjualan",
+      "Akun Pajak Pembelian",
+      "Info Umum"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "taxType",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "salesTaxGlAccount",
+        "type": "text",
+        "placeholder": "Cari/Pilih Akun Perkiraan..."
+      },
+      {
+        "name": "purchaseTaxGlAccount",
+        "type": "text",
+        "placeholder": "Cari/Pilih Akun Perkiraan..."
+      }
+    ],
+    "tables": [],
+    "selects": {
+      "taxType": [
+        "- Pilih Tipe Pajak -",
+        "Pajak Pertambahan Nilai",
+        "Pajak Pertambahan Barang Mewah",
+        "Pajak Penghasilan Ps.4(2)",
+        "Pajak Penghasilan Ps.15",
+        "Pajak Penghasilan Ps.21",
+        "Pajak Penghasilan Ps.22",
+        "Pajak Penghasilan Ps.23"
+      ]
+    }
+  },
+  "payment_term": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Non Aktif : Semua",
+      "Nama",
+      "Diskon (%)",
+      "Masa Diskon (hari)",
+      "Masa Jatuh Tempo (hari)",
+      "Keterangan",
+      "Non Aktif",
+      "Default",
+      "Info Umum",
+      "Jika membayar antara",
+      "Hari",
+      "Akan mendapat diskon",
+      "Masa Jatuh Tempo",
+      "Default Syarat Pembayaran",
+      "Ya"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "discDays",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "discPC",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "netDays",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "memo",
+        "type": "textarea",
+        "placeholder": ""
+      },
+      {
+        "name": "isDefault",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "suspended",
+        "type": "checkbox",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "shipment": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Non Aktif : Semua",
+      "Info Umum",
+      "Nama",
+      "PIC",
+      "No. Telp",
+      "Non Aktif",
+      "Ya",
+      "Info Lainnya",
+      "Alamat Pengiriman"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "picName",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "picPhoneNumber",
+        "type": "text",
+        "placeholder": "________________"
+      },
+      {
+        "name": "suspended",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "shipAddressStreet",
+        "type": "textarea",
+        "placeholder": ""
+      },
+      {
+        "name": "shipAddressCity",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "shipAddressZipCode",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "shipAddressProvince",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "shipAddressCountry",
+        "type": "text",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "freeonboard": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Info Umum",
+      "Nama"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "employee_fee": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Non Aktif : Semua",
+      "Tipe Gaji/Tunjangan : Semua",
+      "Info Umum",
+      "Nama",
+      "Tipe Gaji/Tunjangan",
+      "Bayar/Potong",
+      "Bulanan",
+      "Akun Beban",
+      "Non Aktif",
+      "Ya"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "feeType",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "expenseAccount",
+        "type": "text",
+        "placeholder": "Cari/Pilih Akun Perkiraan..."
+      },
+      {
+        "name": "suspended",
+        "type": "checkbox",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {
+      "feeType": [
+        "Gaji/Pensiun atau THT/JHT",
+        "Tunjangan PPh",
+        "Subsidi PPh",
+        "Tunjangan Lainnya, Uang lembur dan sebagainya",
+        "Tunjangan Jaminan Kecelakaan Kerja, Jaminan Kematian",
+        "Honorarium dan Imbalan lain sejenisnya",
+        "Premi asuransi kesehatan yang dibayarkan pemberi kerja",
+        "Penerimaan dalam bentuk natura dan kenikmatan lainnya",
+        "Tantiem, Bonus, Rapel, Gratifikasi, Jasa Produksi dan THR",
+        "Tunjangan Iuran Pensiun/THT/JHT dibayarkan Pemberi Kerja",
+        "Potongan Gaji (Tidak Mengurangi PPh)",
+        "Pengurangan Gaji (Mengurangi PPh)",
+        "Premi asuransi kesehatan dibayarkan pekerja",
+        "Iuran Pensiun/THT/JHT dibayarkan Pekerja"
+      ]
+    }
+  },
+  "employee": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Non Aktif : Semua",
+      "Status Pekerja : Semua",
+      "Penjual : Semua",
+      "Cabang",
+      "Nama",
+      "Posisi Jabatan",
+      "Email",
+      "Handphone",
+      "Tgl Masuk",
+      "Dikenakan PTKP",
+      "No. KTP",
+      "Non Aktif",
+      "Rekening Gaji",
+      "Atas Nama Rekening",
+      "Nama Bank",
+      "No. NPWP",
+      "Memiliki dokumen",
+      "Penjual",
+      "ID Karyawan",
+      "No. Telp. Bisnis",
+      "No. Telp. Rumah",
+      "Status PTKP",
+      "Status Pekerja",
+      "Utang",
+      "Login Penjual",
+      "Data Pribadi",
+      "Nama Lengkap",
+      "No. WhatsApp",
+      "Website",
+      "Kewarganegaraan",
+      "Data Karyawan",
+      "Departemen",
+      "Ya",
+      "Catatan",
+      "Rp 0",
+      "Info Alamat",
+      "Alamat",
+      "Pajak Penghasilan",
+      "Dikenakan PPh 21",
+      "Perhitungan PPh",
+      "PPh mulai dihitung",
+      "Penghasilan Sebelumnya",
+      "PPh Sebelumnya",
+      "Info Akun",
+      "No Rekening",
+      "s/d"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "salutation",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "nikNo",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "mobilePhone",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "workPhone",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "homePhone",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "bbmPin",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "website",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "domisiliType",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "btnManualNumber--24--0",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "typeAutoNumber",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "position",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "joinDate",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "branch",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "department",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "salesman",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "suspended",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "street",
+        "type": "textarea",
+        "placeholder": ""
+      },
+      {
+        "name": "city",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "zipCode",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "province",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "country",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "pph",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "npwpNo",
+        "type": "text",
+        "placeholder": "________________"
+      },
+      {
+        "name": "employeeWorkStatus",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "employeeTaxStatus",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "startMonthPayment",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "startYearPayment",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "nettoIncomeBefore",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "pphBefore",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "bank",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "bankAccount",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "bankAccountName",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "fromDate",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "toDate",
+        "type": "text",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {
+      "salutation": [
+        "- Sapaan -",
+        "Bapak",
+        "Ibu"
+      ],
+      "domisiliType": [
+        "Afrika Selatan",
+        "Aljazair",
+        "Amerika Serikat",
+        "Australia",
+        "Austria",
+        "Bangladesh",
+        "Belanda",
+        "Belgia",
+        "Brunei Darussalam",
+        "Bulgaria",
+        "China",
+        "Denmark",
+        "Finlandia",
+        "Hong Kong",
+        "Hungaria",
+        "India",
+        "Indonesia",
+        "Inggris",
+        "Iran",
+        "Italia",
+        "Jepang",
+        "Jerman",
+        "Kanada",
+        "Korea Selatan",
+        "Korea Utara",
+        "Kuwait",
+        "Luxembourg",
+        "Malaysia",
+        "Maroko",
+        "Mesir",
+        "Mongolia",
+        "Norwegia",
+        "Pakistan",
+        "Perancis",
+        "Philipina",
+        "Polandia",
+        "Portugal",
+        "Qatar",
+        "Republik Ceko",
+        "Romania",
+        "Rusia",
+        "Saudi Arabia",
+        "Selandia Baru",
+        "Seychelles",
+        "Singapura",
+        "Slovakia",
+        "Spanyol",
+        "Sri Lanka",
+        "Sudan",
+        "Suriah",
+        "Swedia",
+        "Swiss",
+        "Taiwan",
+        "Thailand",
+        "Tunisia",
+        "Turki",
+        "Ukraina",
+        "Uni Emirat Arab",
+        "Uzbekistan",
+        "Venezuela",
+        "Vietnam",
+        "Yordania",
+        "Timor Leste"
+      ],
+      "typeAutoNumber": [
+        "Karyawan"
+      ],
+      "branch": [
+        "[Semua Cabang]",
+        "Kantor Pusat"
+      ],
+      "employeeWorkStatus": [
+        "Pegawai Tetap",
+        "Pegawai Tidak Tetap",
+        "Bukan Pegawai - Distributor MLM",
+        "Bukan Pegawai - Petugas Dinas Luar Asuransi",
+        "Bukan Pegawai -  Penjaja Barang Dagangan",
+        "Bukan Pegawai -  Tenaga Ahli",
+        "Anggota Dewan Komisaris atau dewan pengawas",
+        "Bukan Pegawai yang menerima imbalan yang bersifat berkesinambungan",
+        "Bukan Pegawai yang menerima imbalan yang tidak bersifat berkesinambungan"
+      ],
+      "employeeTaxStatus": [
+        "Tidak Kawin (Tidak ada tanggungan)",
+        "Tidak Kawin (1 Tanggungan)",
+        "Tidak Kawin (2 Tanggungan)",
+        "Tidak Kawin (3 Tanggungan)",
+        "Kawin (Tidak ada tanggungan)",
+        "Kawin (1 Tanggungan)",
+        "Kawin (2 Tanggungan)",
+        "Kawin (3 Tanggungan)"
+      ],
+      "startMonthPayment": [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+      ],
+      "startYearPayment": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026",
+        "2027"
+      ]
+    }
+  },
+  "recurring": {
+    "buttons": [
+      "Jalankan"
+    ],
+    "labels": [
+      "Kategori : Semua",
+      "Tipe Transaksi : Semua",
+      "Status : Semua",
+      "Cabang"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "period_end": {
+    "buttons": [],
+    "labels": [
+      "Data Baru",
+      "Bulan : Semua",
+      "Tahun : Semua",
+      "Nama",
+      "Tanggal Input",
+      "Keterangan",
+      "Memiliki dokumen",
+      "Bulan",
+      "Tahun"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      },
+      {
+        "name": "monthPE",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "yearPE",
+        "type": "select",
+        "placeholder": ""
+      },
+      {
+        "name": "description",
+        "type": "textarea",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {
+      "monthPE": [
+        "[Pilih Bulan]",
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+      ],
+      "yearPE": [
+        "2027",
+        "2026"
+      ]
+    }
+  },
+  "contact": {
+    "buttons": [],
+    "labels": [
+      "Tipe : Semua",
+      "Cabang",
+      "Nama Lengkap",
+      "Tipe",
+      "Perusahaan",
+      "Email",
+      "Handphone",
+      "No. Telp. Bisnis",
+      "No. Telp. Rumah",
+      "Faximili",
+      "Catatan",
+      "No. WhatsApp",
+      "Website",
+      "Posisi Jabatan"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": "Cari/Pilih..."
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "memorize_transaction": {
+    "buttons": [],
+    "labels": [
+      "Tipe Transaksi : Semua"
+    ],
+    "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": "Ketik dan [Enter]"
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  },
+  "calendar": {
+    "buttons": [
+      "hari ini",
+      "Bulan",
+      "Minggu",
+      "Hari",
+      "Subscribe",
+      "Buat Baru"
+    ],
+    "labels": [
+      "Jadwal Pembayaran Beban",
+      "Jadwal Pembayaran Gaji",
+      "Jadwal Penerimaan Barang",
+      "Jadwal Pengiriman Barang",
+      "Jadwal Stok Opname",
+      "Jatuh Tempo Giro Keluar",
+      "Jatuh Tempo Giro Masuk",
+      "Jatuh Tempo No. Produksi",
+      "Jatuh Tempo PPh Pembelian",
+      "Jatuh Tempo PPh Penjualan",
+      "Jatuh Tempo Pembayaran",
+      "Jatuh Tempo Penerimaan",
+      "Jatuh Tempo Permintaan Barang",
+      "Jatuh Tempo Piutang",
+      "Jatuh Tempo Utang",
+      "Transaksi Terjadwal",
+      "Tukar Faktur"
+    ],
+    "inputs": [],
+    "tables": [
+      [
+        "Sen",
+        "Sel",
+        "Rab",
+        "Kam",
+        "Jum",
+        "Sab",
+        "Min"
+      ],
+      [
+        "Sen",
+        "Sel",
+        "Rab",
+        "Kam",
+        "Jum",
+        "Sab",
+        "Min"
+      ]
+    ],
+    "selects": {}
+  },
+  "audit": {
+    "buttons": [],
+    "labels": [
+      "Tgl Transaksi : Semua",
+      "Tanggal : Semua",
+      "Tipe Transaksi : Semua",
+      "Pengguna : Semua",
+      "Tipe Tindakan : Semua",
+      "Tgl Transaksi",
+      "No/Nama Referensi",
+      "Tipe Tindakan",
+      "Tipe Transaksi",
+      "Tanggal",
+      "Pengguna",
+      "Email",
+      "Alamat IP"
+    ],
+    "inputs": [
+      {
+        "name": "searchFilter",
+        "type": "text",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "selectedColumn",
+        "type": "checkbox",
+        "placeholder": ""
+      },
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": ""
+      }
+    ],
+    "tables": [],
+    "selects": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "menu": "Syarat Pembayaran",
+  "module": "#accurate__company__payment-term",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "columns": [
+    "Nama",
+    "Diskon (%)",
+    "Masa Diskon (hari)",
+    "Masa Jatuh Tempo (hari)",
+    "Keterangan",
+    "Non Aktif",
+    "Default"
+  ],
+  "filters": [
+    "Non Aktif : Semua"
+  ],
+  "record_count": 0,
+  "records": []
+}

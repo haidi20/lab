@@ -1,0 +1,69 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Non Aktif : Semua",
+    "Info Umum",
+    "Nama",
+    "PIC",
+    "No. Telp",
+    "Non Aktif",
+    "Ya",
+    "Info Lainnya",
+    "Alamat Pengiriman"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "picName",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "picPhoneNumber",
+      "type": "text",
+      "placeholder": "________________"
+    },
+    {
+      "name": "suspended",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "shipAddressStreet",
+      "type": "textarea",
+      "placeholder": ""
+    },
+    {
+      "name": "shipAddressCity",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "shipAddressZipCode",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "shipAddressProvince",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "shipAddressCountry",
+      "type": "text",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

@@ -1,0 +1,70 @@
+{
+  "buttons": [],
+  "labels": [
+    "Data Baru",
+    "Non Aktif : Semua",
+    "Info Umum",
+    "Nama",
+    "No. Telepon",
+    "Non Aktif",
+    "Ya",
+    "Info Lainnya",
+    "Alamat",
+    "Akses Pengguna",
+    "Semua Pengguna"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "phoneNumber",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "suspended",
+      "type": "checkbox",
+      "placeholder": ""
+    },
+    {
+      "name": "street",
+      "type": "textarea",
+      "placeholder": ""
+    },
+    {
+      "name": "city",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "zipCode",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "province",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "country",
+      "type": "text",
+      "placeholder": ""
+    },
+    {
+      "name": "usedAllUser",
+      "type": "checkbox",
+      "placeholder": ""
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}

@@ -1,0 +1,15 @@
+{
+  "buttons": [],
+  "labels": [
+    "Tipe Transaksi : Semua"
+  ],
+  "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    }
+  ],
+  "tables": [],
+  "selects": {}
+}
