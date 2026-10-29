@@ -13,6 +13,7 @@
     "Non Aktif",
     "Ya"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "Tipe Gaji/Tunjangan", "required": false, "inputs": [{"name": "feeType", "type": "select", "option_count": 14, "options_ref": "feeType"}]}, {"label": "Akun Beban", "required": true, "inputs": [{"name": "expenseAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}]}], "required": ["Nama", "Akun Beban"]},
   "inputs": [
     {
       "name": "keyword",

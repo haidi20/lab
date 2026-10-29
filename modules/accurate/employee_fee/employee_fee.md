@@ -9,7 +9,18 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Gaji/Tunjangan)
+
+Wajib diisi: **Nama, Akun Beban**.
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Nama | name | text | Ya | |
+| Tipe Gaji/Tunjangan | feeType | select | - | 14 opsi (lihat Dropdown Options) |
+| Akun Beban | expenseAccount | lookup | Ya | Cari/Pilih Akun Perkiraan. Tampil untuk tipe tertentu saja |
+| Non Aktif | suspended | checkbox | - | |
+
+## Filter & Kolom Daftar
 
 ### Label
 

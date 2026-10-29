@@ -9,7 +9,26 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Pengiriman)
+
+Wajib diisi: **Nama**.
+
+### Info Umum
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Nama | name | text | Ya | |
+| PIC | picName | text | - | |
+| No. Telp | picPhoneNumber | text | - | |
+| Non Aktif | suspended | checkbox | - | |
+
+### Info Lainnya
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Alamat Pengiriman | shipAddressStreet + shipAddressCity + shipAddressZipCode + shipAddressProvince + shipAddressCountry | textarea + 4x text | - | Jalan, Kota, K.Pos, Provinsi, Negara |
+
+## Filter & Kolom Daftar
 
 ### Label
 

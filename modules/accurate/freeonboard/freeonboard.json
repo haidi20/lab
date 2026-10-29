@@ -5,6 +5,7 @@
     "Info Umum",
     "Nama"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}]}]}], "required": ["Nama"]},
   "inputs": [
     {
       "name": "keyword",

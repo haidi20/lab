@@ -13,6 +13,7 @@
     "Akses Pengguna",
     "Semua Pengguna"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "No. Telepon", "required": false, "inputs": [{"name": "phoneNumber", "type": "text"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}, {"section": "Info Lainnya", "fields": [{"label": "Alamat", "required": false, "inputs": [{"name": "street", "type": "textarea"}, {"name": "city", "type": "text"}, {"name": "zipCode", "type": "text"}, {"name": "province", "type": "text"}, {"name": "country", "type": "text"}]}]}]}], "required": ["Nama"]},
   "inputs": [
     {
       "name": "keyword",

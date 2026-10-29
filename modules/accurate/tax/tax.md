@@ -9,7 +9,18 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Pajak)
+
+Wajib diisi: **Tipe Pajak, Keterangan, Akun Pajak Penjualan, Akun Pajak Pembelian**.
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Tipe Pajak | taxType | select | Ya | 8 opsi (lihat Dropdown Options) |
+| Keterangan | description | text | Ya | |
+| Akun Pajak Penjualan | salesTaxGlAccount | lookup | Ya | Cari/Pilih Akun Perkiraan |
+| Akun Pajak Pembelian | purchaseTaxGlAccount | lookup | Ya | Cari/Pilih Akun Perkiraan |
+
+## Filter & Kolom Daftar
 
 ### Label
 

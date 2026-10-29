@@ -18,6 +18,7 @@
     "Default Syarat Pembayaran",
     "Ya"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Jika membayar antara", "required": false, "inputs": [{"name": "discDays", "type": "number"}]}, {"label": "Akan mendapat diskon", "required": false, "inputs": [{"name": "discPC", "type": "number"}]}, {"label": "Masa Jatuh Tempo", "required": false, "inputs": [{"name": "netDays", "type": "number"}]}, {"label": "Keterangan", "required": false, "inputs": [{"name": "memo", "type": "textarea"}]}, {"label": "Default Syarat Pembayaran", "required": false, "inputs": [{"name": "isDefault", "type": "checkbox"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}]}]},
   "inputs": [
     {
       "name": "searchFilter",

@@ -9,7 +9,20 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Syarat Pembayaran)
+
+Tidak ada field wajib.
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Jika membayar antara | discDays | number | - | Hari |
+| Akan mendapat diskon | discPC | number | - | Persen |
+| Masa Jatuh Tempo | netDays | number | - | Hari |
+| Keterangan | memo | textarea | - | |
+| Default Syarat Pembayaran | isDefault | checkbox | - | |
+| Non Aktif | suspended | checkbox | - | |
+
+## Filter & Kolom Daftar
 
 ### Label
 

@@ -9,7 +9,75 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Karyawan)
+
+Form tambah karyawan terbagi menjadi 4 tab. Hanya **Nama Lengkap** yang wajib diisi.
+
+### Tab Info Umum — Data Pribadi
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Sapaan | salutation | select | - | Bapak, Ibu |
+| Nama Lengkap | name | text | Ya | |
+| No. KTP | nikNo | text | - | |
+| Email | email | text | - | |
+| Handphone | mobilePhone | text | - | |
+| No. Telp. Bisnis | workPhone | text | - | |
+| No. Telp. Rumah | homePhone | text | - | |
+| No. WhatsApp | bbmPin | text | - | Nama input internal: bbmPin |
+| Website | website | text | - | |
+| Kewarganegaraan | domisiliType | select | - | 63 opsi negara (lihat Dropdown Options) |
+
+### Tab Info Umum — Data Karyawan
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| ID Karyawan | btnManualNumber + typeAutoNumber | checkbox + select | - | Centang untuk isi manual; select: Karyawan (penomoran otomatis) |
+| Posisi Jabatan | position | text | - | |
+| Tgl Masuk | joinDate | date | - | Datepicker |
+| Cabang | branch | select | - | Kantor Pusat |
+| Departemen | department | lookup | - | Cari/Pilih dari daftar departemen |
+| Penjual | salesman | checkbox | - | |
+| Catatan | notes | textarea | - | |
+| Non Aktif | suspended | checkbox | - | |
+
+### Tab Info Alamat
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Alamat (Jalan) | street | textarea | - | |
+| Kota | city | text | - | |
+| K.Pos | zipCode | text | - | |
+| Provinsi | province | text | - | |
+| Negara | country | text | - | |
+
+### Tab Pajak Penghasilan
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Dikenakan PPh 21 | pph | checkbox | - | |
+| No. NPWP | npwpNo | text | - | Format mask NPWP |
+| Status Pekerja | employeeWorkStatus | select | - | 9 opsi (lihat Dropdown Options) |
+| Status PTKP | employeeTaxStatus | select | - | 8 opsi K/TK + tanggungan |
+
+### Tab Pajak Penghasilan — Perhitungan PPh
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| PPh mulai dihitung (Bulan) | startMonthPayment | select | - | Januari-Desember |
+| PPh mulai dihitung (Tahun) | startYearPayment | select | - | 2021-2027 |
+| Penghasilan Sebelumnya | nettoIncomeBefore | number | - | |
+| PPh Sebelumnya | pphBefore | number | - | |
+
+### Tab Info Akun
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Nama Bank | bank | lookup | - | Cari/Pilih bank |
+| No Rekening | bankAccount | text | - | Mask 16 digit |
+| Atas Nama Rekening | bankAccountName | text | - | |
+
+## Filter & Kolom Daftar
 
 ### Label
 

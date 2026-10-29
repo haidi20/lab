@@ -12,6 +12,7 @@
     "Info Lainnya",
     "Alamat Pengiriman"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "PIC", "required": false, "inputs": [{"name": "picName", "type": "text"}]}, {"label": "No. Telp", "required": false, "inputs": [{"name": "picPhoneNumber", "type": "text", "placeholder": "________________"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}, {"section": "Info Lainnya", "fields": [{"label": "Alamat Pengiriman", "required": false, "inputs": [{"name": "shipAddressStreet", "type": "textarea"}, {"name": "shipAddressCity", "type": "text"}, {"name": "shipAddressZipCode", "type": "text"}, {"name": "shipAddressProvince", "type": "text"}, {"name": "shipAddressCountry", "type": "text"}]}]}]}], "required": ["Nama"]},
   "inputs": [
     {
       "name": "keyword",

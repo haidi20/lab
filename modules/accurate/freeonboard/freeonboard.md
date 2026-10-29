@@ -9,7 +9,15 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah FOB)
+
+Wajib diisi: **Nama**.
+
+| Field | Input | Tipe | Wajib | Keterangan |
+|-------|-------|------|-------|------------|
+| Nama | name | text | Ya | |
+
+## Filter & Kolom Daftar
 
 ### Label
 

@@ -1,11 +1,16 @@
 {
+  "menu": "Log Aktifitas",
+  "module": "#accurate__company__audit",
+  "entity_type": "Audit",
   "buttons": [],
   "labels": [
     "Tgl Transaksi : Semua",
     "Tanggal : Semua",
     "Tipe Transaksi : Semua",
     "Pengguna : Semua",
-    "Tipe Tindakan : Semua",
+    "Tipe Tindakan : Semua"
+  ],
+  "columns": [
     "Tgl Transaksi",
     "No/Nama Referensi",
     "Tipe Tindakan",
@@ -15,23 +20,182 @@
     "Email",
     "Alamat IP"
   ],
+  "filters": [
+    {
+      "key": "transDateFilter",
+      "label": "Tgl Transaksi",
+      "type": "DATE",
+      "default": true
+    },
+    {
+      "key": "logDateFilter",
+      "label": "Tanggal",
+      "type": "DATE",
+      "default": true
+    },
+    {
+      "key": "transactionTypeFilter",
+      "label": "Tipe Transaksi",
+      "type": "LIST",
+      "default": true,
+      "options": [
+        "Akses Grup",
+        "Akun Perkiraan",
+        "Alokasi Biaya Produksi",
+        "Anggaran",
+        "Aset Tetap",
+        "Barang & Jasa",
+        "Cabang",
+        "Departemen",
+        "Desain Cetakan",
+        "Disposisi Aset Tetap",
+        "Distribusi Stok",
+        "Etalase",
+        "FOB",
+        "Faktur Pembelian",
+        "Faktur Penjualan",
+        "Food Delivery",
+        "Forecast PO",
+        "Formula Produksi",
+        "Gaji/Tunjangan",
+        "Gudang",
+        "Harga Pemasok",
+        "Hasil Stok Opname",
+        "Internet Banking",
+        "Jurnal Umum",
+        "Karyawan",
+        "Katalog",
+        "Kategori Aset",
+        "Kategori Aset Tetap Pajak",
+        "Kategori Barang",
+        "Kategori Keuangan ",
+        "Kategori Pelanggan",
+        "Kategori Pemasok",
+        "Kategori Penjualan",
+        "Kategori Transaksi Berulang",
+        "Klaim Pelanggan",
+        "Klaim Pemasok",
+        "Koleksi",
+        "Komisi Penjual",
+        "Kontak",
+        "Laporan Tersimpan",
+        "Mata Uang",
+        "Merek Barang",
+        "Minimum Stok Cabang",
+        "Pajak",
+        "Pekerjaan Pesanan",
+        "Pelanggan",
+        "Pelunasan Pinjaman",
+        "Pemasok",
+        "Pembayaran",
+        "Pembayaran Angsuran",
+        "Pembayaran Pembelian",
+        "Pemindahan Barang",
+        "Penambahan Bahan Baku",
+        "Penanggung Jawab",
+        "Penawaran Penjualan",
+        "Pencairan Pinjaman",
+        "Pencatatan Beban",
+        "Pencatatan Gaji",
+        "Penerimaan",
+        "Penerimaan Barang",
+        "Penerimaan Penjualan",
+        "Pengambilan Bahan Baku",
+        "Pengaturan POS",
+        "Pengaturan Sub Company Code",
+        "Pengaturan Virtual Account",
+        "Pengaturan e-Payment",
+        "Pengepakan Barang",
+        "Pengiriman",
+        "Pengiriman Pesanan",
+        "Pengisian Nomor Seri",
+        "Penomoran",
+        "Penyelesaian Barang Jadi",
+        "Penyelesaian Pesanan",
+        "Penyesuaian Harga/Diskon",
+        "Penyesuaian Persediaan",
+        "Penyetuju Transaksi",
+        "Perintah Kerja",
+        "Perintah Pembayaran",
+        "Perintah Stok Opname",
+        "Permintaan Barang",
+        "Persiapan Bahan Baku",
+        "Perubahan Aset Tetap",
+        "Pesanan Pembelian",
+        "Pesanan Penjualan",
+        "Pihak Berwenang e-Faktur",
+        "Pindah Aset",
+        "Pinjaman Karyawan",
+        "Preferensi",
+        "Promo",
+        "Proses Akhir Bulan",
+        "Proyek",
+        "Rencana Produksi",
+        "Retur Pembelian",
+        "Retur Penjualan",
+        "SPT PPN/PPNBM",
+        "Satuan Barang",
+        "SmartLink Virtual Account",
+        "SmartLink e-Commerce",
+        "SmartLink e-Payment",
+        "Standar Biaya Produksi",
+        "Syarat Pembayaran",
+        "Tahapan",
+        "Tahapan Proses",
+        "Target Penjualan",
+        "Trade Portal",
+        "Transfer Bank",
+        "Tukar Faktur",
+        "Uang Muka Pembelian",
+        "Uang Muka Penjualan"
+      ]
+    },
+    {
+      "key": "createdByFilter",
+      "label": "Pengguna",
+      "type": "LIST",
+      "default": true,
+      "options": [
+        "haidi nurhadinata"
+      ]
+    },
+    {
+      "key": "operationTypeFilter",
+      "label": "Tipe Tindakan",
+      "type": "LIST",
+      "default": true,
+      "options": [
+        "Buat",
+        "Hapus",
+        "Ubah"
+      ]
+    }
+  ],
   "inputs": [
+    {
+      "name": "keyword",
+      "type": "text",
+      "purpose": "Cari kata kunci pada daftar log"
+    },
     {
       "name": "searchFilter",
       "type": "text",
-      "placeholder": ""
+      "purpose": "Cari kolom pada panel pengaturan kolom"
     },
     {
       "name": "selectedColumn",
       "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "keyword",
-      "type": "text",
-      "placeholder": ""
+      "purpose": "Pilih kolom tampil",
+      "options": [
+        "Tgl Transaksi",
+        "No/Nama Referensi",
+        "Tipe Tindakan",
+        "Tipe Transaksi",
+        "Tanggal",
+        "Pengguna",
+        "Email",
+        "Alamat IP"
+      ]
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

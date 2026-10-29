@@ -10,6 +10,7 @@
     "Akun Pajak Pembelian",
     "Info Umum"
   ],
+  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Tipe Pajak", "required": true, "inputs": [{"name": "taxType", "type": "select", "option_count": 8, "options_ref": "taxType"}]}, {"label": "Keterangan", "required": true, "inputs": [{"name": "description", "type": "text"}]}, {"label": "Akun Pajak Penjualan", "required": true, "inputs": [{"name": "salesTaxGlAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}, {"label": "Akun Pajak Pembelian", "required": true, "inputs": [{"name": "purchaseTaxGlAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}]}]}], "required": ["Tipe Pajak", "Keterangan", "Akun Pajak Penjualan", "Akun Pajak Pembelian"]},
   "inputs": [
     {
       "name": "searchFilter",
