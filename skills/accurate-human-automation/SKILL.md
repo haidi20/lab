@@ -307,6 +307,26 @@ form inputnya, bukan hanya daftar dan filter. Markup form **sudah ada di
 DOM** meskipun form belum dibuka, sehingga bisa diekstrak dari capture
 tanpa klik tambahan.
 
+### Pola Capture Modul dan Form
+
+- Gunakan `capture-browser-scenario` mode `connect` saat login manual sudah
+  aktif di Chrome debugging.
+- Ambil ulang `target_id` dari endpoint `/json` sebelum setiap batch.
+- Buka grup menu, klik submenu, lalu klik tab `#module-<module-key>` bila
+  modul belum aktif.
+- Modul transaksi umumnya langsung membuka form Data Baru; jangan menganggap
+  capture gagal hanya karena `button[name='btnAdd']` berada di daftar belakang
+  dan tidak dapat diklik.
+- Scope selector tombol ke modul aktif:
+  `#module-<module-key> button[name='btnAdd']`.
+- Tutup modul sebelumnya lewat `a.aol-main-tab-close` pada tab terkait agar
+  tidak ada dua modul menumpuk.
+- Untuk form, cukup capture DOM setelah modul stabil 8-12 detik. Jangan
+  memakai screenshot sebagai bukti analisa.
+- Jika modul berbasis iframe (misalnya Accurate Store), iframe biasanya tidak
+  muncul sebagai CDP target terpisah. Ambil URL iframe dari atribut `src`,
+  lalu buka URL tersebut langsung sebagai `start_url` pada skenario REA.
+
 ### Struktur DOM Form
 
 ```text
