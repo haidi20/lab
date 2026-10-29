@@ -1,52 +1,175 @@
 {
-  "buttons": [
-    "hari ini",
-    "Bulan",
-    "Minggu",
-    "Hari",
-    "Subscribe",
-    "Buat Baru"
+  "menu": "Kalender",
+  "menu_key": "calendar",
+  "module": "#accurate__company__calendar",
+  "module_type": null,
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
+    "Tampilkan kalender bulan/minggu/hari",
+    "Buat kalender",
+    "Buat event",
+    "Subscribe kalender",
+    "Drag/drop dan ubah ukuran event",
+    "Kelola hak akses kalender"
   ],
-  "labels": [
-    "Jadwal Pembayaran Beban",
-    "Jadwal Pembayaran Gaji",
-    "Jadwal Penerimaan Barang",
-    "Jadwal Pengiriman Barang",
-    "Jadwal Stok Opname",
-    "Jatuh Tempo Giro Keluar",
-    "Jatuh Tempo Giro Masuk",
-    "Jatuh Tempo No. Produksi",
-    "Jatuh Tempo PPh Pembelian",
-    "Jatuh Tempo PPh Penjualan",
-    "Jatuh Tempo Pembayaran",
-    "Jatuh Tempo Penerimaan",
-    "Jatuh Tempo Permintaan Barang",
-    "Jatuh Tempo Piutang",
-    "Jatuh Tempo Utang",
-    "Transaksi Terjadwal",
-    "Tukar Faktur"
-  ],
+  "list_view": {
+    "columns": [],
+    "filters": [],
+    "toolbar_buttons": [],
+    "search": null,
+    "actual_data_file": "data.json"
+  },
   "form": null,
-  "inputs": [],
-  "tables": [
-    [
-      "Sen",
-      "Sel",
-      "Rab",
-      "Kam",
-      "Jum",
-      "Sab",
-      "Min"
-    ],
-    [
-      "Sen",
-      "Sel",
-      "Rab",
-      "Kam",
-      "Jum",
-      "Sab",
-      "Min"
-    ]
+  "form_status": {
+    "available": false,
+    "reason": "Tidak memakai form tambah master data standar dan tidak memiliki `btnAdd`; kalender/event dibuat melalui dialog khusus Kalender."
+  },
+  "related_forms": [
+    {
+      "name": "Form Kalender",
+      "trigger": "Buat Baru atau pilih area kalender",
+      "tabs": [
+        "Pengaturan",
+        "Hak Mengakses",
+        "Hak Tambah/Ubah Event",
+        "Hak Administrasi"
+      ],
+      "fields": [
+        {
+          "label": "Jenis Kalender",
+          "input": "type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Kegiatan"
+          ],
+          "source": "Jenis kalender yang tersedia pada capture."
+        },
+        {
+          "label": "Nama Kalender",
+          "input": "name",
+          "type": "text",
+          "required": true,
+          "max_length": 30,
+          "source": "Input manual pengguna."
+        },
+        {
+          "label": "Deskripsi",
+          "input": "description",
+          "type": "textarea",
+          "required": false,
+          "max_length": 500,
+          "source": "Input manual pengguna."
+        },
+        {
+          "label": "Semua Pengguna / Grup / Pengguna",
+          "input": "usedViewAllUser; userRoleAccessList; userAccessList",
+          "type": "checkbox/lookup",
+          "required": false,
+          "source": "Pengguna dan grup akses perusahaan."
+        }
+      ]
+    },
+    {
+      "name": "Form Event",
+      "trigger": "Pilih tanggal atau klik event",
+      "tabs": [
+        "Detail Event"
+      ],
+      "fields": [
+        {
+          "label": "Kalender",
+          "input": "calendarId",
+          "type": "select",
+          "required": true,
+          "source": "Daftar kalender Kegiatan."
+        },
+        {
+          "label": "Nama Event",
+          "input": "title",
+          "type": "text",
+          "required": true,
+          "max_length": 100,
+          "source": "Input manual pengguna."
+        },
+        {
+          "label": "Tanggal Mulai",
+          "input": "eventStart",
+          "type": "date",
+          "required": true,
+          "source": "Tanggal dipilih dari kalender."
+        },
+        {
+          "label": "Sepanjang Hari",
+          "input": "allDay",
+          "type": "checkbox",
+          "required": false,
+          "source": "Input manual pengguna."
+        },
+        {
+          "label": "Deskripsi",
+          "input": "description",
+          "type": "textarea",
+          "required": false,
+          "source": "Input manual pengguna."
+        }
+      ]
+    },
+    {
+      "name": "Form Subscribe",
+      "trigger": "Tombol Subscribe",
+      "tabs": [
+        "Cari Kalender"
+      ],
+      "fields": [
+        {
+          "label": "Kata kunci",
+          "input": "keywords",
+          "type": "text",
+          "required": false,
+          "source": "Daftar kalender yang dapat disubscribe."
+        }
+      ]
+    },
+    {
+      "name": "Form Hapus Kalender",
+      "trigger": "Hapus kalender",
+      "tabs": [
+        "Konfirmasi"
+      ],
+      "fields": [
+        {
+          "label": "Aksi Hapus",
+          "input": "action",
+          "type": "radio",
+          "required": true,
+          "options": [
+            "unsubscribe",
+            "delete"
+          ],
+          "source": "Pilihan hak administrasi kalender."
+        }
+      ]
+    }
   ],
-  "selects": {}
+  "data_sources": [
+    {
+      "scope": "Kalender",
+      "source": "Kalender Kegiatan yang dibuat/disubscribe pengguna.",
+      "evidence": "Form kalender dan teks `Belum ada kalender` pada panel Kegiatan."
+    },
+    {
+      "scope": "Event",
+      "source": "Event manual dan jadwal dari modul terkait (pembayaran, pengiriman, jatuh tempo, stok opname, dll.).",
+      "evidence": "Daftar tipe event pada filter/konfigurasi kalender."
+    },
+    {
+      "scope": "Hak akses",
+      "source": "Pengguna/grup akses.",
+      "evidence": "Lookup `/accurate/entity-access/search-user.do` dan `/accurate/entity-access/search-user-role.do`."
+    }
+  ]
 }

@@ -1,68 +1,86 @@
 # Kalender
 
 **Module:** `#accurate__company__calendar`
+**Tipe Modul:** `None`
+**Capture:** 2026-10-29T08:14:00+08:00 ? perusahaan `cy` (database `3058374`).
 
 ## Fitur
-
-- **Data Baru**: Membuat entri kalender baru
-- **Cetak**: Mencetak daftar kalender
-- **Unduh XLS**: Ekspor daftar ke format Excel
-- **Unduh PDF**: Ekspor daftar ke format PDF
-
-### Tombol Tersedia
-
-- hari ini
-- Bulan
-- Minggu
-- Hari
-- Subscribe
-- Buat Baru
+- Tampilkan kalender bulan/minggu/hari
+- Buat kalender
+- Buat event
+- Subscribe kalender
+- Drag/drop dan ubah ukuran event
+- Kelola hak akses kalender
 
 ## Form Data Baru
+Menu ini tidak memakai form tambah standar; dialog khusus berikut dipakai untuk membuat kalender/event.
 
-Menu Kalender tidak memakai form tambah standar modul. Capture DOM tidak menampilkan tombol `btnAdd`; aksi **Buat Baru** mengarah ke pembuatan item/jadwal kalender, bukan form master data Perusahaan.
+### Form Kalender
+Trigger: Buat Baru atau pilih area kalender.
+
+| Field | Input | Tipe | Wajib | Sumber Data |
+|---|---|---|---|---|
+| Jenis Kalender | `type` | select | Ya | Jenis kalender yang tersedia pada capture. |
+| Nama Kalender | `name` | text | Ya | Input manual pengguna. |
+| Deskripsi | `description` | textarea | Tidak | Input manual pengguna. |
+| Semua Pengguna / Grup / Pengguna | `usedViewAllUser; userRoleAccessList; userAccessList` | checkbox/lookup | Tidak | Pengguna dan grup akses perusahaan. |
+
+### Form Event
+Trigger: Pilih tanggal atau klik event.
+
+| Field | Input | Tipe | Wajib | Sumber Data |
+|---|---|---|---|---|
+| Kalender | `calendarId` | select | Ya | Daftar kalender Kegiatan. |
+| Nama Event | `title` | text | Ya | Input manual pengguna. |
+| Tanggal Mulai | `eventStart` | date | Ya | Tanggal dipilih dari kalender. |
+| Sepanjang Hari | `allDay` | checkbox | Tidak | Input manual pengguna. |
+| Deskripsi | `description` | textarea | Tidak | Input manual pengguna. |
+
+### Form Subscribe
+Trigger: Tombol Subscribe.
+
+| Field | Input | Tipe | Wajib | Sumber Data |
+|---|---|---|---|---|
+| Kata kunci | `keywords` | text | Tidak | Daftar kalender yang dapat disubscribe. |
+
+### Form Hapus Kalender
+Trigger: Hapus kalender.
+
+| Field | Input | Tipe | Wajib | Sumber Data |
+|---|---|---|---|---|
+| Aksi Hapus | `action` | radio | Ya | Pilihan hak administrasi kalender. |
+
+## Daftar & Filter
+
+### Tombol Toolbar
+
+| Tombol | Hint/Label |
+|---|---|
+
+### Filter
+
+| Key | Label | Tipe | Opsi |
+|---|---|---|---|
+| - | Tidak ada filter dinamis pada capture | - | - |
 
 ## Kolom Tabel
 
-### Tabel 1
+| Key | Label | Default Tampil | Tipe |
+|---|---|---|---|
+| - | Kalender tidak memakai tabel data standar | - | - |
 
-- Sen
-- Sel
-- Rab
-- Kam
-- Jum
-- Sab
-- Min
+Record aktual tersimpan di `data.json`: **0 baris**, status `Belum ada kalender`.
 
-### Tabel 2
+## Sumber Data
 
-- Sen
-- Sel
-- Rab
-- Kam
-- Jum
-- Sab
-- Min
+| Cakupan | Sumber | Bukti Capture |
+|---|---|---|
+| Kalender | Kalender Kegiatan yang dibuat/disubscribe pengguna. | Form kalender dan teks `Belum ada kalender` pada panel Kegiatan. |
+| Event | Event manual dan jadwal dari modul terkait (pembayaran, pengiriman, jatuh tempo, stok opname, dll.). | Daftar tipe event pada filter/konfigurasi kalender. |
+| Hak akses | Pengguna/grup akses. | Lookup `/accurate/entity-access/search-user.do` dan `/accurate/entity-access/search-user-role.do`. |
 
-## Form
+## Catatan Analisa
 
-### Label
-
-- Jadwal Pembayaran Beban
-- Jadwal Pembayaran Gaji
-- Jadwal Penerimaan Barang
-- Jadwal Pengiriman Barang
-- Jadwal Stok Opname
-- Jatuh Tempo Giro Keluar
-- Jatuh Tempo Giro Masuk
-- Jatuh Tempo No. Produksi
-- Jatuh Tempo PPh Pembelian
-- Jatuh Tempo PPh Penjualan
-- Jatuh Tempo Pembayaran
-- Jatuh Tempo Penerimaan
-- Jatuh Tempo Permintaan Barang
-- Jatuh Tempo Piutang
-- Jatuh Tempo Utang
-- Transaksi Terjadwal
-- Tukar Faktur
-
+- Analisa berbasis observasi browser; tidak menggunakan screenshot.
+- REA `capture-browser-scenario` dipakai untuk skenario login/navigasi; CLI konsisten timeout pada klik pembuka modul setelah tiga percobaan.
+- Struktur modul, form, filter, dan kolom diekstrak dari DOM capture yang valid.

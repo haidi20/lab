@@ -1,379 +1,895 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Karyawan",
+  "menu_key": "employee",
+  "module": "#accurate__company__employee",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Non Aktif : Semua",
-    "Status Pekerja : Semua",
-    "Penjual : Semua",
-    "Cabang",
-    "Nama",
-    "Posisi Jabatan",
-    "Email",
-    "Handphone",
-    "Tgl Masuk",
-    "Dikenakan PTKP",
-    "No. KTP",
-    "Non Aktif",
-    "Rekening Gaji",
-    "Atas Nama Rekening",
-    "Nama Bank",
-    "No. NPWP",
-    "Memiliki dokumen",
-    "Penjual",
-    "ID Karyawan",
-    "No. Telp. Bisnis",
-    "No. Telp. Rumah",
-    "Status PTKP",
-    "Status Pekerja",
-    "Utang",
-    "Login Penjual",
-    "Data Pribadi",
-    "Nama Lengkap",
-    "No. WhatsApp",
-    "Website",
-    "Kewarganegaraan",
-    "Data Karyawan",
-    "Departemen",
-    "Ya",
-    "Catatan",
-    "Rp 0",
-    "Info Alamat",
-    "Alamat",
-    "Pajak Penghasilan",
-    "Dikenakan PPh 21",
-    "Perhitungan PPh",
-    "PPh mulai dihitung",
-    "Penghasilan Sebelumnya",
-    "PPh Sebelumnya",
-    "Info Akun",
-    "No Rekening",
-    "s/d"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom",
+    "Histori piutang pada data tersimpan"
   ],
-  "form": {"note":"Hanya Nama Lengkap yang wajib diisi. Opsi select merujuk ke keys di selects.","tabs":[{"tab":"Info Umum","sections":[{"section":"Data Pribadi","fields":[{"label":"Nama Lengkap","required":true,"inputs":[{"name":"salutation","type":"select","option_count":3,"options_ref":"salutation"},{"name":"name","type":"text"}]},{"label":"No. KTP","required":false,"inputs":[{"name":"nikNo","type":"text"}]},{"label":"Email","required":false,"inputs":[{"name":"email","type":"text"}]},{"label":"Handphone","required":false,"inputs":[{"name":"mobilePhone","type":"text"}]},{"label":"No. Telp. Bisnis","required":false,"inputs":[{"name":"workPhone","type":"text"}]},{"label":"No. Telp. Rumah","required":false,"inputs":[{"name":"homePhone","type":"text"}]},{"label":"No. WhatsApp","required":false,"inputs":[{"name":"bbmPin","type":"text"}]},{"label":"Website","required":false,"inputs":[{"name":"website","type":"text"}]},{"label":"Kewarganegaraan","required":false,"inputs":[{"name":"domisiliType","type":"select","option_count":63,"options_ref":"domisiliType"}]}]},{"section":"Data Karyawan","fields":[{"label":"ID Karyawan","required":false,"inputs":[{"name":"btnManualNumber--24--0","type":"checkbox"},{"name":"typeAutoNumber","type":"select","option_count":1,"options_ref":"typeAutoNumber"}]},{"label":"Posisi Jabatan","required":false,"inputs":[{"name":"position","type":"text"}]},{"label":"Tgl Masuk","required":false,"inputs":[{"name":"joinDate","type":"date"}]},{"label":"Cabang","required":false,"inputs":[{"name":"branch","type":"select","option_count":2,"options_ref":"branch"}]},{"label":"Departemen","required":false,"inputs":[{"name":"department","type":"lookup","placeholder":"Cari/Pilih..."}]},{"label":"Penjual","required":false,"inputs":[{"name":"salesman","type":"checkbox"}]},{"label":"Catatan","required":false,"inputs":[{"name":"notes","type":"textarea"}]},{"label":"Non Aktif","required":false,"inputs":[{"name":"suspended","type":"checkbox"}]}]}]},{"tab":"Info Alamat","sections":[{"section":"Info Alamat","fields":[{"label":"Alamat","required":false,"inputs":[{"name":"street","type":"textarea"},{"name":"city","type":"text"},{"name":"zipCode","type":"text"},{"name":"province","type":"text"},{"name":"country","type":"text"}]}]}]},{"tab":"Pajak Penghasilan","sections":[{"section":"Pajak Penghasilan","fields":[{"label":"Dikenakan PPh 21","required":false,"inputs":[{"name":"pph","type":"checkbox"}]},{"label":"No. NPWP","required":false,"inputs":[{"name":"npwpNo","type":"text","placeholder":"________________"}]},{"label":"Status Pekerja","required":false,"inputs":[{"name":"employeeWorkStatus","type":"select","option_count":9,"options_ref":"employeeWorkStatus"}]},{"label":"Status PTKP","required":false,"inputs":[{"name":"employeeTaxStatus","type":"select","option_count":8,"options_ref":"employeeTaxStatus"}]}]},{"section":"Perhitungan PPh","fields":[{"label":"PPh mulai dihitung","required":false,"inputs":[{"name":"startMonthPayment","type":"select","option_count":12,"options_ref":"startMonthPayment"},{"name":"startYearPayment","type":"select","option_count":7,"options_ref":"startYearPayment"}]},{"label":"Penghasilan Sebelumnya","required":false,"inputs":[{"name":"nettoIncomeBefore","type":"number"}]},{"label":"PPh Sebelumnya","required":false,"inputs":[{"name":"pphBefore","type":"number"}]}]}]},{"tab":"Info Akun","sections":[{"section":"Info Akun","fields":[{"label":"Nama Bank","required":false,"inputs":[{"name":"bank","type":"lookup","placeholder":"Cari/Pilih..."}]},{"label":"No Rekening","required":false,"inputs":[{"name":"bankAccount","type":"text"}]},{"label":"Atas Nama Rekening","required":false,"inputs":[{"name":"bankAccountName","type":"text"}]}]}]}]},
-  "inputs": [
-    {
-      "name": "searchFilter",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "EMPLOYEE_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "position",
+        "name": "position",
+        "label": "Posisi Jabatan",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "email",
+        "name": "email",
+        "label": "Email",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "mobilePhone",
+        "name": "mobilePhone",
+        "label": "Handphone",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "joinDate",
+        "name": "joinDate",
+        "label": "Tgl Masuk",
+        "visible": false,
+        "columnWidth": 90,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "DATE",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "calculatePtkp",
+        "name": "calculatePtkp",
+        "label": "Dikenakan PTKP",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "nikNo",
+        "name": "nikNo",
+        "label": "No. KTP",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "suspended",
+        "name": "suspended",
+        "label": "Non Aktif",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "bankAccount",
+        "name": "bankAccount",
+        "label": "Rekening Gaji",
+        "visible": false,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "bankAccountName",
+        "name": "bankAccountName",
+        "label": "Atas Nama Rekening",
+        "visible": false,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "bankName",
+        "name": "bankName",
+        "label": "Nama Bank",
+        "visible": false,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "branch.name",
+        "name": "branch",
+        "label": "Cabang",
+        "visible": false,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "LOOKUP",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "npwpNo",
+        "name": "npwpNo",
+        "label": "No. NPWP",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "attachmentExist",
+        "name": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "salesman",
+        "name": "salesman",
+        "label": "Penjual",
+        "visible": false,
+        "columnWidth": 50,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "number",
+        "name": "number",
+        "label": "ID Karyawan",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "workPhone",
+        "name": "workPhone",
+        "label": "No. Telp. Bisnis",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "homePhone",
+        "name": "homePhone",
+        "label": "No. Telp. Rumah",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "employeeTaxStatusName",
+        "name": "employeeTaxStatusName",
+        "label": "Status PTKP",
+        "visible": true,
+        "columnWidth": 100,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "employeeWorkStatusName",
+        "name": "employeeWorkStatusName",
+        "label": "Status Pekerja",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "lastBalanceView",
+        "name": "lastBalanceView",
+        "label": "Utang",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": "text-right",
+        "sortable": false
+      },
+      {
+        "key": "salesmanUser",
+        "name": "salesmanUser",
+        "label": "Login Penjual",
+        "visible": false,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "type": "BOOLEAN",
+        "defaultFilter": true,
+        "trueLabel": "Ya",
+        "falseLabel": "Tidak"
+      },
+      {
+        "key": "employeeWorkStatusFilter",
+        "label": "Status Pekerja",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Anggota Dewan Komisaris atau dewan pengawas",
+            "key": "ANGGOTA_DEWAN_KOMISARIS"
+          },
+          {
+            "value": "Bukan Pegawai -  Penjaja Barang Dagangan",
+            "key": "BUKAN_PEGAWAI_PENJAJA_DAGANGAN"
+          },
+          {
+            "value": "Bukan Pegawai -  Tenaga Ahli",
+            "key": "BUKAN_PEGAWAI_TENAGA_AHLI"
+          },
+          {
+            "value": "Bukan Pegawai - Distributor MLM",
+            "key": "BUKAN_PEGAWAI_DISTRIBUTOR_MLM"
+          },
+          {
+            "value": "Bukan Pegawai - Petugas Dinas Luar Asuransi",
+            "key": "BUKAN_PEGAWAI_PETUGAS_ASURANSI"
+          },
+          {
+            "value": "Pegawai Tetap",
+            "key": "PEGAWAI_TETAP"
+          },
+          {
+            "value": "Pegawai Tidak Tetap",
+            "key": "PEGAWAI_TIDAK_TETAP"
+          }
+        ]
+      },
+      {
+        "key": "branchFilter",
+        "label": "Cabang",
+        "type": "LIST",
+        "defaultFilter": false,
+        "valueList": []
+      },
+      {
+        "key": "salesmanFilter",
+        "label": "Penjual",
+        "type": "BOOLEAN",
+        "defaultFilter": true,
+        "trueLabel": "Ya",
+        "falseLabel": "Tidak"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnImport",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-import"
+      },
+      {
+        "name": "btnExport",
+        "hint": "",
+        "text": "",
+        "icon": "icon-share"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "note": "Hanya Nama Lengkap yang wajib diisi. Opsi select merujuk ke keys di selects.",
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Data Pribadi",
+            "fields": [
+              {
+                "label": "Nama Lengkap",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "salutation",
+                    "type": "select",
+                    "option_count": 3,
+                    "options_ref": "salutation"
+                  },
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. KTP",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "nikNo",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Email",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "email",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Handphone",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "mobilePhone",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. Telp. Bisnis",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "workPhone",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. Telp. Rumah",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "homePhone",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. WhatsApp",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bbmPin",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Website",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "website",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Kewarganegaraan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "domisiliType",
+                    "type": "select",
+                    "option_count": 63,
+                    "options_ref": "domisiliType"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Data Karyawan",
+            "fields": [
+              {
+                "label": "ID Karyawan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "btnManualNumber--24--0",
+                    "type": "checkbox"
+                  },
+                  {
+                    "name": "typeAutoNumber",
+                    "type": "select",
+                    "option_count": 1,
+                    "options_ref": "typeAutoNumber"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Posisi Jabatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "position",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Tgl Masuk",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "joinDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Cabang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "branch",
+                    "type": "select",
+                    "option_count": 2,
+                    "options_ref": "branch"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Departemen",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "department",
+                    "type": "lookup",
+                    "placeholder": "Cari/Pilih..."
+                  }
+                ],
+                "source": "Departemen; endpoint `/accurate/company/child-department.do`, tambah cepat via `/accurate/company/save-department.do`."
+              },
+              {
+                "label": "Penjual",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesman",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "notes",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Info Alamat",
+        "sections": [
+          {
+            "section": "Info Alamat",
+            "fields": [
+              {
+                "label": "Alamat",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "street",
+                    "type": "textarea"
+                  },
+                  {
+                    "name": "city",
+                    "type": "text"
+                  },
+                  {
+                    "name": "zipCode",
+                    "type": "text"
+                  },
+                  {
+                    "name": "province",
+                    "type": "text"
+                  },
+                  {
+                    "name": "country",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Pajak Penghasilan",
+        "sections": [
+          {
+            "section": "Pajak Penghasilan",
+            "fields": [
+              {
+                "label": "Dikenakan PPh 21",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pph",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. NPWP",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "npwpNo",
+                    "type": "text",
+                    "placeholder": "________________"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Status Pekerja",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "employeeWorkStatus",
+                    "type": "select",
+                    "option_count": 9,
+                    "options_ref": "employeeWorkStatus"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Status PTKP",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "employeeTaxStatus",
+                    "type": "select",
+                    "option_count": 8,
+                    "options_ref": "employeeTaxStatus"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Perhitungan PPh",
+            "fields": [
+              {
+                "label": "PPh mulai dihitung",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "startMonthPayment",
+                    "type": "select",
+                    "option_count": 12,
+                    "options_ref": "startMonthPayment"
+                  },
+                  {
+                    "name": "startYearPayment",
+                    "type": "select",
+                    "option_count": 7,
+                    "options_ref": "startYearPayment"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Penghasilan Sebelumnya",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "nettoIncomeBefore",
+                    "type": "number"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "PPh Sebelumnya",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "pphBefore",
+                    "type": "number"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Info Akun",
+        "sections": [
+          {
+            "section": "Info Akun",
+            "fields": [
+              {
+                "label": "Nama Bank",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bank",
+                    "type": "lookup",
+                    "placeholder": "Cari/Pilih..."
+                  }
+                ],
+                "source": "Kode/nama bank; endpoint `/accurate/company/search-bank-code-type.do`."
+              },
+              {
+                "label": "No Rekening",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bankAccount",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Atas Nama Rekening",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bankAccountName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Histori Piutang",
+        "sections": [
+          {
+            "section": "Filter Histori",
+            "fields": [
+              {
+                "label": "Tanggal Histori",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fromDate",
+                    "type": "date"
+                  },
+                  {
+                    "name": "toDate",
+                    "type": "date"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "opens_with": "btnAdd",
+    "required": []
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "salutation",
-      "type": "select",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Karyawan pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = Employee`."
     },
     {
-      "name": "name",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Cabang",
+      "source": "Master Cabang.",
+      "evidence": "Opsi `root.branchListOption` pada form Karyawan."
     },
     {
-      "name": "nikNo",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Departemen",
+      "source": "Master Departemen.",
+      "evidence": "Lookup `/accurate/company/child-department.do`; tambah cepat `/accurate/company/save-department.do`."
     },
     {
-      "name": "email",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Nama Bank",
+      "source": "Kode/nama bank.",
+      "evidence": "Lookup `/accurate/company/search-bank-code-type.do`."
     },
     {
-      "name": "mobilePhone",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "workPhone",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "homePhone",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "bbmPin",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "website",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "domisiliType",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "btnManualNumber--24--0",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "typeAutoNumber",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "position",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "joinDate",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "branch",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "department",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "salesman",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "notes",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "suspended",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "street",
-      "type": "textarea",
-      "placeholder": ""
-    },
-    {
-      "name": "city",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "zipCode",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "province",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "country",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "pph",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "npwpNo",
-      "type": "text",
-      "placeholder": "________________"
-    },
-    {
-      "name": "employeeWorkStatus",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "employeeTaxStatus",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "startMonthPayment",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "startYearPayment",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "nettoIncomeBefore",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "pphBefore",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "bank",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "bankAccount",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "bankAccountName",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "fromDate",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "toDate",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Histori Piutang",
+      "source": "Transaksi yang menyentuh piutang karyawan.",
+      "evidence": "Tab Histori Piutang dengan filter tanggal dan tombol refresh."
     }
-  ],
-  "tables": [],
-  "selects": {
-    "salutation": [
-      "- Sapaan -",
-      "Bapak",
-      "Ibu"
-    ],
-    "domisiliType": [
-      "Afrika Selatan",
-      "Aljazair",
-      "Amerika Serikat",
-      "Australia",
-      "Austria",
-      "Bangladesh",
-      "Belanda",
-      "Belgia",
-      "Brunei Darussalam",
-      "Bulgaria",
-      "China",
-      "Denmark",
-      "Finlandia",
-      "Hong Kong",
-      "Hungaria",
-      "India",
-      "Indonesia",
-      "Inggris",
-      "Iran",
-      "Italia",
-      "Jepang",
-      "Jerman",
-      "Kanada",
-      "Korea Selatan",
-      "Korea Utara",
-      "Kuwait",
-      "Luxembourg",
-      "Malaysia",
-      "Maroko",
-      "Mesir",
-      "Mongolia",
-      "Norwegia",
-      "Pakistan",
-      "Perancis",
-      "Philipina",
-      "Polandia",
-      "Portugal",
-      "Qatar",
-      "Republik Ceko",
-      "Romania",
-      "Rusia",
-      "Saudi Arabia",
-      "Selandia Baru",
-      "Seychelles",
-      "Singapura",
-      "Slovakia",
-      "Spanyol",
-      "Sri Lanka",
-      "Sudan",
-      "Suriah",
-      "Swedia",
-      "Swiss",
-      "Taiwan",
-      "Thailand",
-      "Tunisia",
-      "Turki",
-      "Ukraina",
-      "Uni Emirat Arab",
-      "Uzbekistan",
-      "Venezuela",
-      "Vietnam",
-      "Yordania",
-      "Timor Leste"
-    ],
-    "typeAutoNumber": [
-      "Karyawan"
-    ],
-    "branch": [
-      "[Semua Cabang]",
-      "Kantor Pusat"
-    ],
-    "employeeWorkStatus": [
-      "Pegawai Tetap",
-      "Pegawai Tidak Tetap",
-      "Bukan Pegawai - Distributor MLM",
-      "Bukan Pegawai - Petugas Dinas Luar Asuransi",
-      "Bukan Pegawai -  Penjaja Barang Dagangan",
-      "Bukan Pegawai -  Tenaga Ahli",
-      "Anggota Dewan Komisaris atau dewan pengawas",
-      "Bukan Pegawai yang menerima imbalan yang bersifat berkesinambungan",
-      "Bukan Pegawai yang menerima imbalan yang tidak bersifat berkesinambungan"
-    ],
-    "employeeTaxStatus": [
-      "Tidak Kawin (Tidak ada tanggungan)",
-      "Tidak Kawin (1 Tanggungan)",
-      "Tidak Kawin (2 Tanggungan)",
-      "Tidak Kawin (3 Tanggungan)",
-      "Kawin (Tidak ada tanggungan)",
-      "Kawin (1 Tanggungan)",
-      "Kawin (2 Tanggungan)",
-      "Kawin (3 Tanggungan)"
-    ],
-    "startMonthPayment": [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember"
-    ],
-    "startYearPayment": [
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "2025",
-      "2026",
-      "2027"
-    ]
-  }
+  ]
 }

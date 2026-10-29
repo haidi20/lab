@@ -1,63 +1,177 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Gaji/Tunjangan",
+  "menu_key": "employee_fee",
+  "module": "#accurate__company__employee-fee",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Non Aktif : Semua",
-    "Tipe Gaji/Tunjangan : Semua",
-    "Info Umum",
-    "Nama",
-    "Tipe Gaji/Tunjangan",
-    "Bayar/Potong",
-    "Bulanan",
-    "Akun Beban",
-    "Non Aktif",
-    "Ya"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "Tipe Gaji/Tunjangan", "required": false, "inputs": [{"name": "feeType", "type": "select", "option_count": 14, "options_ref": "feeType"}]}, {"label": "Akun Beban", "required": true, "inputs": [{"name": "expenseAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}]}], "required": ["Nama", "Akun Beban"]},
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 100,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "feeType",
+        "name": "feeType",
+        "label": "Tipe Gaji/Tunjangan",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "suspended",
+        "name": "suspended",
+        "label": "Non Aktif",
+        "visible": true,
+        "columnWidth": 100,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Tipe Gaji/Tunjangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "feeType",
+                    "type": "select",
+                    "option_count": 14,
+                    "options_ref": "feeType"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Akun Beban",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "expenseAccount",
+                    "type": "lookup",
+                    "placeholder": "Cari/Pilih Akun Perkiraan..."
+                  }
+                ],
+                "source": "Buku Besar > Akun Perkiraan; endpoint `/accurate/general-ledger/childwithtype-glaccount.do`."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Nama",
+      "Akun Beban"
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "name",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Gaji/Tunjangan pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = EmployeeFee`."
     },
     {
-      "name": "feeType",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "expenseAccount",
-      "type": "text",
-      "placeholder": "Cari/Pilih Akun Perkiraan..."
-    },
-    {
-      "name": "suspended",
-      "type": "checkbox",
-      "placeholder": ""
+      "scope": "Akun Beban",
+      "source": "Buku Besar > Akun Perkiraan.",
+      "evidence": "Lookup `/accurate/general-ledger/childwithtype-glaccount.do`."
     }
-  ],
-  "tables": [],
-  "selects": {
-    "feeType": [
-      "Gaji/Pensiun atau THT/JHT",
-      "Tunjangan PPh",
-      "Subsidi PPh",
-      "Tunjangan Lainnya, Uang lembur dan sebagainya",
-      "Tunjangan Jaminan Kecelakaan Kerja, Jaminan Kematian",
-      "Honorarium dan Imbalan lain sejenisnya",
-      "Premi asuransi kesehatan yang dibayarkan pemberi kerja",
-      "Penerimaan dalam bentuk natura dan kenikmatan lainnya",
-      "Tantiem, Bonus, Rapel, Gratifikasi, Jasa Produksi dan THR",
-      "Tunjangan Iuran Pensiun/THT/JHT dibayarkan Pemberi Kerja",
-      "Potongan Gaji (Tidak Mengurangi PPh)",
-      "Pengurangan Gaji (Mengurangi PPh)",
-      "Premi asuransi kesehatan dibayarkan pekerja",
-      "Iuran Pensiun/THT/JHT dibayarkan Pekerja"
-    ]
-  }
+  ]
 }

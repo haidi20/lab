@@ -1,16 +1,187 @@
 {
-  "buttons": [],
-  "labels": [
-    "Tipe Transaksi : Semua"
+  "menu": "Transaksi Favorit",
+  "menu_key": "memorize_transaction",
+  "module": "#accurate__company__memorize-transaction",
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Gunakan transaksi favorit yang tersimpan"
   ],
-  "form": null,
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama Favorit",
+        "visible": true,
+        "columnWidth": 220,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "transactionTypeText",
+        "name": "transactionTypeText",
+        "label": "Tipe Transaksi",
+        "visible": true,
+        "columnWidth": 220,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "userListName",
+        "name": "userListName",
+        "label": "Daftar Pengguna",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transactionTypeFilter",
+        "label": "Tipe Transaksi",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Anggaran",
+            "key": "ABT"
+          },
+          {
+            "value": "Faktur Pembelian",
+            "key": "PI"
+          },
+          {
+            "value": "Faktur Penjualan",
+            "key": "SI"
+          },
+          {
+            "value": "Jurnal Umum",
+            "key": "JV"
+          },
+          {
+            "value": "Pekerjaan Pesanan",
+            "key": "JC"
+          },
+          {
+            "value": "Pembayaran",
+            "key": "PAY"
+          },
+          {
+            "value": "Pemindahan Barang",
+            "key": "IT"
+          },
+          {
+            "value": "Penambahan Bahan Baku",
+            "key": "MA"
+          },
+          {
+            "value": "Penawaran Penjualan",
+            "key": "SQ"
+          },
+          {
+            "value": "Pencatatan Beban",
+            "key": "EXP"
+          },
+          {
+            "value": "Penerimaan",
+            "key": "DEP"
+          },
+          {
+            "value": "Penerimaan Barang",
+            "key": "RI"
+          },
+          {
+            "value": "Pengiriman Pesanan",
+            "key": "DO"
+          },
+          {
+            "value": "Penyelesaian Pesanan",
+            "key": "RO"
+          },
+          {
+            "value": "Penyesuaian Harga/Diskon",
+            "key": "SPA"
+          },
+          {
+            "value": "Penyesuaian Persediaan",
+            "key": "IA"
+          },
+          {
+            "value": "Permintaan Barang",
+            "key": "PR"
+          },
+          {
+            "value": "Pesanan Pembelian",
+            "key": "PO"
+          },
+          {
+            "value": "Pesanan Penjualan",
+            "key": "SO"
+          },
+          {
+            "value": "Rencana Produksi",
+            "key": "MO"
+          },
+          {
+            "value": "Standar Biaya Produksi",
+            "key": "SPC"
+          }
+        ]
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
+    },
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Tidak ada form tambah standar; capture tidak menampilkan `btnAdd`. Data favorit dibuat dari aksi simpan favorit pada modul transaksi."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Tabel",
+      "source": "Transaksi favorit/template yang disimpan pengguna.",
+      "evidence": "Kolom Nama Favorit, Tipe Transaksi, dan Daftar Pengguna."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

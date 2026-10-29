@@ -1,23 +1,109 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "FOB",
+  "menu_key": "freeonboard",
+  "module": "#accurate__company__freeonboard",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Info Umum",
-    "Nama"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}]}]}], "required": ["Nama"]},
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 100,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "FOB_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Nama"
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "name",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master FOB pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = FreeOnBoard`."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

@@ -1,70 +1,248 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Pengiriman",
+  "menu_key": "shipment",
+  "module": "#accurate__company__shipment",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Non Aktif : Semua",
-    "Info Umum",
-    "Nama",
-    "PIC",
-    "No. Telp",
-    "Non Aktif",
-    "Ya",
-    "Info Lainnya",
-    "Alamat Pengiriman"
+    "Perbarui daftar",
+    "Impor",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "PIC", "required": false, "inputs": [{"name": "picName", "type": "text"}]}, {"label": "No. Telp", "required": false, "inputs": [{"name": "picPhoneNumber", "type": "text", "placeholder": "________________"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}, {"section": "Info Lainnya", "fields": [{"label": "Alamat Pengiriman", "required": false, "inputs": [{"name": "shipAddressStreet", "type": "textarea"}, {"name": "shipAddressCity", "type": "text"}, {"name": "shipAddressZipCode", "type": "text"}, {"name": "shipAddressProvince", "type": "text"}, {"name": "shipAddressCountry", "type": "text"}]}]}]}], "required": ["Nama"]},
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "SHIPMENT_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "picName",
+        "name": "picName",
+        "label": "PIC",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "picPhoneNumber",
+        "name": "picPhoneNumber",
+        "label": "No. Telp",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "shipAddress",
+        "name": "shipAddress",
+        "label": "Alamat Lengkap",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "suspended",
+        "name": "suspended",
+        "label": "Non Aktif",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "type": "BOOLEAN",
+        "defaultFilter": true,
+        "trueLabel": "Ya",
+        "falseLabel": "Tidak"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnImport",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-import"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "PIC",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "picName",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. Telp",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "picPhoneNumber",
+                    "type": "text",
+                    "placeholder": "________________"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Alamat Pengiriman",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "shipAddressStreet",
+                    "type": "textarea"
+                  },
+                  {
+                    "name": "shipAddressCity",
+                    "type": "text"
+                  },
+                  {
+                    "name": "shipAddressZipCode",
+                    "type": "text"
+                  },
+                  {
+                    "name": "shipAddressProvince",
+                    "type": "text"
+                  },
+                  {
+                    "name": "shipAddressCountry",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Nama"
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "name",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Pengiriman pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = Shipment`."
     },
     {
-      "name": "picName",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "picPhoneNumber",
-      "type": "text",
-      "placeholder": "________________"
-    },
-    {
-      "name": "suspended",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "shipAddressStreet",
-      "type": "textarea",
-      "placeholder": ""
-    },
-    {
-      "name": "shipAddressCity",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "shipAddressZipCode",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "shipAddressProvince",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "shipAddressCountry",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Impor",
+      "source": "Berkas impor yang diunggah pengguna.",
+      "evidence": "Tombol `btnImport` pada toolbar."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

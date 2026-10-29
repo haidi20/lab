@@ -1,39 +1,276 @@
 {
-  "buttons": [],
-  "labels": [
-    "Tipe : Semua",
-    "Cabang",
-    "Nama Lengkap",
-    "Tipe",
-    "Perusahaan",
-    "Email",
-    "Handphone",
-    "No. Telp. Bisnis",
-    "No. Telp. Rumah",
-    "Faximili",
-    "Catatan",
-    "No. WhatsApp",
-    "Website",
-    "Posisi Jabatan"
+  "menu": "Kontak",
+  "menu_key": "contact",
+  "module": "#accurate__company__contact",
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom",
+    "Tampilkan kontak dari modul pelanggan/pemasok"
   ],
-  "form": null,
-  "inputs": [
-    {
-      "name": "searchFilter",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama Lengkap",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "contactType",
+        "name": "contactType",
+        "label": "Tipe",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "companyName",
+        "name": "companyName",
+        "label": "Perusahaan",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "email",
+        "name": "email",
+        "label": "Email",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "mobilePhone",
+        "name": "mobilePhone",
+        "label": "Handphone",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "workPhone",
+        "name": "workPhone",
+        "label": "No. Telp. Bisnis",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "homePhone",
+        "name": "homePhone",
+        "label": "No. Telp. Rumah",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "branch.name",
+        "name": "branch",
+        "label": "Cabang",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "LOOKUP",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "fax",
+        "name": "fax",
+        "label": "Faximili",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "notes",
+        "name": "notes",
+        "label": "Catatan",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "bbmPin",
+        "name": "bbmPin",
+        "label": "No. WhatsApp",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "website",
+        "name": "website",
+        "label": "Website",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "position",
+        "name": "position",
+        "label": "Posisi Jabatan",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "branchFilter",
+        "label": "Cabang",
+        "type": "LIST",
+        "defaultFilter": false,
+        "valueList": []
+      },
+      {
+        "key": "contactTypeFilter",
+        "label": "Tipe",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Pelanggan",
+            "key": "CST"
+          },
+          {
+            "value": "Pemasok",
+            "key": "VDR"
+          },
+          {
+            "value": "Tenaga Penjual",
+            "key": "EMP"
+          }
+        ]
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
+    },
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Tidak ada form tambah standar; capture tidak menampilkan `btnAdd`. Kontak dikelola dari modul pelanggan/pemasok."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Tabel",
+      "source": "Data kontak pelanggan/pemasok yang sudah tersimpan.",
+      "evidence": "Kolom identitas dan kontak pada grid Kontak."
+    },
+    {
+      "scope": "Cabang",
+      "source": "Master Cabang.",
+      "evidence": "Filter `branchFilter`."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

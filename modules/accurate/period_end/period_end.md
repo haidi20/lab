@@ -1,77 +1,88 @@
 # Proses Akhir Bulan
 
 **Module:** `#accurate__company__period-end`
+**Tipe Modul:** `TRANSACTION`
+**Capture:** 2026-10-29T08:14:00+08:00 ? perusahaan `cy` (database `3058374`).
 
 ## Fitur
-
-- **Data Baru**: Membuat entri proses akhir bulan baru
-- **Cetak**: Mencetak daftar proses akhir bulan
-- **Unduh XLS**: Ekspor daftar ke format Excel
-- **Unduh PDF**: Ekspor daftar ke format PDF
-
-## Form Data Baru (Tambah Proses Akhir Bulan)
-
-Form ini dibuka dari tombol **Tambah** (`btnAdd`) pada daftar Proses Akhir Bulan.
-
-### Info Utama
-
-| Field | Input | Tipe | Wajib | Keterangan |
-| --- | --- | --- | --- | --- |
-| Bulan | `monthPE` | select | Ya | Wajib memilih salah satu bulan; placeholder/nilai awal `[Pilih Bulan]`. |
-| Tahun | `yearPE` | select | Tidak | Opsi tahun tersedia sesuai data konfigurasi periode. |
-
-### Tab
-
-| Tab | Isi | Keterangan |
-| --- | --- | --- |
-| Nilai Tukar Mata Uang | SlickGrid nilai tukar | Kolom: **Nama Mata Uang** dan **Nilai Tukar**. Baris dapat dibuka/diatur; capture menampilkan `Indonesian Rupiah = 1`. |
-| Catatan | `description` | Textarea, maksimal 5.000 karakter. |
-
-## Filter & Kolom Daftar
-
-### Label
-
 - Data Baru
-- Bulan : Semua
-- Tahun : Semua
-- Nama
-- Tanggal Input
-- Keterangan
-- Memiliki dokumen
-- Bulan
-- Tahun
+- Perbarui daftar
+- Cetak
+- Ekspor XLS
+- Ekspor PDF
+- Pengaturan kolom
+- Atur nilai tukar mata uang
 
-### Input Fields
+## Form Data Baru
+Form **Data Baru Proses Akhir Bulan** dibuka dari tombol `btnAdd`.
 
-| Nama | Tipe | Placeholder |
-|------|------|-------------|
-| searchFilter | text | Cari/Pilih... |
-| selectedColumn | checkbox |  |
-| keyword | text | Ketik dan [Enter] |
-| monthPE | select |  |
-| yearPE | select |  |
-| description | textarea |  |
+Wajib diisi: **Bulan**.
 
-### Dropdown Options
+### Tab Info Utama
 
-**monthPE:**
+#### Info Utama
 
-- [Pilih Bulan]
-- Januari
-- Februari
-- Maret
-- April
-- Mei
-- Juni
-- Juli
-- Agustus
-- September
-- Oktober
-- November
-- Desember
+| Field | Input | Wajib | Sumber Data |
+|---|---|---|---|
+| Bulan | `monthPE` (select) | Ya | Input manual pengguna. |
+| Tahun | `yearPE` (select) | Tidak | Input manual pengguna. |
 
-**yearPE:**
+### Tab Nilai Tukar Mata Uang
 
-- 2027
-- 2026
+#### Nilai Tukar
 
+| Field | Input | Wajib | Sumber Data |
+|---|---|---|---|
+| Nilai Tukar Mata Uang | `currencyRate` (grid) | Tidak | Master mata uang perusahaan; capture menampilkan Indonesian Rupiah dengan nilai tukar 1. |
+
+### Tab Catatan
+
+#### Catatan
+
+| Field | Input | Wajib | Sumber Data |
+|---|---|---|---|
+| Catatan | `description` (textarea) | Tidak | Input manual pengguna. |
+
+## Daftar & Filter
+
+### Tombol Toolbar
+
+| Tombol | Hint/Label |
+|---|---|
+| `btnAdd` | - |
+| `btnRefresh` | - |
+| `btnColumnSetting` | - |
+| `-` | - |
+| `-` | - |
+
+### Filter
+
+| Key | Label | Tipe | Opsi |
+|---|---|---|---|
+| `monthPEFilter` | Bulan | LIST | 12 opsi |
+| `yearPEFilter` | Tahun | LIST | 5 opsi |
+
+## Kolom Tabel
+
+| Key | Label | Default Tampil | Tipe |
+|---|---|---|---|
+| `number` | Nama | Ya | TEXT |
+| `transDate` | Tanggal Input | Ya | DATE |
+| `description` | Keterangan | Ya | TEXT |
+| `attachmentExist` | Memiliki dokumen | Tidak | BOOLEAN |
+
+Record aktual tersimpan di `data.json`: **0 baris**, status `empty`.
+
+## Sumber Data
+
+| Cakupan | Sumber | Bukti Capture |
+|---|---|---|
+| Tabel | Entri Proses Akhir Bulan yang sudah dibuat. | Kolom Nama, Tanggal Input, Keterangan, dan Memiliki dokumen. |
+| Bulan/Tahun | Konfigurasi periode perusahaan. | Filter `monthPEFilter` dan `yearPEFilter` dengan opsi 2023-2027. |
+| Nilai Tukar | Master mata uang perusahaan. | Grid Nilai Tukar Mata Uang dan baris Indonesian Rupiah = 1. |
+
+## Catatan Analisa
+
+- Analisa berbasis observasi browser; tidak menggunakan screenshot.
+- REA `capture-browser-scenario` dipakai untuk skenario login/navigasi; CLI konsisten timeout pada klik pembuka modul setelah tiga percobaan.
+- Struktur modul, form, filter, dan kolom diekstrak dari DOM capture yang valid.

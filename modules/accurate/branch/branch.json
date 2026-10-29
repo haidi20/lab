@@ -1,71 +1,231 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Cabang",
+  "menu_key": "branch",
+  "module": "#accurate__company__branch",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Non Aktif : Semua",
-    "Info Umum",
-    "Nama",
-    "No. Telepon",
-    "Non Aktif",
-    "Ya",
-    "Info Lainnya",
-    "Alamat",
-    "Akses Pengguna",
-    "Semua Pengguna"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Nama", "required": true, "inputs": [{"name": "name", "type": "text"}]}, {"label": "No. Telepon", "required": false, "inputs": [{"name": "phoneNumber", "type": "text"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}, {"section": "Info Lainnya", "fields": [{"label": "Alamat", "required": false, "inputs": [{"name": "street", "type": "textarea"}, {"name": "city", "type": "text"}, {"name": "zipCode", "type": "text"}, {"name": "province", "type": "text"}, {"name": "country", "type": "text"}]}]}]}], "required": ["Nama"]},
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "suspended",
+        "name": "suspended",
+        "label": "Non Aktif",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "phoneNumber",
+        "name": "phoneNumber",
+        "label": "No. Telepon",
+        "visible": true,
+        "columnWidth": 90,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "BRANCH_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "branchAddress",
+        "name": "branchAddress",
+        "label": "Alamat",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "userListName",
+        "name": "userListName",
+        "label": "Daftar Pengguna",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "No. Telepon",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "phoneNumber",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          },
+          {
+            "section": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Alamat",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "street",
+                    "type": "textarea"
+                  },
+                  {
+                    "name": "city",
+                    "type": "text"
+                  },
+                  {
+                    "name": "zipCode",
+                    "type": "text"
+                  },
+                  {
+                    "name": "province",
+                    "type": "text"
+                  },
+                  {
+                    "name": "country",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Akses Pengguna",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "usedAllUser",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Akses pengguna/grup perusahaan; pilih Semua Pengguna atau batasi daftar."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Nama"
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "name",
-      "type": "text",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Cabang pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = Branch` dan grid daftar cabang."
     },
     {
-      "name": "phoneNumber",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "suspended",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "street",
-      "type": "textarea",
-      "placeholder": ""
-    },
-    {
-      "name": "city",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "zipCode",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "province",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "country",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "usedAllUser",
-      "type": "checkbox",
-      "placeholder": ""
+      "scope": "Akses Pengguna",
+      "source": "Daftar pengguna/grup akses perusahaan.",
+      "evidence": "Kontrol `usedAllUser` dan teks `Semua Pengguna`."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

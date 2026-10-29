@@ -1,71 +1,260 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Syarat Pembayaran",
+  "menu_key": "payment_term",
+  "module": "#accurate__company__payment-term",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Non Aktif : Semua",
-    "Nama",
-    "Diskon (%)",
-    "Masa Diskon (hari)",
-    "Masa Jatuh Tempo (hari)",
-    "Keterangan",
-    "Non Aktif",
-    "Default",
-    "Info Umum",
-    "Jika membayar antara",
-    "Hari",
-    "Akan mendapat diskon",
-    "Masa Jatuh Tempo",
-    "Default Syarat Pembayaran",
-    "Ya"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Jika membayar antara", "required": false, "inputs": [{"name": "discDays", "type": "number"}]}, {"label": "Akan mendapat diskon", "required": false, "inputs": [{"name": "discPC", "type": "number"}]}, {"label": "Masa Jatuh Tempo", "required": false, "inputs": [{"name": "netDays", "type": "number"}]}, {"label": "Keterangan", "required": false, "inputs": [{"name": "memo", "type": "textarea"}]}, {"label": "Default Syarat Pembayaran", "required": false, "inputs": [{"name": "isDefault", "type": "checkbox"}]}, {"label": "Non Aktif", "required": false, "inputs": [{"name": "suspended", "type": "checkbox"}]}]}]}]},
-  "inputs": [
-    {
-      "name": "searchFilter",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TERM_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "discPC",
+        "name": "discPC",
+        "label": "Diskon (%)",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": true,
+        "type": "MONEY",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "discDays",
+        "name": "discDays",
+        "label": "Masa Diskon (hari)",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": true,
+        "type": "DAY_VALUE",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "netDays",
+        "name": "netDays",
+        "label": "Masa Jatuh Tempo (hari)",
+        "visible": true,
+        "columnWidth": 180,
+        "fixedWidth": true,
+        "numberField": true,
+        "type": "DAY_VALUE",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "memo",
+        "name": "memo",
+        "label": "Keterangan",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "suspended",
+        "name": "suspended",
+        "label": "Non Aktif",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "defaultTerm",
+        "name": "defaultTerm",
+        "label": "Default",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "type": "BOOLEAN",
+        "defaultFilter": true,
+        "trueLabel": "Ya",
+        "falseLabel": "Tidak"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Jika membayar antara",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "discDays",
+                    "type": "number"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Akan mendapat diskon",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "discPC",
+                    "type": "number"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Masa Jatuh Tempo",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "netDays",
+                    "type": "number"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "memo",
+                    "type": "textarea"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Default Syarat Pembayaran",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "isDefault",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "type": "checkbox"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "discDays",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "discPC",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "netDays",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "memo",
-      "type": "textarea",
-      "placeholder": ""
-    },
-    {
-      "name": "isDefault",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "suspended",
-      "type": "checkbox",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Syarat Pembayaran pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = PaymentTerm`."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

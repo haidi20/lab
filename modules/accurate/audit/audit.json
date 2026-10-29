@@ -1,202 +1,666 @@
 {
   "menu": "Log Aktifitas",
+  "menu_key": "audit",
   "module": "#accurate__company__audit",
-  "entity_type": "Audit",
-  "buttons": [],
-  "labels": [
-    "Tgl Transaksi : Semua",
-    "Tanggal : Semua",
-    "Tipe Transaksi : Semua",
-    "Pengguna : Semua",
-    "Tipe Tindakan : Semua"
+  "module_type": "INFORMATION",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
+    "Perbarui log",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom",
+    "Filter aktivitas sistem"
   ],
-  "form": null,
-  "columns": [
-    "Tgl Transaksi",
-    "No/Nama Referensi",
-    "Tipe Tindakan",
-    "Tipe Transaksi",
-    "Tanggal",
-    "Pengguna",
-    "Email",
-    "Alamat IP"
-  ],
-  "filters": [
-    {
-      "key": "transDateFilter",
-      "label": "Tgl Transaksi",
-      "type": "DATE",
-      "default": true
-    },
-    {
-      "key": "logDateFilter",
-      "label": "Tanggal",
-      "type": "DATE",
-      "default": true
-    },
-    {
-      "key": "transactionTypeFilter",
-      "label": "Tipe Transaksi",
-      "type": "LIST",
-      "default": true,
-      "options": [
-        "Akses Grup",
-        "Akun Perkiraan",
-        "Alokasi Biaya Produksi",
-        "Anggaran",
-        "Aset Tetap",
-        "Barang & Jasa",
-        "Cabang",
-        "Departemen",
-        "Desain Cetakan",
-        "Disposisi Aset Tetap",
-        "Distribusi Stok",
-        "Etalase",
-        "FOB",
-        "Faktur Pembelian",
-        "Faktur Penjualan",
-        "Food Delivery",
-        "Forecast PO",
-        "Formula Produksi",
-        "Gaji/Tunjangan",
-        "Gudang",
-        "Harga Pemasok",
-        "Hasil Stok Opname",
-        "Internet Banking",
-        "Jurnal Umum",
-        "Karyawan",
-        "Katalog",
-        "Kategori Aset",
-        "Kategori Aset Tetap Pajak",
-        "Kategori Barang",
-        "Kategori Keuangan ",
-        "Kategori Pelanggan",
-        "Kategori Pemasok",
-        "Kategori Penjualan",
-        "Kategori Transaksi Berulang",
-        "Klaim Pelanggan",
-        "Klaim Pemasok",
-        "Koleksi",
-        "Komisi Penjual",
-        "Kontak",
-        "Laporan Tersimpan",
-        "Mata Uang",
-        "Merek Barang",
-        "Minimum Stok Cabang",
-        "Pajak",
-        "Pekerjaan Pesanan",
-        "Pelanggan",
-        "Pelunasan Pinjaman",
-        "Pemasok",
-        "Pembayaran",
-        "Pembayaran Angsuran",
-        "Pembayaran Pembelian",
-        "Pemindahan Barang",
-        "Penambahan Bahan Baku",
-        "Penanggung Jawab",
-        "Penawaran Penjualan",
-        "Pencairan Pinjaman",
-        "Pencatatan Beban",
-        "Pencatatan Gaji",
-        "Penerimaan",
-        "Penerimaan Barang",
-        "Penerimaan Penjualan",
-        "Pengambilan Bahan Baku",
-        "Pengaturan POS",
-        "Pengaturan Sub Company Code",
-        "Pengaturan Virtual Account",
-        "Pengaturan e-Payment",
-        "Pengepakan Barang",
-        "Pengiriman",
-        "Pengiriman Pesanan",
-        "Pengisian Nomor Seri",
-        "Penomoran",
-        "Penyelesaian Barang Jadi",
-        "Penyelesaian Pesanan",
-        "Penyesuaian Harga/Diskon",
-        "Penyesuaian Persediaan",
-        "Penyetuju Transaksi",
-        "Perintah Kerja",
-        "Perintah Pembayaran",
-        "Perintah Stok Opname",
-        "Permintaan Barang",
-        "Persiapan Bahan Baku",
-        "Perubahan Aset Tetap",
-        "Pesanan Pembelian",
-        "Pesanan Penjualan",
-        "Pihak Berwenang e-Faktur",
-        "Pindah Aset",
-        "Pinjaman Karyawan",
-        "Preferensi",
-        "Promo",
-        "Proses Akhir Bulan",
-        "Proyek",
-        "Rencana Produksi",
-        "Retur Pembelian",
-        "Retur Penjualan",
-        "SPT PPN/PPNBM",
-        "Satuan Barang",
-        "SmartLink Virtual Account",
-        "SmartLink e-Commerce",
-        "SmartLink e-Payment",
-        "Standar Biaya Produksi",
-        "Syarat Pembayaran",
-        "Tahapan",
-        "Tahapan Proses",
-        "Target Penjualan",
-        "Trade Portal",
-        "Transfer Bank",
-        "Tukar Faktur",
-        "Uang Muka Pembelian",
-        "Uang Muka Penjualan"
-      ]
-    },
-    {
-      "key": "createdByFilter",
-      "label": "Pengguna",
-      "type": "LIST",
-      "default": true,
-      "options": [
-        "haidi nurhadinata"
-      ]
-    },
-    {
-      "key": "operationTypeFilter",
-      "label": "Tipe Tindakan",
-      "type": "LIST",
-      "default": true,
-      "options": [
-        "Buat",
-        "Hapus",
-        "Ubah"
-      ]
-    }
-  ],
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "transDate",
+        "name": "transDate",
+        "label": "Tgl Transaksi",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "DATE",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "description",
+        "name": "description",
+        "label": "No/Nama Referensi",
+        "visible": true,
+        "columnWidth": 70,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "operationTypeName",
+        "name": "operationTypeName",
+        "label": "Tipe Tindakan",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "transactionTypeName",
+        "name": "transactionTypeName",
+        "label": "Tipe Transaksi",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "createDateView",
+        "name": "createDateView",
+        "label": "Tanggal",
+        "visible": true,
+        "columnWidth": 180,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "createdBy",
+        "name": "createdBy",
+        "label": "Pengguna",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "email",
+        "name": "email",
+        "label": "Email",
+        "visible": true,
+        "columnWidth": 250,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "accessIp",
+        "name": "accessIp",
+        "label": "Alamat IP",
+        "visible": true,
+        "columnWidth": 140,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tgl Transaksi",
+        "type": "DATE",
+        "defaultFilter": true
+      },
+      {
+        "key": "logDateFilter",
+        "label": "Tanggal",
+        "type": "DATE",
+        "defaultFilter": true
+      },
+      {
+        "key": "transactionTypeFilter",
+        "label": "Tipe Transaksi",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Akses Grup",
+            "key": "APR"
+          },
+          {
+            "value": "Akun Perkiraan",
+            "key": "ACC"
+          },
+          {
+            "value": "Alokasi Biaya Produksi",
+            "key": "CDT"
+          },
+          {
+            "value": "Anggaran",
+            "key": "ABT"
+          },
+          {
+            "value": "Aset Tetap",
+            "key": "FAA"
+          },
+          {
+            "value": "Barang & Jasa",
+            "key": "ITM"
+          },
+          {
+            "value": "Cabang",
+            "key": "BRN"
+          },
+          {
+            "value": "Departemen",
+            "key": "DPT"
+          },
+          {
+            "value": "Desain Cetakan",
+            "key": "PRL"
+          },
+          {
+            "value": "Disposisi Aset Tetap",
+            "key": "FAD"
+          },
+          {
+            "value": "Distribusi Stok",
+            "key": "GDT"
+          },
+          {
+            "value": "Etalase",
+            "key": "STC"
+          },
+          {
+            "value": "FOB",
+            "key": "FOB"
+          },
+          {
+            "value": "Faktur Pembelian",
+            "key": "PI"
+          },
+          {
+            "value": "Faktur Penjualan",
+            "key": "SI"
+          },
+          {
+            "value": "Food Delivery",
+            "key": "FDS"
+          },
+          {
+            "value": "Forecast PO",
+            "key": "FPO"
+          },
+          {
+            "value": "Formula Produksi",
+            "key": "BOM"
+          },
+          {
+            "value": "Gaji/Tunjangan",
+            "key": "FEE"
+          },
+          {
+            "value": "Gudang",
+            "key": "WHS"
+          },
+          {
+            "value": "Harga Pemasok",
+            "key": "VPA"
+          },
+          {
+            "value": "Hasil Stok Opname",
+            "key": "OPR"
+          },
+          {
+            "value": "Internet Banking",
+            "key": "IB"
+          },
+          {
+            "value": "Jurnal Umum",
+            "key": "JV"
+          },
+          {
+            "value": "Karyawan",
+            "key": "EMP"
+          },
+          {
+            "value": "Katalog",
+            "key": "ICA"
+          },
+          {
+            "value": "Kategori Aset",
+            "key": "ACT"
+          },
+          {
+            "value": "Kategori Aset Tetap Pajak",
+            "key": "FFT"
+          },
+          {
+            "value": "Kategori Barang",
+            "key": "ICT"
+          },
+          {
+            "value": "Kategori Keuangan ",
+            "key": "DCF"
+          },
+          {
+            "value": "Kategori Pelanggan",
+            "key": "CCT"
+          },
+          {
+            "value": "Kategori Pemasok",
+            "key": "VCT"
+          },
+          {
+            "value": "Kategori Penjualan",
+            "key": "PCT"
+          },
+          {
+            "value": "Kategori Transaksi Berulang",
+            "key": "RCT"
+          },
+          {
+            "value": "Klaim Pelanggan",
+            "key": "CCL"
+          },
+          {
+            "value": "Klaim Pemasok",
+            "key": "VCL"
+          },
+          {
+            "value": "Koleksi",
+            "key": "ICO"
+          },
+          {
+            "value": "Komisi Penjual",
+            "key": "SCO"
+          },
+          {
+            "value": "Kontak",
+            "key": "CTC"
+          },
+          {
+            "value": "Laporan Tersimpan",
+            "key": "RPT"
+          },
+          {
+            "value": "Mata Uang",
+            "key": "CUR"
+          },
+          {
+            "value": "Merek Barang",
+            "key": "IBR"
+          },
+          {
+            "value": "Minimum Stok Cabang",
+            "key": "BMQ"
+          },
+          {
+            "value": "Pajak",
+            "key": "TAX"
+          },
+          {
+            "value": "Pekerjaan Pesanan",
+            "key": "JC"
+          },
+          {
+            "value": "Pelanggan",
+            "key": "CST"
+          },
+          {
+            "value": "Pelunasan Pinjaman",
+            "key": "ELS"
+          },
+          {
+            "value": "Pemasok",
+            "key": "VDR"
+          },
+          {
+            "value": "Pembayaran",
+            "key": "PAY"
+          },
+          {
+            "value": "Pembayaran Angsuran",
+            "key": "ELI"
+          },
+          {
+            "value": "Pembayaran Pembelian",
+            "key": "PPY"
+          },
+          {
+            "value": "Pemindahan Barang",
+            "key": "IT"
+          },
+          {
+            "value": "Penambahan Bahan Baku",
+            "key": "MA"
+          },
+          {
+            "value": "Penanggung Jawab",
+            "key": "WP"
+          },
+          {
+            "value": "Penawaran Penjualan",
+            "key": "SQ"
+          },
+          {
+            "value": "Pencairan Pinjaman",
+            "key": "ELD"
+          },
+          {
+            "value": "Pencatatan Beban",
+            "key": "EXP"
+          },
+          {
+            "value": "Pencatatan Gaji",
+            "key": "EPY"
+          },
+          {
+            "value": "Penerimaan",
+            "key": "DEP"
+          },
+          {
+            "value": "Penerimaan Barang",
+            "key": "RI"
+          },
+          {
+            "value": "Penerimaan Penjualan",
+            "key": "SPY"
+          },
+          {
+            "value": "Pengambilan Bahan Baku",
+            "key": "MS"
+          },
+          {
+            "value": "Pengaturan POS",
+            "key": "PSG"
+          },
+          {
+            "value": "Pengaturan Sub Company Code",
+            "key": "VSC"
+          },
+          {
+            "value": "Pengaturan Virtual Account",
+            "key": "VAS"
+          },
+          {
+            "value": "Pengaturan e-Payment",
+            "key": "EPS"
+          },
+          {
+            "value": "Pengepakan Barang",
+            "key": "DPK"
+          },
+          {
+            "value": "Pengiriman",
+            "key": "SHP"
+          },
+          {
+            "value": "Pengiriman Pesanan",
+            "key": "DO"
+          },
+          {
+            "value": "Pengisian Nomor Seri",
+            "key": "SNE"
+          },
+          {
+            "value": "Penomoran",
+            "key": "ANT"
+          },
+          {
+            "value": "Penyelesaian Barang Jadi",
+            "key": "FGS"
+          },
+          {
+            "value": "Penyelesaian Pesanan",
+            "key": "RO"
+          },
+          {
+            "value": "Penyesuaian Harga/Diskon",
+            "key": "SPA"
+          },
+          {
+            "value": "Penyesuaian Persediaan",
+            "key": "IA"
+          },
+          {
+            "value": "Penyetuju Transaksi",
+            "key": "UAP"
+          },
+          {
+            "value": "Perintah Kerja",
+            "key": "WO"
+          },
+          {
+            "value": "Perintah Pembayaran",
+            "key": "TFO"
+          },
+          {
+            "value": "Perintah Stok Opname",
+            "key": "OPO"
+          },
+          {
+            "value": "Permintaan Barang",
+            "key": "PR"
+          },
+          {
+            "value": "Persiapan Bahan Baku",
+            "key": "MPP"
+          },
+          {
+            "value": "Perubahan Aset Tetap",
+            "key": "FAE"
+          },
+          {
+            "value": "Pesanan Pembelian",
+            "key": "PO"
+          },
+          {
+            "value": "Pesanan Penjualan",
+            "key": "SO"
+          },
+          {
+            "value": "Pihak Berwenang e-Faktur",
+            "key": "TIA"
+          },
+          {
+            "value": "Pindah Aset",
+            "key": "AST"
+          },
+          {
+            "value": "Pinjaman Karyawan",
+            "key": "EPL"
+          },
+          {
+            "value": "Preferensi",
+            "key": "PRF"
+          },
+          {
+            "value": "Promo",
+            "key": "PRM"
+          },
+          {
+            "value": "Proses Akhir Bulan",
+            "key": "PEU"
+          },
+          {
+            "value": "Proyek",
+            "key": "PRJ"
+          },
+          {
+            "value": "Rencana Produksi",
+            "key": "MO"
+          },
+          {
+            "value": "Retur Pembelian",
+            "key": "PRT"
+          },
+          {
+            "value": "Retur Penjualan",
+            "key": "SRT"
+          },
+          {
+            "value": "SPT PPN/PPNBM",
+            "key": "PPN"
+          },
+          {
+            "value": "Satuan Barang",
+            "key": "UOM"
+          },
+          {
+            "value": "SmartLink Virtual Account",
+            "key": "VST"
+          },
+          {
+            "value": "SmartLink e-Commerce",
+            "key": "ES"
+          },
+          {
+            "value": "SmartLink e-Payment",
+            "key": "EPH"
+          },
+          {
+            "value": "Standar Biaya Produksi",
+            "key": "SPC"
+          },
+          {
+            "value": "Syarat Pembayaran",
+            "key": "TRM"
+          },
+          {
+            "value": "Tahapan",
+            "key": "BPC"
+          },
+          {
+            "value": "Tahapan Proses",
+            "key": "PS"
+          },
+          {
+            "value": "Target Penjualan",
+            "key": "ST"
+          },
+          {
+            "value": "Trade Portal",
+            "key": "OLO"
+          },
+          {
+            "value": "Transfer Bank",
+            "key": "BT"
+          },
+          {
+            "value": "Tukar Faktur",
+            "key": "EXI"
+          },
+          {
+            "value": "Uang Muka Pembelian",
+            "key": "PID"
+          },
+          {
+            "value": "Uang Muka Penjualan",
+            "key": "SID"
+          }
+        ]
+      },
+      {
+        "key": "createdByFilter",
+        "label": "Pengguna",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "haidi nurhadinata",
+            "key": "1342014"
+          }
+        ]
+      },
+      {
+        "key": "operationTypeFilter",
+        "label": "Tipe Tindakan",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Buat",
+            "key": "INSERT"
+          },
+          {
+            "value": "Hapus",
+            "key": "DELETE"
+          },
+          {
+            "value": "Ubah",
+            "key": "EDIT"
+          }
+        ]
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
-      "purpose": "Cari kata kunci pada daftar log"
+      "placeholder": ""
+    },
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Tidak ada form tambah karena menu ini read-only; record dihasilkan otomatis oleh sistem."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Tabel",
+      "source": "Log aktivitas yang dihasilkan otomatis oleh sistem saat pengguna membuat, mengubah, atau menghapus data.",
+      "evidence": "Record capture: `Buat Preferensi` pada 29 Oct 2026."
     },
     {
-      "name": "searchFilter",
-      "type": "text",
-      "purpose": "Cari kolom pada panel pengaturan kolom"
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "purpose": "Pilih kolom tampil",
-      "options": [
-        "Tgl Transaksi",
-        "No/Nama Referensi",
-        "Tipe Tindakan",
-        "Tipe Transaksi",
-        "Tanggal",
-        "Pengguna",
-        "Email",
-        "Alamat IP"
-      ]
+      "scope": "Pengguna",
+      "source": "Akun pengguna perusahaan.",
+      "evidence": "Filter `createdByFilter` dan kolom Pengguna/Email."
     }
   ]
 }

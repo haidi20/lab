@@ -1,16 +1,201 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Proses Akhir Bulan",
+  "menu_key": "period_end",
+  "module": "#accurate__company__period-end",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Bulan : Semua",
-    "Tahun : Semua",
-    "Nama",
-    "Tanggal Input",
-    "Keterangan",
-    "Memiliki dokumen",
-    "Bulan",
-    "Tahun"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom",
+    "Atur nilai tukar mata uang"
   ],
+  "list_view": {
+    "columns": [
+      {
+        "key": "number",
+        "name": "number",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "transDate",
+        "name": "transDate",
+        "label": "Tanggal Input",
+        "visible": true,
+        "columnWidth": 150,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "DATE",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "description",
+        "name": "description",
+        "label": "Keterangan",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TEXT",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "attachmentExist",
+        "name": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "BOOLEAN",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "monthPEFilter",
+        "label": "Bulan",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "Januari",
+            "key": "01"
+          },
+          {
+            "value": "Februari",
+            "key": "02"
+          },
+          {
+            "value": "Maret",
+            "key": "03"
+          },
+          {
+            "value": "April",
+            "key": "04"
+          },
+          {
+            "value": "Mei",
+            "key": "05"
+          },
+          {
+            "value": "Juni",
+            "key": "06"
+          },
+          {
+            "value": "Juli",
+            "key": "07"
+          },
+          {
+            "value": "Agustus",
+            "key": "08"
+          },
+          {
+            "value": "September",
+            "key": "09"
+          },
+          {
+            "value": "Oktober",
+            "key": "10"
+          },
+          {
+            "value": "November",
+            "key": "11"
+          },
+          {
+            "value": "Desember",
+            "key": "12"
+          }
+        ]
+      },
+      {
+        "key": "yearPEFilter",
+        "label": "Tahun",
+        "type": "LIST",
+        "defaultFilter": true,
+        "valueList": [
+          {
+            "value": "2023",
+            "key": "2023"
+          },
+          {
+            "value": "2024",
+            "key": "2024"
+          },
+          {
+            "value": "2025",
+            "key": "2025"
+          },
+          {
+            "value": "2026",
+            "key": "2026"
+          },
+          {
+            "value": "2027",
+            "key": "2027"
+          }
+        ]
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
+      "name": "keyword",
+      "type": "text",
+      "placeholder": "Ketik dan [Enter]"
+    },
+    "actual_data_file": "data.json"
+  },
   "form": {
     "tabs": [
       {
@@ -27,7 +212,8 @@
                     "name": "monthPE",
                     "type": "select"
                   }
-                ]
+                ],
+                "source": "Input manual pengguna."
               },
               {
                 "label": "Tahun",
@@ -37,7 +223,8 @@
                     "name": "yearPE",
                     "type": "select"
                   }
-                ]
+                ],
+                "source": "Input manual pengguna."
               }
             ]
           }
@@ -61,7 +248,8 @@
                       "Nilai Tukar"
                     ]
                   }
-                ]
+                ],
+                "source": "Master mata uang perusahaan; capture menampilkan Indonesian Rupiah dengan nilai tukar 1."
               }
             ]
           }
@@ -82,7 +270,8 @@
                     "type": "textarea",
                     "max_length": 5000
                   }
-                ]
+                ],
+                "source": "Input manual pengguna."
               }
             ]
           }
@@ -91,60 +280,29 @@
     ],
     "required": [
       "Bulan"
-    ]
-  },
-  "inputs": [
-    {
-      "name": "searchFilter",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
-      "name": "keyword",
-      "type": "text",
-      "placeholder": "Ketik dan [Enter]"
-    },
-    {
-      "name": "monthPE",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "yearPE",
-      "type": "select",
-      "placeholder": ""
-    },
-    {
-      "name": "description",
-      "type": "textarea",
-      "placeholder": ""
-    }
-  ],
-  "tables": [],
-  "selects": {
-    "monthPE": [
-      "[Pilih Bulan]",
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember"
     ],
-    "yearPE": [
-      "2027",
-      "2026"
-    ]
-  }
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Tabel",
+      "source": "Entri Proses Akhir Bulan yang sudah dibuat.",
+      "evidence": "Kolom Nama, Tanggal Input, Keterangan, dan Memiliki dokumen."
+    },
+    {
+      "scope": "Bulan/Tahun",
+      "source": "Konfigurasi periode perusahaan.",
+      "evidence": "Filter `monthPEFilter` dan `yearPEFilter` dengan opsi 2023-2027."
+    },
+    {
+      "scope": "Nilai Tukar",
+      "source": "Master mata uang perusahaan.",
+      "evidence": "Grid Nilai Tukar Mata Uang dan baris Indonesian Rupiah = 1."
+    }
+  ]
 }

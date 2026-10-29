@@ -1,64 +1,218 @@
 {
-  "buttons": [],
-  "labels": [
+  "menu": "Pajak",
+  "menu_key": "tax",
+  "module": "#accurate__company__tax",
+  "module_type": "MASTERDATA",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
     "Data Baru",
-    "Tipe Pajak : Semua",
-    "Keterangan",
-    "Tipe Pajak",
-    "Persentase",
-    "Akun Pajak Penjualan",
-    "Akun Pajak Pembelian",
-    "Info Umum"
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF",
+    "Pengaturan kolom"
   ],
-  "form": {"tabs": [{"tab": "Info Umum", "sections": [{"section": "Info Umum", "fields": [{"label": "Tipe Pajak", "required": true, "inputs": [{"name": "taxType", "type": "select", "option_count": 8, "options_ref": "taxType"}]}, {"label": "Keterangan", "required": true, "inputs": [{"name": "description", "type": "text"}]}, {"label": "Akun Pajak Penjualan", "required": true, "inputs": [{"name": "salesTaxGlAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}, {"label": "Akun Pajak Pembelian", "required": true, "inputs": [{"name": "purchaseTaxGlAccount", "type": "lookup", "placeholder": "Cari/Pilih Akun Perkiraan..."}]}]}]}], "required": ["Tipe Pajak", "Keterangan", "Akun Pajak Penjualan", "Akun Pajak Pembelian"]},
-  "inputs": [
-    {
-      "name": "searchFilter",
-      "type": "text",
-      "placeholder": "Cari/Pilih..."
-    },
-    {
-      "name": "selectedColumn",
-      "type": "checkbox",
-      "placeholder": ""
-    },
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "description",
+        "name": "description",
+        "label": "Keterangan",
+        "visible": true,
+        "columnWidth": 90,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "TAX_NAME",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "taxTypeName",
+        "name": "taxTypeName",
+        "label": "Tipe Pajak",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "rate",
+        "name": "rate",
+        "label": "Persentase",
+        "visible": true,
+        "columnWidth": 120,
+        "fixedWidth": true,
+        "numberField": true,
+        "type": "MONEY",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "salesTaxGlAccount.name",
+        "name": "salesTaxGlAccount",
+        "label": "Akun Pajak Penjualan",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "LOOKUP",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "purchaseTaxGlAccount.name",
+        "name": "purchaseTaxGlAccount",
+        "label": "Akun Pajak Pembelian",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": "LOOKUP",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnAdd",
+        "hint": "",
+        "text": "",
+        "icon": "icon-plus-2"
+      },
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnPrint",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-printer"
+      },
+      {
+        "name": "btnColumnSetting",
+        "hint": "",
+        "text": "",
+        "icon": "icn-transaction-setting"
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": "Ketik dan [Enter]"
     },
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Umum",
+        "sections": [
+          {
+            "section": "Info Umum",
+            "fields": [
+              {
+                "label": "Tipe Pajak",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "taxType",
+                    "type": "select",
+                    "option_count": 8,
+                    "options_ref": "taxType"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Keterangan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "type": "text"
+                  }
+                ],
+                "source": "Input manual pengguna."
+              },
+              {
+                "label": "Akun Pajak Penjualan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "salesTaxGlAccount",
+                    "type": "lookup",
+                    "placeholder": "Cari/Pilih Akun Perkiraan..."
+                  }
+                ],
+                "source": "Buku Besar > Akun Perkiraan; endpoint `/accurate/general-ledger/childwithtype-glaccount.do`."
+              },
+              {
+                "label": "Akun Pajak Pembelian",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "purchaseTaxGlAccount",
+                    "type": "lookup",
+                    "placeholder": "Cari/Pilih Akun Perkiraan..."
+                  }
+                ],
+                "source": "Buku Besar > Akun Perkiraan; endpoint `/accurate/general-ledger/childwithtype-glaccount.do`."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Tipe Pajak",
+      "Keterangan",
+      "Akun Pajak Penjualan",
+      "Akun Pajak Pembelian"
+    ],
+    "opens_with": "btnAdd"
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form standar tersedia melalui tombol `btnAdd`."
+  },
+  "related_forms": [],
+  "data_sources": [
     {
-      "name": "taxType",
-      "type": "select",
-      "placeholder": ""
+      "scope": "Tabel dan form",
+      "source": "Master Pajak pada database perusahaan.",
+      "evidence": "Konfigurasi `entityType = Tax`."
     },
     {
-      "name": "description",
-      "type": "text",
-      "placeholder": ""
-    },
-    {
-      "name": "salesTaxGlAccount",
-      "type": "text",
-      "placeholder": "Cari/Pilih Akun Perkiraan..."
-    },
-    {
-      "name": "purchaseTaxGlAccount",
-      "type": "text",
-      "placeholder": "Cari/Pilih Akun Perkiraan..."
+      "scope": "Akun Pajak Penjualan/Pembelian",
+      "source": "Buku Besar > Akun Perkiraan.",
+      "evidence": "Lookup `/accurate/general-ledger/childwithtype-glaccount.do`."
     }
-  ],
-  "tables": [],
-  "selects": {
-    "taxType": [
-      "- Pilih Tipe Pajak -",
-      "Pajak Pertambahan Nilai",
-      "Pajak Pertambahan Barang Mewah",
-      "Pajak Penghasilan Ps.4(2)",
-      "Pajak Penghasilan Ps.15",
-      "Pajak Penghasilan Ps.21",
-      "Pajak Penghasilan Ps.22",
-      "Pajak Penghasilan Ps.23"
-    ]
-  }
+  ]
 }

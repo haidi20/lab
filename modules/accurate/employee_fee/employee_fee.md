@@ -1,67 +1,69 @@
 # Gaji/Tunjangan
 
 **Module:** `#accurate__company__employee-fee`
+**Tipe Modul:** `MASTERDATA`
+**Capture:** 2026-10-29T08:14:00+08:00 ? perusahaan `cy` (database `3058374`).
 
 ## Fitur
-
-- **Data Baru**: Membuat entri gaji/tunjangan baru
-- **Cetak**: Mencetak daftar gaji/tunjangan
-- **Unduh XLS**: Ekspor daftar ke format Excel
-- **Unduh PDF**: Ekspor daftar ke format PDF
-
-## Form Data Baru (Tambah Gaji/Tunjangan)
-
-Wajib diisi: **Nama, Akun Beban**.
-
-| Field | Input | Tipe | Wajib | Keterangan |
-|-------|-------|------|-------|------------|
-| Nama | name | text | Ya | |
-| Tipe Gaji/Tunjangan | feeType | select | - | 14 opsi (lihat Dropdown Options) |
-| Akun Beban | expenseAccount | lookup | Ya | Cari/Pilih Akun Perkiraan. Tampil untuk tipe tertentu saja |
-| Non Aktif | suspended | checkbox | - | |
-
-## Filter & Kolom Daftar
-
-### Label
-
 - Data Baru
-- Non Aktif : Semua
-- Tipe Gaji/Tunjangan : Semua
-- Info Umum
-- Nama
-- Tipe Gaji/Tunjangan
-- Bayar/Potong
-- Bulanan
-- Akun Beban
-- Non Aktif
-- Ya
+- Perbarui daftar
+- Cetak
+- Ekspor XLS
+- Ekspor PDF
+- Pengaturan kolom
 
-### Input Fields
+## Form Data Baru
+Form **Data Baru Gaji/Tunjangan** dibuka dari tombol `btnAdd`.
 
-| Nama | Tipe | Placeholder |
-|------|------|-------------|
-| keyword | text | Ketik dan [Enter] |
-| name | text |  |
-| feeType | select |  |
-| expenseAccount | text | Cari/Pilih Akun Perkiraan... |
-| suspended | checkbox |  |
+Wajib diisi: **Nama**, **Akun Beban**.
 
-### Dropdown Options
+### Tab Info Umum
 
-**feeType:**
+#### Info Umum
 
-- Gaji/Pensiun atau THT/JHT
-- Tunjangan PPh
-- Subsidi PPh
-- Tunjangan Lainnya, Uang lembur dan sebagainya
-- Tunjangan Jaminan Kecelakaan Kerja, Jaminan Kematian
-- Honorarium dan Imbalan lain sejenisnya
-- Premi asuransi kesehatan yang dibayarkan pemberi kerja
-- Penerimaan dalam bentuk natura dan kenikmatan lainnya
-- Tantiem, Bonus, Rapel, Gratifikasi, Jasa Produksi dan THR
-- Tunjangan Iuran Pensiun/THT/JHT dibayarkan Pemberi Kerja
-- Potongan Gaji (Tidak Mengurangi PPh)
-- Pengurangan Gaji (Mengurangi PPh)
-- Premi asuransi kesehatan dibayarkan pekerja
-- Iuran Pensiun/THT/JHT dibayarkan Pekerja
+| Field | Input | Wajib | Sumber Data |
+|---|---|---|---|
+| Nama | `name` (text) | Ya | Input manual pengguna. |
+| Tipe Gaji/Tunjangan | `feeType` (select) | Tidak | Input manual pengguna. |
+| Akun Beban | `expenseAccount` (lookup) | Ya | Buku Besar > Akun Perkiraan; endpoint `/accurate/general-ledger/childwithtype-glaccount.do`. |
+| Non Aktif | `suspended` (checkbox) | Tidak | Input manual pengguna. |
 
+## Daftar & Filter
+
+### Tombol Toolbar
+
+| Tombol | Hint/Label |
+|---|---|
+| `btnAdd` | - |
+| `btnRefresh` | - |
+| `btnPrint` | - |
+| `-` | - |
+
+### Filter
+
+| Key | Label | Tipe | Opsi |
+|---|---|---|---|
+| - | Tidak ada filter dinamis pada capture | - | - |
+
+## Kolom Tabel
+
+| Key | Label | Default Tampil | Tipe |
+|---|---|---|---|
+| `name` | Nama | Ya | TEXT |
+| `feeType` | Tipe Gaji/Tunjangan | Ya | - |
+| `suspended` | Non Aktif | Ya | BOOLEAN |
+
+Record aktual tersimpan di `data.json`: **0 baris**, status `empty`.
+
+## Sumber Data
+
+| Cakupan | Sumber | Bukti Capture |
+|---|---|---|
+| Tabel dan form | Master Gaji/Tunjangan pada database perusahaan. | Konfigurasi `entityType = EmployeeFee`. |
+| Akun Beban | Buku Besar > Akun Perkiraan. | Lookup `/accurate/general-ledger/childwithtype-glaccount.do`. |
+
+## Catatan Analisa
+
+- Analisa berbasis observasi browser; tidak menggunakan screenshot.
+- REA `capture-browser-scenario` dipakai untuk skenario login/navigasi; CLI konsisten timeout pada klik pembuka modul setelah tiga percobaan.
+- Struktur modul, form, filter, dan kolom diekstrak dari DOM capture yang valid.

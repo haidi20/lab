@@ -1,21 +1,151 @@
 {
-  "buttons": [
-    "Jalankan"
+  "menu": "Transaksi Berulang",
+  "menu_key": "recurring",
+  "module": "#accurate__company__recurring",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T08:14:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "tmp_rea/dom_v4/<menu>.html + REA evidence",
+  "features": [
+    "Jalankan transaksi berulang",
+    "Kelola kategori transaksi berulang",
+    "Perbarui daftar",
+    "Cetak",
+    "Ekspor XLS",
+    "Ekspor PDF"
   ],
-  "labels": [
-    "Kategori : Semua",
-    "Tipe Transaksi : Semua",
-    "Status : Semua",
-    "Cabang"
-  ],
-  "form": null,
-  "inputs": [
-    {
+  "list_view": {
+    "columns": [
+      {
+        "key": "count",
+        "name": "count",
+        "label": "Berapa kali",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "perioda",
+        "name": "perioda",
+        "label": "Periode",
+        "visible": false,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "recurringCategory.name",
+        "name": "recurringCategory",
+        "label": "Kategori",
+        "visible": true,
+        "columnWidth": 250,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": "LOOKUP",
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "name",
+        "name": "name",
+        "label": "Nama",
+        "visible": true,
+        "columnWidth": 80,
+        "fixedWidth": false,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": true
+      },
+      {
+        "key": "transactionTypeText",
+        "name": "transactionTypeText",
+        "label": "Tipe Transaksi",
+        "visible": true,
+        "columnWidth": 250,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      },
+      {
+        "key": "statusName",
+        "name": "statusName",
+        "label": "Status",
+        "visible": true,
+        "columnWidth": 200,
+        "fixedWidth": true,
+        "numberField": false,
+        "type": null,
+        "prefix": null,
+        "css": null,
+        "sortable": false
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "name": "btnRefresh",
+        "hint": "",
+        "text": "",
+        "icon": "icon-cycle"
+      },
+      {
+        "name": "btnRecurringCategory",
+        "hint": "",
+        "text": "",
+        "icon": "icn-menu-setting"
+      },
+      {
+        "name": "btnBulkExecuteRecurring",
+        "hint": "",
+        "text": "Jalankan",
+        "icon": ""
+      },
+      {
+        "name": "",
+        "hint": "",
+        "text": "",
+        "icon": ""
+      }
+    ],
+    "search": {
       "name": "keyword",
       "type": "text",
       "placeholder": ""
+    },
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Tidak ada form tambah standar; capture tidak menampilkan `btnAdd`. Transaksi berulang dibuat dari modul transaksi sumber, sedangkan menu ini menjalankan dan mengelolanya."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "scope": "Tabel",
+      "source": "Definisi transaksi berulang yang sudah disimpan.",
+      "evidence": "Kolom Kategori, Nama, Tipe Transaksi, dan Status."
+    },
+    {
+      "scope": "Kategori",
+      "source": "Kategori Transaksi Berulang.",
+      "evidence": "Tombol `btnRecurringCategory`."
     }
-  ],
-  "tables": [],
-  "selects": {}
+  ]
 }

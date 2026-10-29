@@ -1,27 +1,52 @@
 # Transaksi Favorit
 
 **Module:** `#accurate__company__memorize-transaction`
+**Tipe Modul:** `INFORMATION`
+**Capture:** 2026-10-29T08:14:00+08:00 ? perusahaan `cy` (database `3058374`).
 
 ## Fitur
-
-- **Data Baru**: Membuat entri transaksi favorit baru
-- **Cetak**: Mencetak daftar transaksi favorit
-- **Unduh XLS**: Ekspor daftar ke format Excel
-- **Unduh PDF**: Ekspor daftar ke format PDF
+- Perbarui daftar
+- Cetak
+- Ekspor XLS
+- Ekspor PDF
+- Gunakan transaksi favorit yang tersimpan
 
 ## Form Data Baru
+Tidak ada form tambah standar; capture tidak menampilkan `btnAdd`. Data favorit dibuat dari aksi simpan favorit pada modul transaksi.
 
-Tidak ada form **Data Baru**. Capture DOM tidak menampilkan tombol `btnAdd`; menu ini bertipe `INFORMATION` dan hanya menampilkan data.
+## Daftar & Filter
 
-## Form
+### Tombol Toolbar
 
-### Label
+| Tombol | Hint/Label |
+|---|---|
+| `btnRefresh` | - |
+| `-` | - |
 
-- Tipe Transaksi : Semua
+### Filter
 
-### Input Fields
+| Key | Label | Tipe | Opsi |
+|---|---|---|---|
+| `transactionTypeFilter` | Tipe Transaksi | LIST | 21 opsi |
 
-| Nama | Tipe | Placeholder |
-|------|------|-------------|
-| keyword | text | Ketik dan [Enter] |
+## Kolom Tabel
 
+| Key | Label | Default Tampil | Tipe |
+|---|---|---|---|
+| `name` | Nama Favorit | Ya | - |
+| `transactionTypeText` | Tipe Transaksi | Ya | - |
+| `userListName` | Daftar Pengguna | Ya | - |
+
+Record aktual tersimpan di `data.json`: **0 baris**, status `Belum ada data`.
+
+## Sumber Data
+
+| Cakupan | Sumber | Bukti Capture |
+|---|---|---|
+| Tabel | Transaksi favorit/template yang disimpan pengguna. | Kolom Nama Favorit, Tipe Transaksi, dan Daftar Pengguna. |
+
+## Catatan Analisa
+
+- Analisa berbasis observasi browser; tidak menggunakan screenshot.
+- REA `capture-browser-scenario` dipakai untuk skenario login/navigasi; CLI konsisten timeout pada klik pembuka modul setelah tiga percobaan.
+- Struktur modul, form, filter, dan kolom diekstrak dari DOM capture yang valid.
