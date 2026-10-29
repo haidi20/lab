@@ -114,7 +114,40 @@ Untuk input yang perlu terlihat seperti diketik manusia:
 Setiap menu Accurate yang punya tabel/grid data harus diekstrak dan
 disimpan sebagai `data.json` di folder dokumentasi menu tersebut
 (`modules/accurate/<menu>/data.json`). Data ini adalah data aktual yang tampil di
-tabel, bukan definisi kolom atau struktur form.
+tabel — **bukan** tempat untuk informasi kolom, filter, atau struktur form.
+
+### Isi `data.json`
+
+`data.json` hanya berisi record aktual yang tampil di tabel:
+
+```json
+{
+  "menu": "Nama Menu",
+  "module": "#accurate__module__name",
+  "captured_at": "ISO-8601 timestamp",
+  "company": "nama perusahaan",
+  "database_id": 1234567,
+  "table": {
+    "columns": ["Kolom 1", "Kolom 2"],
+    "record_count": 95,
+    "records": [
+      {"kolom_1": "nilai", "kolom_2": "nilai"}
+    ]
+  },
+  "status": "loaded"
+}
+```
+
+Aturan:
+
+- `columns` hanya sebagai penanda urutan kolom di `records`, bukan
+  dokumentasi struktur.
+- `records` berisi baris data aktual. Jika tabel kosong, `record_count: 0`
+  dan `records: []`.
+- Informasi kolom, filter, form, dan tombol **dilarang** masuk
+  `data.json`. Semua itu milik `<menu>.json` dan `<menu>.md`.
+- Jangan menulis `filters`, `inputs`, `buttons`, atau `columns` sebagai
+  dokumentasi terpisah di dalam `data.json`.
 
 ### Pola Grid Accurate
 
@@ -164,7 +197,7 @@ const rows = await page.evaluate(() => {
 7. Deduplikasi baris berdasarkan kolom pertama (kode/ID) karena scroll
    dapat menghasilkan baris yang sama muncul lebih dari sekali.
 8. Stop scroll ketika jumlah baris unik tidak bertambah lagi.
-9. Simpan hasil ke `modules/accurate/<menu>/data.json` dengan struktur:
+9. Simpan hasil ke `modules/accurate/<menu>/data.json` dengan struktur di atas.
 
 ```json
 {
@@ -184,7 +217,7 @@ const rows = await page.evaluate(() => {
 }
 ```
 
-### Menentukan Kolom Tabel
+### Menentukan Kolom Tabel (untuk urutan kolom di `records`)
 
 Kolom tabel asli bisa ditemukan dari script module dengan mencari
 `columnDef` di DOM. Contoh untuk Akun Perkiraan:
@@ -200,7 +233,8 @@ self._init({
 });
 ```
 
-Gunakan hanya kolom dengan `"visible": true` untuk `data.json`.
+Gunakan hanya kolom dengan `"visible": true` sebagai urutan kolom di
+`records`. Definisi lengkapnya tetap disimpan di `<menu>.json`.
 
 ### Jika Tabel Kosong
 
@@ -265,3 +299,129 @@ async def extract_table_data(page, output_path):
     )
     return all_rows
 ```
+
+## Analisa Form Input Data (Data Baru)
+
+Setiap menu Accurate yang punya tombol **Data Baru** harus dianalisa juga
+form inputnya, bukan hanya daftar dan filter. Markup form **sudah ada di
+DOM** meskipun form belum dibuka, sehingga bisa diekstrak dari capture
+tanpa klik tambahan.
+
+### Struktur DOM Form
+
+```text
+div.module-form.tabbing-module
+├── div.module-tab                    ← daftar tab form (Data Baru, dll)
+└── div.general-tab-content           ← 1 frame per tab
+    ├── div.span12                    ← judul section (Data Pribadi, dst)
+    └── div.row.no-margin             ← 1 baris form
+        ├── div.span4 > label         ← label field (bisa class "required")
+        └── div.span7/span5           ← input (bisa lebih dari 1)
+```
+
+### Aturan Pemetaan Label ke Input
+
+1. Jangan pasangkan label dengan sibling terdekat saja — beberapa baris
+   punya **lebih dari satu input** (contoh: `salutation` + `name`,
+   `startMonthPayment` + `startYearPayment`, `btnManualNumber` +
+   `typeAutoNumber`).
+2. Naik ke `div.row` terdekat dari label, lalu kumpulkan **semua**
+   `input/select/textarea` di dalam row tersebut.
+3. Deduplikasi berdasarkan `name` agar field yang sama tidak tercatat
+   dua kali.
+4. Field wajib ditandai class `required` pada label.
+5. Input tanpa `name` bisa dirujuk lewat binding `formData.<field>` di
+   atribut `data-bind`.
+
+### Klasifikasi Tipe Input
+
+Tipe input ditentukan dari binding Knockout pada `data-bind`:
+
+| Binding | Tipe |
+|---------|------|
+| `metroDatepicker` | date |
+| `metroLookup` | lookup (cari/pilih dari API) |
+| `metroNumberfield` | number |
+| `metroCombobox` atau `select` | select |
+| `metroCheckbox` atau `type=checkbox` | checkbox |
+| `textarea` | textarea |
+| lainnya | text |
+
+Opsi `select` diambil dari elemen `<option>` di dalamnya.
+
+### Output Dokumentasi
+
+Simpan hasil analisa form ke dua tempat:
+
+1. `modules/accurate/<menu>/<menu>.md` — section baru `## Form Data
+   Baru (...)` di atas section daftar, berisi tabel per tab/section
+   dengan kolom: Field, Input, Tipe, Wajib, Keterangan.
+2. `modules/accurate/<menu>/<menu>.json` — key baru `"form"` berisi
+   struktur `tabs[].sections[].fields[].inputs[]`. Agar file tidak
+   membengkak, opsi panjang disimpan sebagai `option_count` +
+   `options_ref` yang merujuk ke key di `selects`.
+
+### Contoh Script Ekstraksi
+
+```python
+from bs4 import BeautifulSoup
+from pathlib import Path
+import json
+
+html = Path("dom_capture.html").read_text(encoding="utf-8")
+soup = BeautifulSoup(html, "html.parser")
+module = next(d for d in soup.find_all("div", id=True)
+              if d["id"].startswith("accurate__company__employee--")
+              and "module-form" in " ".join(d.get("class", [])))
+
+def classify(inp):
+    bind = " ".join((inp.get("data-bind") or "").split())
+    if "metroDatepicker" in bind: return "date"
+    if "metroLookup" in bind: return "lookup"
+    if "metroNumberfield" in bind: return "number"
+    if inp.name == "select" or "metroCombobox" in bind: return "select"
+    if "metroCheckbox" in bind or inp.get("type") == "checkbox": return "checkbox"
+    if inp.name == "textarea": return "textarea"
+    return "text"
+
+entries = []
+seen = set()
+for frame in module.find_all("div", class_="general-tab-content"):
+    section = None
+    for el in frame.find_all(True):
+        cls = " ".join(el.get("class", []) or [])
+        if el.name == "div" and "span12" in cls:
+            section = " ".join(el.get_text().split())
+            continue
+        if el.name != "label" or el.find_parent("div", class_="input-control"):
+            continue
+        label = " ".join(el.get_text().split())
+        row = el.find_parent("div", class_="row")
+        if not label or row is None:
+            continue
+        inputs = []
+        for inp in row.find_all(["input", "select", "textarea"]):
+            name = inp.get("name") or inp.get("id") or ""
+            if not name or name in seen:
+                continue
+            seen.add(name)
+            opts = ([o.get_text(strip=True) for o in inp.find_all("option")]
+                    if inp.name == "select" else [])
+            inputs.append({"name": name, "kind": classify(inp), "options": opts})
+        if inputs:
+            entries.append({"section": section, "label": label,
+                            "required": "required" in cls, "inputs": inputs})
+
+Path("form_map.json").write_text(
+    json.dumps(entries, indent=2, ensure_ascii=False), encoding="utf-8")
+```
+
+### Checklist Analisa Form
+
+- [ ] Semua tab form teridentifikasi (frame `general-tab-content`).
+- [ ] Semua section di dalam tab tercatat (div `span12`).
+- [ ] Baris multi-input tidak terpecah (label dipetakan ke semua input
+      dalam row yang sama).
+- [ ] Field wajib ditandai berdasarkan class `required` pada label.
+- [ ] Opsi select diekstrak dan dirujuk dengan `options_ref` di JSON.
+- [ ] Input tanpa `name` dirujuk lewat binding `formData.<field>`.
