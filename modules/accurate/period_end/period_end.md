@@ -9,7 +9,25 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
-## Form
+## Form Data Baru (Tambah Proses Akhir Bulan)
+
+Form ini dibuka dari tombol **Tambah** (`btnAdd`) pada daftar Proses Akhir Bulan.
+
+### Info Utama
+
+| Field | Input | Tipe | Wajib | Keterangan |
+| --- | --- | --- | --- | --- |
+| Bulan | `monthPE` | select | Ya | Wajib memilih salah satu bulan; placeholder/nilai awal `[Pilih Bulan]`. |
+| Tahun | `yearPE` | select | Tidak | Opsi tahun tersedia sesuai data konfigurasi periode. |
+
+### Tab
+
+| Tab | Isi | Keterangan |
+| --- | --- | --- |
+| Nilai Tukar Mata Uang | SlickGrid nilai tukar | Kolom: **Nama Mata Uang** dan **Nilai Tukar**. Baris dapat dibuka/diatur; capture menampilkan `Indonesian Rupiah = 1`. |
+| Catatan | `description` | Textarea, maksimal 5.000 karakter. |
+
+## Filter & Kolom Daftar
 
 ### Label
 

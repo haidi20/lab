@@ -11,6 +11,88 @@
     "Bulan",
     "Tahun"
   ],
+  "form": {
+    "tabs": [
+      {
+        "tab": "Info Utama",
+        "sections": [
+          {
+            "section": "Info Utama",
+            "fields": [
+              {
+                "label": "Bulan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "monthPE",
+                    "type": "select"
+                  }
+                ]
+              },
+              {
+                "label": "Tahun",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "yearPE",
+                    "type": "select"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Nilai Tukar Mata Uang",
+        "sections": [
+          {
+            "section": "Nilai Tukar",
+            "fields": [
+              {
+                "label": "Nilai Tukar Mata Uang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "currencyRate",
+                    "type": "grid",
+                    "columns": [
+                      "Nama Mata Uang",
+                      "Nilai Tukar"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Catatan",
+        "sections": [
+          {
+            "section": "Catatan",
+            "fields": [
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "type": "textarea",
+                    "max_length": 5000
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "required": [
+      "Bulan"
+    ]
+  },
   "inputs": [
     {
       "name": "searchFilter",
