@@ -108,3 +108,160 @@ Untuk input yang perlu terlihat seperti diketik manusia:
 - [ ] Popup atau tab baru ditunggu dengan benar.
 - [ ] Tidak ada kredensial pada hasil capture atau log.
 - [ ] Skenario hanya menyimpan data yang benar-benar diperlukan.
+
+## Ekstraksi Data Tabel ke `data.json`
+
+Setiap menu Accurate yang punya tabel/grid data harus diekstrak dan
+disimpan sebagai `data.json` di folder dokumentasi menu tersebut
+(`modules/accurate/<menu>/data.json`). Data ini adalah data aktual yang tampil di
+tabel, bukan definisi kolom atau struktur form.
+
+### Pola Grid Accurate
+
+Accurate memakai SlickGrid yang merender baris secara virtual. Artinya
+DOM hanya berisi baris yang terlihat di viewport. Untuk mendapat semua
+baris, lakukan scroll bertahap dan kumpulkan baris yang terlihat di
+setiap iterasi.
+
+### Langkah Ekstraksi
+
+1. Login dan buka perusahaan sesuai alur human-paced.
+2. Navigasi ke hash menu target, contoh:
+   `#accurate__general-ledger__glaccount`.
+3. Tunggu konten module selesai dimuat minimal 15-30 detik.
+4. Klik tombol `btnToggleList` dan `btnRefresh` bila perlu untuk memicu
+   load data.
+5. Scroll grid secara bertahap menggunakan Playwright:
+
+```javascript
+await page.evaluate(() => {
+  const canvas = document.querySelector('.grid-canvas');
+  if (canvas) {
+    const viewport = canvas.closest('.slick-viewport');
+    if (viewport) viewport.scrollTop += 500;
+  }
+});
+```
+
+6. Setiap iterasi scroll, kumpulkan baris yang terlihat:
+
+```javascript
+const rows = await page.evaluate(() => {
+  const result = [];
+  document.querySelectorAll('.slick-row').forEach(row => {
+    const cells = [];
+    row.querySelectorAll('.slick-cell').forEach(cell => {
+      cells.push(cell.textContent.trim());
+    });
+    if (cells.length > 0 && cells.some(c => c)) {
+      result.push(cells);
+    }
+  });
+  return result;
+});
+```
+
+7. Deduplikasi baris berdasarkan kolom pertama (kode/ID) karena scroll
+   dapat menghasilkan baris yang sama muncul lebih dari sekali.
+8. Stop scroll ketika jumlah baris unik tidak bertambah lagi.
+9. Simpan hasil ke `modules/accurate/<menu>/data.json` dengan struktur:
+
+```json
+{
+  "menu": "Nama Menu",
+  "module": "#accurate__module__name",
+  "captured_at": "ISO-8601 timestamp",
+  "company": "nama perusahaan",
+  "database_id": 1234567,
+  "table": {
+    "columns": ["Kolom 1", "Kolom 2"],
+    "record_count": 95,
+    "records": [
+      {"kolom_1": "nilai", "kolom_2": "nilai"}
+    ]
+  },
+  "status": "loaded"
+}
+```
+
+### Menentukan Kolom Tabel
+
+Kolom tabel asli bisa ditemukan dari script module dengan mencari
+`columnDef` di DOM. Contoh untuk Akun Perkiraan:
+
+```javascript
+self._init({
+  columnDef: [
+    {"key":"noWithIndent","label":"Kode Perkiraan","visible":true,...},
+    {"key":"nameWithIndent","label":"Nama","visible":true,...},
+    {"key":"accountTypeName","label":"Tipe Akun","visible":true,...},
+    {"key":"balance","label":"Saldo","visible":true,...}
+  ]
+});
+```
+
+Gunakan hanya kolom dengan `"visible": true` untuk `data.json`.
+
+### Jika Tabel Kosong
+
+Bila grid menampilkan "Belum ada data" atau jumlah baris 0, tetap buat
+`data.json` dengan `record_count: 0` dan `records: []`. Jangan mengisi
+dengan data dari sumber lain atau asumsi.
+
+### Contoh Script Playwright
+
+```python
+import asyncio
+import json
+from pathlib import Path
+from playwright.async_api import async_playwright
+
+async def extract_table_data(page, output_path):
+    all_rows = []
+    seen_codes = set()
+    prev_count = 0
+
+    for scroll_iter in range(30):
+        rows = await page.evaluate("""
+            () => {
+                const result = [];
+                document.querySelectorAll('.slick-row').forEach(row => {
+                    const cells = [];
+                    row.querySelectorAll('.slick-cell').forEach(cell => {
+                        cells.push(cell.textContent.trim());
+                    });
+                    if (cells.length > 0 && cells.some(c => c)) {
+                        result.push(cells);
+                    }
+                });
+                return result;
+            }
+        """)
+
+        for r in rows:
+            code = r[0].strip() if r else ''
+            if code and code not in seen_codes:
+                seen_codes.add(code)
+                all_rows.append(r)
+
+        if len(all_rows) == prev_count and scroll_iter > 0:
+            break
+        prev_count = len(all_rows)
+
+        await page.evaluate("""
+            () => {
+                const canvas = document.querySelector('.grid-canvas');
+                if (canvas) {
+                    const viewport = canvas.closest('.slick-viewport');
+                    if (viewport) viewport.scrollTop += 500;
+                }
+            }
+        """)
+        await asyncio.sleep(1)
+
+    output_path.write_text(
+        json.dumps(all_rows, indent=2, ensure_ascii=False),
+        encoding="utf-8"
+    )
+    return all_rows
+```
