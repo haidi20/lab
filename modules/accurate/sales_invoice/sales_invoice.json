@@ -1,0 +1,755 @@
+{
+  "menu": "Faktur Penjualan",
+  "menu_key": "sales_invoice",
+  "module": "#accurate__customer__sales-invoice",
+  "module_type": "SI",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/sales-invoice.do",
+    "/accurate/cu",
+    "/accurate/inventory/",
+    "/accurate/general-ledger/childwithtype-glaccount.do",
+    "/accurate/company/",
+    "/accurate/company/detail-"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "transDate",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "customer.name",
+        "label": "Pelanggan",
+        "visible": true
+      },
+      {
+        "field": "currency.code",
+        "label": "Mata Uang",
+        "visible": false
+      },
+      {
+        "field": "poNumber",
+        "label": "No. PO",
+        "visible": false
+      },
+      {
+        "field": "paymentTerm.name",
+        "label": "Syarat Pembayaran",
+        "visible": false
+      },
+      {
+        "field": "shipDate",
+        "label": "Tgl Pengiriman",
+        "visible": false
+      },
+      {
+        "field": "taxDate",
+        "label": "Tgl Faktur Pajak",
+        "visible": false
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "statusName",
+        "label": "Status",
+        "visible": true
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "tax4Amount",
+        "label": "PPh 22 Impor",
+        "visible": false
+      },
+      {
+        "field": "dppAmount",
+        "label": "DPP",
+        "visible": false
+      },
+      {
+        "field": "taxable",
+        "label": "Kena Pajak",
+        "visible": false
+      },
+      {
+        "field": "inclusiveTax",
+        "label": "Total termasuk Pajak",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "tax3Amount",
+        "label": "PPh",
+        "visible": false
+      },
+      {
+        "field": "dueDate",
+        "label": "Jatuh Tempo",
+        "visible": false
+      },
+      {
+        "field": "arAccount.name",
+        "label": "Akun Piutang",
+        "visible": false
+      },
+      {
+        "field": "efakturFileName",
+        "label": "File efaktur",
+        "visible": false
+      },
+      {
+        "field": "vaNumber",
+        "label": "Nomor VA",
+        "visible": false
+      },
+      {
+        "field": "subComp",
+        "label": "Sub Kode Perusahaan",
+        "visible": false
+      },
+      {
+        "field": "posPromotion.name",
+        "label": "Promo",
+        "visible": false
+      },
+      {
+        "field": "openingBalance",
+        "label": "Saldo awal",
+        "visible": false
+      },
+      {
+        "field": "reverseInvoice",
+        "label": "Faktur Dimuka",
+        "visible": false
+      },
+      {
+        "field": "retailWpType",
+        "label": "Tipe ID Wajib Pajak",
+        "visible": true
+      },
+      {
+        "field": "masterSalesman.name",
+        "label": "Penjual Utama",
+        "visible": false
+      },
+      {
+        "field": "taxType",
+        "label": "Detail Transaksi",
+        "visible": false
+      },
+      {
+        "field": "hasExchangeInvoice",
+        "label": "Ditukar Faktur",
+        "visible": false
+      },
+      {
+        "field": "masterDepartment.name",
+        "label": "Departemen Utama",
+        "visible": false
+      },
+      {
+        "field": "taxNumber",
+        "label": "No. Faktur Pajak",
+        "visible": false
+      },
+      {
+        "field": "masterProject.name",
+        "label": "Proyek Utama",
+        "visible": false
+      },
+      {
+        "field": "exchangeInvoiceDueDate",
+        "label": "Jatuh Tempo (Tukar Faktur)",
+        "visible": false
+      },
+      {
+        "field": "pendingAmortized",
+        "label": "Pendapatan Tertunda",
+        "visible": false
+      },
+      {
+        "field": "paidOverTotal",
+        "label": "Pendapatan Tertunda",
+        "visible": false
+      },
+      {
+        "field": "cashierEmployee.name",
+        "label": "Kasir",
+        "visible": false
+      },
+      {
+        "field": "paymentWithUniqueAmount",
+        "label": "Faktur Kode Unik",
+        "visible": false
+      },
+      {
+        "field": "uniqueAmount",
+        "label": "Kode Unik",
+        "visible": false
+      },
+      {
+        "field": "totalAmountWithUniqueAmount",
+        "label": "Total Transfer",
+        "visible": false
+      },
+      {
+        "field": "masterPosSalesType.name",
+        "label": "Tipe Penjualan Utama",
+        "visible": false
+      },
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      },
+      {
+        "field": "age",
+        "label": "Umur (hr)",
+        "visible": true
+      },
+      {
+        "field": "printedByUser",
+        "label": "Dicetak/email",
+        "visible": false
+      },
+      {
+        "field": "invoicePrintedTime",
+        "label": "Waktu cetak/email",
+        "visible": false
+      },
+      {
+        "field": "deliveryPackingNumber",
+        "label": "No Pengepakan",
+        "visible": false
+      },
+      {
+        "field": "createdByUserName",
+        "label": "Pembuat Data",
+        "visible": false
+      },
+      {
+        "field": "customerCategoryName",
+        "label": "Kategori Pelanggan",
+        "visible": false
+      },
+      {
+        "field": "documentCodeName",
+        "label": "Jenis Dokumen",
+        "visible": false
+      },
+      {
+        "field": "totalDiscountDetail",
+        "label": "Diskon Barang",
+        "visible": false
+      },
+      {
+        "field": "totalDiscount",
+        "label": "Total Diskon",
+        "visible": false
+      },
+      {
+        "field": "customerNo",
+        "label": "ID Pelanggan",
+        "visible": false
+      },
+      {
+        "field": "subTotal",
+        "label": "Sub Total",
+        "visible": false
+      },
+      {
+        "field": "cashDiscPercent",
+        "label": "Diskon %",
+        "visible": false
+      },
+      {
+        "field": "cashDiscount",
+        "label": "Diskon",
+        "visible": false
+      },
+      {
+        "field": "totalDownPayment",
+        "label": "Uang Muka",
+        "visible": false
+      },
+      {
+        "field": "tax1Amount",
+        "label": "Nilai PPN",
+        "visible": false
+      },
+      {
+        "field": "tax2Amount",
+        "label": "Nilai PPNBM",
+        "visible": false
+      },
+      {
+        "field": "totalExpense",
+        "label": "Biaya Lainnya",
+        "visible": false
+      },
+      {
+        "field": "totalAmount",
+        "label": "Total",
+        "visible": true
+      },
+      {
+        "field": "primeReceipt",
+        "label": "Pembayaran",
+        "visible": false
+      },
+      {
+        "field": "taxReceipt",
+        "label": "Terima Pajak",
+        "visible": false
+      },
+      {
+        "field": "primeReturn",
+        "label": "Retur",
+        "visible": false
+      },
+      {
+        "field": "taxReturn",
+        "label": "Retur Pajak",
+        "visible": false
+      },
+      {
+        "field": "primeOwing",
+        "label": "Piutang",
+        "visible": false
+      },
+      {
+        "field": "taxOwing",
+        "label": "Piutang Pajak",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "customerFilter",
+        "label": "Pelanggan",
+        "display_value": "Semua"
+      },
+      {
+        "key": "statusFilter",
+        "label": "Status",
+        "display_value": "Semua"
+      },
+      {
+        "key": "hasUserPrintedFilter",
+        "label": "Sudah dicetak",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnImport",
+        "label": "Impor"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      },
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Faktur Penjualan"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Pelanggan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "customer",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'customerNo', text: 'name', referenceText: 'customerNo', rightText: 'customerNo', subText: 'lookupSubText', url: '/accurate/customer/lookup-search-customer.do', saveUrl: '/accurate/customer/save-customer.do', selectUrl: '/accurate/customer/detail-lookup-customer.do', placeHolder: 'Cari/Pilih Pelanggan...', value: formData.customer, disabled: false }"
+                  }
+                ]
+              },
+              {
+                "label": "Tanggal",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.transDate"
+                  }
+                ]
+              },
+              {
+                "label": "Biaya Lainnya",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams:{ glacctype: ['REVENUE','COGS','EXPENSE','OTHER_EXPENSE','OTHER_INCOME','OTHER_CURRENT_LIABILITY','OTHER_CURRENT_ASSET'], currencyId: ko.observable([ acc.staticData.defaultCurrency().id, formData.transactionCurrencyId ]) }, value: root.getDetailForm('detail-expense').lookup, disable: root.getDetailForm('detail-expense').lookup() !== null, placeHolder: 'Cari/Pilih Akun Perkiraan...' }"
+                  }
+                ]
+              },
+              {
+                "label": "Syarat Pembayaran",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentTerm",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'dueDescription', url: '/accurate/company/search-lookup-payment-term.do', additionalParams: { showInstallmentTerm: true }, value:formData.paymentTerm }"
+                  }
+                ]
+              },
+              {
+                "label": "No. PO",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "poNumber",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.poNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Alamat",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "toAddress",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.toAddress"
+                  }
+                ]
+              },
+              {
+                "label": "Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxable",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.taxable"
+                  },
+                  {
+                    "name": "inclusiveTax",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.inclusiveTax"
+                  }
+                ]
+              },
+              {
+                "label": "Kena Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxable",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.taxable"
+                  },
+                  {
+                    "name": "inclusiveTax",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.inclusiveTax"
+                  }
+                ]
+              },
+              {
+                "label": "Tgl Faktur Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.taxDate"
+                  }
+                ]
+              },
+              {
+                "label": "Tipe Transaksi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "documentCode",
+                    "kind": "select",
+                    "options": [
+                      "Faktur Pajak",
+                      "Dokumen Tertentu",
+                      "Ekspor",
+                      "Digunggung"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.documentCode"
+                  }
+                ]
+              },
+              {
+                "label": "Detail Transaksi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxType",
+                    "kind": "select",
+                    "options": [
+                      "01 - kepada selain Pemungut PPN",
+                      "02 - kepada Pemungut PPN Instansi Pemerintah",
+                      "03 - kepada Pemungut PPN selain Instansi Pemerintah",
+                      "04 - DPP Nilai Lain",
+                      "05 - Besaran tertentu",
+                      "06 - kepada orang pribadi pemegang paspor luar negeri (16E UU PPN)",
+                      "07 - penyerahan dengan fasilitas PPN atau PPN dan PPnBM tidak dipungut/ditanggung pemerintah",
+                      "08 - penyerahan dengan fasilitas dibebaskan PPN atau PPN dan PPnBM",
+                      "09 - penyerahan aktiva yang menurut tujuan semula tidak diperjualbelikan (16D UU PPN)",
+                      "10 - Penyerahan lainnya"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.taxType"
+                  }
+                ]
+              },
+              {
+                "label": "Tgl Pengiriman",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "shipDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.shipDate"
+                  }
+                ]
+              },
+              {
+                "label": "Pengiriman",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "shipment",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'lookupSubText', url: '/accurate/company/search-lookup-shipment.do', selectUrl: '/accurate/company/detail-shipment.do', saveUrl: '/accurate/company/save-shipment.do', value: formData.shipment }"
+                  }
+                ]
+              },
+              {
+                "label": "FOB",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fob",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', url: '/accurate/company/search-freeonboard.do', saveUrl: '/accurate/company/save-freeonboard.do', value: formData.fob }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Detail",
+            "fields": [
+              {
+                "label": "Rincian Barang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailItem",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', hintText: 'searchHitSubText', url: '/accurate/inventory/search-lookup-item.do', selectUrl: root.getDetailForm('detail-item').searchLookupItemSelect(), additionalParams: { moduleType: root.moduleType, branchId: function(){ return formData.branchId();}, effectiveDate: function(){ return formData.transDate();}, priceCategoryId: function(){ return formData.customer()!==null ? formData.customer().priceCategoryId : null;}, discountCategoryId: function(){ return formData.customer()!==null ? formData.customer().discountCategoryId : null;}, branchId: function(){ return formData.branchId();}, itemtype: [ 'INVENTORY', 'NON_INVENTORY', 'SERVICE', 'GROUP' ], currencyId: function(){ return formData.currencyId()!==null ? formData.currencyId() : null;}, customerId: function(){ return formData.customer()!==null ? formData.customer().id : null;}, searchSerialNumber: true }, value: root.getDetailForm('detail-item').lookup, disabled: root.getDetailForm('detail-item').lookup() !== null, placeHolder: 'Cari/Pilih Barang & Jasa...' }"
+                  },
+                  {
+                    "name": "searchKeywordItem",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "value: searchKeywordItem, valueUpdate: 'keyup', attr: {placeholder: lang.please_type_keywords }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__sales-invoice",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/detail-",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

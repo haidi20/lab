@@ -1,0 +1,13 @@
+{
+  "menu": "Transfer Bank",
+  "module": "#accurate__cash-bank__bank-transfer",
+  "captured_at": "2026-10-29T13:25:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": ["Nomor #", "Tanggal", "Bank (Keluar)", "Nilai (Keluar)", "Kurs (Keluar)", "Bank (Masuk)", "Nilai (Masuk)", "Kurs (Masuk)", "Keterangan", "Memiliki dokumen", "Total", "Pembayaran Pembelian", "Cabang", "Ke Cabang", "Pembuat Data"],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "loaded"
+}

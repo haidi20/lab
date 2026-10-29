@@ -1,0 +1,88 @@
+{
+  "menu": "SmartLink Virtual Account",
+  "menu_key": "application_virtual_account",
+  "module": "#accurate__company__application-virtual-account",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Membuka Accurate Store kategori EBANKING",
+    "Navigasi Katalog, Aplikasi Saya, dan API Token",
+    "Pencarian aplikasi",
+    "Katalog aplikasi add-on dengan link detail"
+  ],
+  "endpoints": [
+    "/accurate/company/application-virtual-account.do",
+    "https://account.accurate.id/marketplace/user/index.do",
+    "/marketplace/user/application-installed.do",
+    "/marketplace/user/application-api-token.do",
+    "/marketplace/user/application-view.do"
+  ],
+  "list_view": {
+    "navigation": [
+      {
+        "label": "Katalog",
+        "endpoint": "/marketplace/user/index.do"
+      },
+      {
+        "label": "Aplikasi Saya",
+        "endpoint": "/marketplace/user/application-installed.do"
+      },
+      {
+        "label": "API Token",
+        "endpoint": "/marketplace/user/application-api-token.do"
+      }
+    ],
+    "filters": [
+      {
+        "field": "category",
+        "value": "EBANKING"
+      },
+      {
+        "field": "keywords",
+        "kind": "search"
+      }
+    ],
+    "items": [
+      {
+        "name": "SmartLink BCA",
+        "app_key": "BCA_SMARTLINK_APPLICATION"
+      },
+      {
+        "name": "SmartLink Mandiri",
+        "app_key": "MANDIRI_SMARTLINK_APPLICATION"
+      },
+      {
+        "name": "SmartLink UOB",
+        "app_key": "UOB_SMARTLINK_APPLICATION"
+      }
+    ],
+    "columns": [],
+    "toolbar_buttons": [],
+    "search": {
+      "field": "keywords"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Modul adalah katalog Accurate Store, bukan form input data transaksi/master."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__company__application-virtual-account",
+      "detail": "Halaman induk modul."
+    },
+    {
+      "type": "iframe",
+      "source": "https://account.accurate.id/marketplace/user/index.do",
+      "detail": "Konten Accurate Store."
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "menu": "SmartLink e-Banking",
+  "menu_key": "internet_banking",
+  "module": "#accurate__cash-bank__internet-banking",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/cash-bank/internet-banking.do",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "accountNumber",
+        "label": "No. Rekening Bank",
+        "visible": true
+      },
+      {
+        "field": "cashBankGlAccount.name",
+        "label": "Relasi Akun Bank",
+        "visible": true
+      },
+      {
+        "field": "internetBankingTypeName",
+        "label": "Jenis Internet Banking",
+        "visible": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "internetBankingTypeFilter",
+        "label": "Jenis Internet Banking",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Jenis Internet Banking",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "internetBankingType",
+                    "kind": "select",
+                    "options": [
+                      "-- Pilih Internet Banking --",
+                      "Accurate Online Format",
+                      "Accurate Online Format JSON",
+                      "KlikBCA Bisnis (API)",
+                      "KlikBCA Bisnis",
+                      "KlikBCA Personal",
+                      "KlikBCA Bisnis (SNAP API)",
+                      "KlikBCA Syariah",
+                      "KlikBCA Syariah Bisnis",
+                      "MyBCA Bisnis",
+                      "BNI Internet Bisnis",
+                      "BNI Cash Management System",
+                      "BNI Direct Business",
+                      "BRI Cash Management Bisnis",
+                      "BRI IBBIZ (Internet Banking Bisnis)",
+                      "BRI Mobile (BRIMO)",
+                      "BRI IB (BRI Internet Banking)",
+                      "BSI (Bank Syariah Indonesia)",
+                      "Danamon",
+                      "Mandiri Internet Bisnis",
+                      "Mandiri Cash Management",
+                      "Maybank Bisnis",
+                      "OCBC Business",
+                      "Permata Internet Bisnis",
+                      "UOB Bisnis",
+                      "UOB Infinity"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.internetBankingTypeList, optionsText: 'typeDescription', optionsValue: 'id', value: formData.internetBankingType"
+                  }
+                ]
+              },
+              {
+                "label": "No. Rekening Bank",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "accountNumber",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {igormaskcustom: '00000000000000000000'}, value: formData.accountNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Relasi Akun Bank",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "cashBankGlAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['CASH_BANK'] }, submitEmpty : true, value:formData.cashBankGlAccount, placeHolder: 'Cari/Pilih Akun Perkiraan...', disabled: false}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__cash-bank__internet-banking",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

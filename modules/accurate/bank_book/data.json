@@ -1,0 +1,23 @@
+{
+  "menu": "Histori Bank",
+  "module": "#accurate__cash-bank__bank-book",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [
+      "Tanggal",
+      "No. Sumber #",
+      "No Cek #",
+      "Tipe Transaksi",
+      "Keterangan",
+      "Mutasi",
+      "Tipe",
+      "Saldo",
+      "#"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "loaded"
+}

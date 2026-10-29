@@ -1,0 +1,239 @@
+{
+  "menu": "SmartLink e-Commerce",
+  "menu_key": "ecommerce_setting",
+  "module": "#accurate__customer__ecommerce-setting",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/ecommerce-setting.do",
+    "/accurate/company/",
+    "/accurate/general-ledger/childwithtype-glaccount.do",
+    "/accurate/inventory/lookup-"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "ecommerceType",
+        "label": "Nama e-Commerce",
+        "visible": true
+      },
+      {
+        "field": "shopName",
+        "label": "Nama Toko",
+        "visible": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "ecommerceTypeFilter",
+        "label": "Nama e-Commerce",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nama Toko",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "ecommerceType",
+                    "kind": "select",
+                    "options": [
+                      "Silakan Pilih",
+                      "Tokopedia (Lama)",
+                      "Shopee",
+                      "Lazada",
+                      "Blibli",
+                      "Tiktok",
+                      "Tokopedia"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.ecommerceType"
+                  },
+                  {
+                    "name": "shopName",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.shopName"
+                  }
+                ]
+              },
+              {
+                "label": "Penjualan atas Cabang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "branch",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', url: '/accurate/company/search-active-branch.do', value: formData.branch }"
+                  }
+                ]
+              },
+              {
+                "label": "Kas/Bank Saldo e-Commerce",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentBankAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { currencyId: function(){return acc.staticData.defaultCurrency().id;}, glacctype: ['CASH_BANK'] }, submitEmpty : true, value:formData.paymentBankAccount, placeHolder: 'Cari/Kosongkan untuk dibuat otomatis', disabled: false}"
+                  }
+                ]
+              },
+              {
+                "label": "Penjualan Kena PPN",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxable",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.taxable"
+                  }
+                ]
+              },
+              {
+                "label": "Impor Penjualan Berstatus",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "importDoneTransaction",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: importDoneTransactionOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Selesai",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "importDoneTransaction",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: importDoneTransactionOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Semua Status",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "importDoneTransaction",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: importDoneTransactionOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Ongkos Kirim e-Commerce",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "importCourierCost",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.importCourierCost"
+                  }
+                ]
+              },
+              {
+                "label": "Gudang Penjualan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "warehouse",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'warehouseAddress', url: '/accurate/inventory/lookup-search-warehouse.do', additionalParams:{ filterByUser: function(){ return false;} }, value:formData.warehouse }"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__ecommerce-setting",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/lookup-",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

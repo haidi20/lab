@@ -1,0 +1,162 @@
+{
+  "menu": "Transfer Bank",
+  "menu_key": "bank_transfer",
+  "module": "#accurate__cash-bank__bank-transfer",
+  "module_type": "TRANSACTION",
+  "captured_at": "2026-10-29T13:25:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA browser scenario connected to visible Chrome debugging session",
+  "features": [
+    "Transfer uang antar Kas/Bank",
+    "Pencatatan biaya transfer pada detail grid",
+    "Daftar, filter, pencarian, dan navigasi modul",
+    "Tambah, draf, simpan, ekspor, cetak, dan pengaturan kolom"
+  ],
+  "endpoints": [
+    "/accurate/cash-bank/bank-transfer.do",
+    "/accurate/cash-bank/init-bank-transfer.do",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "columns": [
+      {"field": "number", "label": "Nomor #"},
+      {"field": "transDate", "label": "Tanggal"},
+      {"field": "fromBank.name", "label": "Bank (Keluar)"},
+      {"field": "fromBankAmount", "label": "Nilai (Keluar)"},
+      {"field": "fromBankRate", "label": "Kurs (Keluar)"},
+      {"field": "toBank.name", "label": "Bank (Masuk)"},
+      {"field": "toBankAmount", "label": "Nilai (Masuk)"},
+      {"field": "toBankRate", "label": "Kurs (Masuk)"},
+      {"field": "description", "label": "Keterangan"},
+      {"field": "attachmentExist", "label": "Memiliki dokumen"},
+      {"field": "cashInAmount", "label": "Total"},
+      {"field": "purchasePayment.number", "label": "Pembayaran Pembelian"},
+      {"field": "branch.name", "label": "Cabang"},
+      {"field": "toBranch.name", "label": "Ke Cabang"},
+      {"field": "createdByUserName", "label": "Pembuat Data"},
+      {"field": "cashOutAmount", "label": "Total"}
+    ],
+    "filters": [
+      {"field": "date", "label": "Tanggal", "display_value": "Semua"},
+      {"field": "fromBank", "label": "Dari Kas/Bank", "display_value": "Semua"},
+      {"field": "toBank", "label": "Ke Kas/Bank", "display_value": "Semua"},
+      {"field": "branch", "label": "Cabang", "display_value": "Semua"},
+      {"field": "createdBy", "label": "Pembuat Data", "display_value": "Semua"}
+    ],
+    "toolbar_buttons": [
+      {"id": "btnAdd", "label": "Tambah"},
+      {"id": "btnRefresh", "label": "Perbarui"},
+      {"id": "btnExport", "label": "Ekspor"},
+      {"id": "btnPrint", "label": "Cetak"},
+      {"id": "btnColumnSetting", "label": "Pengaturan"}
+    ],
+    "search": {"field": "keyword", "placeholder": "Cari"},
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Transfer Bank",
+        "sections": [
+          {
+            "name": "Transfer Uang",
+            "fields": [
+              {
+                "label": "Tanggal",
+                "required": true,
+                "inputs": [{"name": "transDate", "kind": "date"}]
+              },
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {"name": "isAutoNumber", "kind": "checkbox"},
+                  {"name": "typeAutoNumber", "kind": "select", "options": ["Bank Deposito", "Bank", "Kas & Bank", "Kas Kecil", "Nomor Bukti", "Kas/Bank Setara Kas", "Transfer Bank Tunai"]}
+                ]
+              },
+              {
+                "label": "Dari Kas/Bank",
+                "required": true,
+                "inputs": [{"name": "fromBank", "kind": "lookup", "source": "/accurate/general-ledger/childwithtype-glaccount.do", "source_type": "CASH_BANK"}]
+              },
+              {
+                "label": "Nilai Transfer",
+                "required": true,
+                "inputs": [{"name": "fromBankAmount", "kind": "number"}]
+              },
+              {
+                "label": "Ke Kas/Bank",
+                "required": true,
+                "inputs": [{"name": "toBank", "kind": "lookup"}]
+              },
+              {
+                "label": "Akun Selisih",
+                "required": false,
+                "dynamic_label": "formData.differenceAmountDescription",
+                "inputs": [{"name": "differenceAccount", "kind": "lookup"}]
+              }
+            ]
+          },
+          {
+            "name": "Biaya Transfer",
+            "fields": [
+              {
+                "label": "Pencarian Akun",
+                "required": false,
+                "inputs": [{"name": "searchDetailAccount", "kind": "lookup"}]
+              },
+              {
+                "label": "Detail Biaya Transfer",
+                "required": true,
+                "inputs": [
+                  {"name": "account.no", "kind": "text", "label": "Akun"},
+                  {"name": "expenseName", "kind": "text", "label": "Nama Akun Dibebankan ke"},
+                  {"name": "bankChargeTypeName", "kind": "text", "label": "Tipe"},
+                  {"name": "amount", "kind": "text", "label": "Nilai"}
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [{"name": "description", "kind": "textarea"}]
+              },
+              {
+                "label": "Cabang",
+                "required": false,
+                "inputs": [{"name": "branch", "kind": "text", "disabled": true, "display_value": "Kantor Pusat"}]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {"id": "btnSaveAsDraft", "label": "Sebagai Draf"},
+      {"id": "btnSave", "label": "Simpan"}
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru terbuka dan seluruh field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__cash-bank__bank-transfer",
+      "detail": "Definisi menu dan relasi modul dari currentMenu dashboard."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber pilihan akun Kas/Bank."
+    }
+  ]
+}

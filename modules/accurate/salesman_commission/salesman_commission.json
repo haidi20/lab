@@ -1,0 +1,670 @@
+{
+  "menu": "Komisi Penjual",
+  "menu_key": "salesman_commission",
+  "module": "#accurate__company__salesman-commission",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/company/salesman-commission.do",
+    "/accurate/company/",
+    "/accurate/inventory/",
+    "/accurate/inventory/tree-item-brand.do",
+    "/accurate/vendor/"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "memo",
+        "label": "Catatan",
+        "visible": true
+      },
+      {
+        "field": "name",
+        "label": "Nama",
+        "visible": true
+      },
+      {
+        "field": "activePeriod",
+        "label": "Periode Berlaku",
+        "visible": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Komisi Berlaku",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "activePeriod",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: activePeriodOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Selamanya",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "activePeriod",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: activePeriodOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Periode Tertentu",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "activePeriod",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: activePeriodOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Nama perhitungan komisi",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  }
+                ]
+              },
+              {
+                "label": "Berlaku ke Tenaga Penjual",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "activePeriod",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: activePeriodOpt, metroRadio:{}"
+                  },
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  },
+                  {
+                    "name": "rbsalesmantarget",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: salesmanTargetOpt, metroRadio:{}"
+                  },
+                  {
+                    "name": "userList",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', text: 'name', subText: 'number', url: '/accurate/company/search-lookup-salesman.do', multiValue: true, checkboxMode : true, value: formData.salesmanTargetList}"
+                  },
+                  {
+                    "name": "forLevel1",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel1"
+                  },
+                  {
+                    "name": "forLevel2",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel2"
+                  },
+                  {
+                    "name": "forLevel3",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel3"
+                  },
+                  {
+                    "name": "forLevel4",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel4"
+                  },
+                  {
+                    "name": "forLevel5",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel5"
+                  },
+                  {
+                    "name": "optionItemTarget",
+                    "kind": "select",
+                    "options": [
+                      "Semua Barang",
+                      "Pilih Kategori Barang",
+                      "Pilih Barang",
+                      "Pilih Merk Barang"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.target"
+                  },
+                  {
+                    "name": "itemCategoryTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', text: 'name', url: '/accurate/inventory/search-item-category.do', multiValue: true, checkboxMode : true, value: formData.itemCategoryTargetList}"
+                  },
+                  {
+                    "name": "itemTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', url: '/accurate/inventory/search-lookup-item.do', value: formData.itemTargetList}"
+                  },
+                  {
+                    "name": "itemBrandTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'nameWithIndentStrip', multiValue: true, checkboxMode : true, url: '/accurate/inventory/tree-item-brand.do', value:formData.itemBrandTargetList}"
+                  },
+                  {
+                    "name": "optionVendorTarget",
+                    "kind": "select",
+                    "options": [
+                      "Semua Pemasok",
+                      "Pilih Pemasok"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.targetVendor"
+                  },
+                  {
+                    "name": "vendorTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'vendorNo', text: 'name', subText: 'vendorNo', url: '/accurate/vendor/search-vendor.do', multiValue: true, checkboxMode : true, value: formData.vendorTargetList}"
+                  },
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  },
+                  {
+                    "name": "requirementAmountFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountFrom"
+                  },
+                  {
+                    "name": "requirementAmountTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountTo"
+                  },
+                  {
+                    "name": "requirementQuantityFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityFrom"
+                  },
+                  {
+                    "name": "requirementQuantityTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityTo"
+                  },
+                  {
+                    "name": "requirementQuantityMinimum",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityMinimum"
+                  },
+                  {
+                    "name": "gain",
+                    "kind": "select",
+                    "options": [
+                      "Persentase",
+                      "Nilai Tetap"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.gain"
+                  },
+                  {
+                    "name": "gainAmountPercent",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {maxValue: 100, minValue: -100}, value: formData.gainAmountPercent"
+                  },
+                  {
+                    "name": "gainCalculatedBy",
+                    "kind": "select",
+                    "options": [
+                      "Nilai Penjualan",
+                      "Laba Kotor"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.gainCalculatedBy"
+                  },
+                  {
+                    "name": "memo",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.memo"
+                  },
+                  {
+                    "name": "suspended",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.suspended"
+                  }
+                ]
+              },
+              {
+                "label": "Semua",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbsalesmantarget",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: salesmanTargetOpt, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Tertentu",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbsalesmantarget",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: salesmanTargetOpt, metroRadio:{}"
+                  },
+                  {
+                    "name": "userList",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', text: 'name', subText: 'number', url: '/accurate/company/search-lookup-salesman.do', multiValue: true, checkboxMode : true, value: formData.salesmanTargetList}"
+                  }
+                ]
+              },
+              {
+                "label": "Diberikan pada penjual urutan (Urutan input penjual di faktur)",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "forLevel1",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel1"
+                  },
+                  {
+                    "name": "forLevel2",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel2"
+                  },
+                  {
+                    "name": "forLevel3",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel3"
+                  },
+                  {
+                    "name": "forLevel4",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel4"
+                  },
+                  {
+                    "name": "forLevel5",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel5"
+                  }
+                ]
+              },
+              {
+                "label": "Pertama",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "forLevel1",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel1"
+                  },
+                  {
+                    "name": "forLevel2",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel2"
+                  },
+                  {
+                    "name": "forLevel3",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel3"
+                  },
+                  {
+                    "name": "forLevel4",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel4"
+                  },
+                  {
+                    "name": "forLevel5",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.forLevel5"
+                  }
+                ]
+              },
+              {
+                "label": "Komisi berlaku untuk barang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "optionItemTarget",
+                    "kind": "select",
+                    "options": [
+                      "Semua Barang",
+                      "Pilih Kategori Barang",
+                      "Pilih Barang",
+                      "Pilih Merk Barang"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.target"
+                  },
+                  {
+                    "name": "itemCategoryTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', text: 'name', url: '/accurate/inventory/search-item-category.do', multiValue: true, checkboxMode : true, value: formData.itemCategoryTargetList}"
+                  },
+                  {
+                    "name": "itemTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', url: '/accurate/inventory/search-lookup-item.do', value: formData.itemTargetList}"
+                  },
+                  {
+                    "name": "itemBrandTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'nameWithIndentStrip', multiValue: true, checkboxMode : true, url: '/accurate/inventory/tree-item-brand.do', value:formData.itemBrandTargetList}"
+                  }
+                ]
+              },
+              {
+                "label": "Dari pemasok utama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "optionVendorTarget",
+                    "kind": "select",
+                    "options": [
+                      "Semua Pemasok",
+                      "Pilih Pemasok"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.targetVendor"
+                  },
+                  {
+                    "name": "vendorTarget",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'vendorNo', text: 'name', subText: 'vendorNo', url: '/accurate/vendor/search-vendor.do', multiValue: true, checkboxMode : true, value: formData.vendorTargetList}"
+                  }
+                ]
+              },
+              {
+                "label": "Dengan syarat perhitungan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  },
+                  {
+                    "name": "requirementAmountFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountFrom"
+                  },
+                  {
+                    "name": "requirementAmountTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountTo"
+                  },
+                  {
+                    "name": "requirementQuantityFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityFrom"
+                  },
+                  {
+                    "name": "requirementQuantityTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityTo"
+                  },
+                  {
+                    "name": "requirementQuantityMinimum",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityMinimum"
+                  }
+                ]
+              },
+              {
+                "label": "Tanpa batasan dan syarat",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Nilai Penjualan antara",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  },
+                  {
+                    "name": "requirementAmountFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountFrom"
+                  },
+                  {
+                    "name": "requirementAmountTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementAmountTo"
+                  }
+                ]
+              },
+              {
+                "label": "Kuantitas penjualan antara",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  },
+                  {
+                    "name": "requirementQuantityFrom",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityFrom"
+                  },
+                  {
+                    "name": "requirementQuantityTo",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityTo"
+                  }
+                ]
+              },
+              {
+                "label": "Kuantitas terjual per",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "rbrequirement",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.requirement, metroRadio:{}"
+                  },
+                  {
+                    "name": "requirementQuantityMinimum",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.requirementQuantityMinimum"
+                  }
+                ]
+              },
+              {
+                "label": "Akan mendapat komisi",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "gain",
+                    "kind": "select",
+                    "options": [
+                      "Persentase",
+                      "Nilai Tetap"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.gain"
+                  },
+                  {
+                    "name": "gainAmountPercent",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {maxValue: 100, minValue: -100}, value: formData.gainAmountPercent"
+                  },
+                  {
+                    "name": "gainCalculatedBy",
+                    "kind": "select",
+                    "options": [
+                      "Nilai Penjualan",
+                      "Laba Kotor"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.gainCalculatedBy"
+                  }
+                ]
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.suspended"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__company__salesman-commission",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/tree-item-brand.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/vendor/",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

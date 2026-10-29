@@ -1,0 +1,396 @@
+{
+  "menu": "Penerimaan Penjualan",
+  "menu_key": "sales_receipt",
+  "module": "#accurate__customer__sales-receipt",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/sales-receipt.do",
+    "/accurate/cu",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "transDate",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "chequeNo",
+        "label": "No. Cek",
+        "visible": true
+      },
+      {
+        "field": "chequeDate",
+        "label": "Tanggal Cek",
+        "visible": true
+      },
+      {
+        "field": "customer.name",
+        "label": "Pelanggan",
+        "visible": true
+      },
+      {
+        "field": "currency.name",
+        "label": "Mata Uang",
+        "visible": false
+      },
+      {
+        "field": "bank.name",
+        "label": "Bank",
+        "visible": true
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "voidCheq",
+        "label": "Void",
+        "visible": false
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "overPayUsed",
+        "label": "Kredit Terpakai",
+        "visible": false
+      },
+      {
+        "field": "availableOverPay",
+        "label": "Sisa Kredit",
+        "visible": false
+      },
+      {
+        "field": "useCredit",
+        "label": "Pakai Kredit",
+        "visible": true
+      },
+      {
+        "field": "uniqueNumberPayment",
+        "label": "Bayar (Kode Unik)",
+        "visible": false
+      },
+      {
+        "field": "cashierEmployee.name",
+        "label": "Kasir",
+        "visible": false
+      },
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      },
+      {
+        "field": "createdByUserName",
+        "label": "Pembuat Data",
+        "visible": false
+      },
+      {
+        "field": "paymentMethodName",
+        "label": "Metode Bayar",
+        "visible": false
+      },
+      {
+        "field": "printedByUser",
+        "label": "Dicetak/email",
+        "visible": false
+      },
+      {
+        "field": "printedTime",
+        "label": "Waktu cetak/email",
+        "visible": false
+      },
+      {
+        "field": "customerNo",
+        "label": "ID Pelanggan",
+        "visible": false
+      },
+      {
+        "field": "chequeAmount",
+        "label": "Nilai Pembayaran",
+        "visible": true
+      },
+      {
+        "field": "totalPayment",
+        "label": "Faktur Dibayar",
+        "visible": false
+      },
+      {
+        "field": "totalDiscount",
+        "label": "Diskon",
+        "visible": false
+      },
+      {
+        "field": "equivalentAmount",
+        "label": "Nilai Bayar",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "paymentMethodFilter",
+        "label": "Metode Bayar",
+        "display_value": "Semua"
+      },
+      {
+        "key": "bankFilter",
+        "label": "Bank",
+        "display_value": "Semua"
+      },
+      {
+        "key": "chequeDateFilter",
+        "label": "Tanggal Cek",
+        "display_value": "Semua"
+      },
+      {
+        "key": "customerFilter",
+        "label": "Terima dari",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnImport",
+        "label": "Impor"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Bank",
+                      "Deposito Bank",
+                      "Kas & Bank",
+                      "Kas Kecil",
+                      "Nomor Bukti Kas/Bank",
+                      "Setara Kas",
+                      "Tunai"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Terima dari",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "customer",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'customerNo', text: 'name', referenceText: 'customerNo', rightText: 'customerNo', subText: 'lookupSubText', url: '/accurate/customer/lookup-search-customer.do', saveUrl: '/accurate/customer/save-customer.do', selectUrl: '/accurate/customer/detail-lookup-customer.do', placeHolder: 'Cari/Pilih Pelanggan...', value: formData.customer, disabled: false }"
+                  }
+                ]
+              },
+              {
+                "label": "Bank",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "bank",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', subText: 'no', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['CASH_BANK'] }, submitEmpty : true, value:formData.bank }"
+                  }
+                ]
+              },
+              {
+                "label": "Nilai Pembayaran",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "chequeAmount",
+                    "kind": "number",
+                    "options": [],
+                    "data_bind": "metroNumberfield: {}, value: formData.chequeAmount"
+                  }
+                ]
+              },
+              {
+                "label": "Tgl Bayar",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.transDate"
+                  }
+                ]
+              },
+              {
+                "label": "Faktur",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailInvoice",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'number', text: 'number', subText: 'transDate', rightText: 'owingForPaymentWithSymbol', rightSubText: 'branchName', url: function(data, handler) { return searchOutstandingInvoice(data, handler);}, selectUrl: function(data, handler) { return detailOutstandingInvoice(data, handler);}, additionalParams: { customerId: function(){ return formData.customer()!==null ? formData.customer().id : '';}, currencyId: function(){ return formData.currency()!==null ? formData.currencyId() : '';}, receiptDate: function(){ return formData.transDate();} }, value: root.getDetailForm('detail-invoice').lookup, disabled: root.getDetailForm('detail-invoice').lookup() !== null }"
+                  },
+                  {
+                    "name": "searchKeywordInvoice",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "value: searchKeywordInvoice, valueUpdate: 'keyup', attr: {placeholder: lang.please_type_keywords }"
+                  }
+                ]
+              },
+              {
+                "label": "Metode Bayar",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "paymentMethod",
+                    "kind": "select",
+                    "options": [
+                      "Tunai",
+                      "Cek/Giro",
+                      "Transfer Bank",
+                      "EDC",
+                      "Kartu Debit",
+                      "Kartu Kredit",
+                      "QRIS",
+                      "Payment Link",
+                      "Virtual Account",
+                      "Dompet Digital",
+                      "Non Tunai Lainnya"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.paymentMethod"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__sales-receipt",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

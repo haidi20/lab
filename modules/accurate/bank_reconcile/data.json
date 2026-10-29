@@ -1,0 +1,13 @@
+{
+  "menu": "Rekonsiliasi Bank",
+  "module": "#accurate__cash-bank__bank-reconcile",
+  "captured_at": "2026-10-29T16:30:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "loaded"
+}

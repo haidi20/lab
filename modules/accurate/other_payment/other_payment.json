@@ -1,0 +1,308 @@
+{
+  "menu": "Pembayaran",
+  "menu_key": "other_payment",
+  "module": "#accurate__cash-bank__other-payment",
+  "module_type": "PAY",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/cash-bank/other-payment.do",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "transDate",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "bank.name",
+        "label": "Kas/Bank",
+        "visible": true
+      },
+      {
+        "field": "chequeNo",
+        "label": "No Cek #",
+        "visible": true
+      },
+      {
+        "field": "payee",
+        "label": "Penerima",
+        "visible": false
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "amount",
+        "label": "Nilai",
+        "visible": true
+      },
+      {
+        "field": "rate",
+        "label": "Kurs",
+        "visible": false
+      },
+      {
+        "field": "voidCheq",
+        "label": "Void",
+        "visible": false
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "chequeDate",
+        "label": "Tanggal Cek",
+        "visible": false
+      },
+      {
+        "field": "pendingAmortized",
+        "label": "Pendapatan Tertunda",
+        "visible": false
+      },
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      },
+      {
+        "field": "createdByUserName",
+        "label": "Pembuat Data",
+        "visible": false
+      },
+      {
+        "field": "printedByUser",
+        "label": "Dicetak/email",
+        "visible": false
+      },
+      {
+        "field": "printedTime",
+        "label": "Waktu cetak/email",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "bankFilter",
+        "label": "Kas/Bank",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnImport",
+        "label": "Impor"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      },
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Bank",
+                      "Deposito Bank",
+                      "Kas & Bank",
+                      "Kas Kecil",
+                      "Nomor Bukti Kas/Bank",
+                      "Setara Kas",
+                      "Tunai"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Kas/Bank",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "bank",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', subText: 'no', rightSubText: 'bankBalance', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['CASH_BANK'], showBankBalance: true }, submitEmpty : true, value:formData.bank, disabled: false}"
+                  }
+                ]
+              },
+              {
+                "label": "Tanggal",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.transDate"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Detail",
+            "fields": [
+              {
+                "label": "Rincian Pembayaran",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams:{ glacctype: ['INVENTORY','OTHER_CURRENT_ASSET','FIXED_ASSET','ACCUMULATED_DEPRECIATION','OTHER_ASSET','OTHER_CURRENT_LIABILITY','LONG_TERM_LIABILITY','EQUITY','REVENUE','COGS','EXPENSE','OTHER_EXPENSE','OTHER_INCOME'], currencyId: ko.observable([ acc.staticData.defaultCurrency().id, formData.transactionCurrencyId ]) }, value: root.getDetailForm('detail-other-payment').lookup, disable: root.getDetailForm('detail-other-payment').lookup() !== null, placeHolder: 'Cari/Pilih Akun Perkiraan...' }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "No Cek #",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "chequeNo",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.chequeNo"
+                  }
+                ]
+              },
+              {
+                "label": "Penerima",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "payee",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.payee"
+                  }
+                ]
+              },
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__cash-bank__other-payment",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

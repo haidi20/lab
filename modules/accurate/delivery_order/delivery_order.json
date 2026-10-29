@@ -1,0 +1,407 @@
+{
+  "menu": "Pengiriman Pesanan",
+  "menu_key": "delivery_order",
+  "module": "#accurate__customer__delivery-order",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/delivery-order.do",
+    "/accurate/cu",
+    "/accurate/company/",
+    "/accurate/company/detail-",
+    "/accurate/inventory/"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "transDate",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "customer.name",
+        "label": "Pelanggan",
+        "visible": true
+      },
+      {
+        "field": "toAddress",
+        "label": "Alamat",
+        "visible": false
+      },
+      {
+        "field": "currency.code",
+        "label": "Mata Uang",
+        "visible": false
+      },
+      {
+        "field": "poNumber",
+        "label": "No. PO",
+        "visible": false
+      },
+      {
+        "field": "shipment.name",
+        "label": "Pengiriman",
+        "visible": true
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "canProcess",
+        "label": "Dapat diproses",
+        "visible": false
+      },
+      {
+        "field": "masterSalesman.name",
+        "label": "Penjual Utama",
+        "visible": false
+      },
+      {
+        "field": "printedByUser",
+        "label": "Dicetak/email",
+        "visible": false
+      },
+      {
+        "field": "deliveryPrintedTime",
+        "label": "Waktu cetak/email",
+        "visible": false
+      },
+      {
+        "field": "deliveryPackingNumber",
+        "label": "No Pengepakan",
+        "visible": false
+      },
+      {
+        "field": "createdByUserName",
+        "label": "Pembuat Data",
+        "visible": false
+      },
+      {
+        "field": "statusName",
+        "label": "Status",
+        "visible": true
+      },
+      {
+        "field": "customerNo",
+        "label": "ID Pelanggan",
+        "visible": false
+      },
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "customerFilter",
+        "label": "Kirim ke",
+        "display_value": "Semua"
+      },
+      {
+        "key": "shipmentFilter",
+        "label": "Pengiriman",
+        "display_value": "Semua"
+      },
+      {
+        "key": "statusFilter",
+        "label": "Status",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnImport",
+        "label": "Impor"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      },
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Pengiriman Pesanan"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Kirim ke",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "customer",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'customerNo', text: 'name', referenceText: 'customerNo', rightText: 'customerNo', subText: 'lookupSubText', url: '/accurate/customer/lookup-search-customer.do', saveUrl: '/accurate/customer/save-customer.do', selectUrl: '/accurate/customer/detail-lookup-customer.do', placeHolder: 'Cari/Pilih Pelanggan...', value: formData.customer, disabled: false }"
+                  }
+                ]
+              },
+              {
+                "label": "Tanggal",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.transDate"
+                  }
+                ]
+              },
+              {
+                "label": "Pengiriman",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "shipment",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'lookupSubText', url: '/accurate/company/search-lookup-shipment.do', selectUrl: '/accurate/company/detail-shipment.do', saveUrl: '/accurate/company/save-shipment.do', value: formData.shipment }"
+                  }
+                ]
+              },
+              {
+                "label": "No. PO",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "poNumber",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.poNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Alamat",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "toAddress",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.toAddress"
+                  }
+                ]
+              },
+              {
+                "label": "Kontak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "contactInfo",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'contactTitle', text: 'contactTitle', subText: 'mobilePhone', placeHolder: 'Kontak', url: '/accurate/customer/customer-contact-list.do', additionalParams: { customerId: function(){ return formData.customer() !== null ? formData.customer().id : null;} }, value: formData.contactInfo }"
+                  }
+                ]
+              },
+              {
+                "label": "FOB",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fob",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', url: '/accurate/company/search-freeonboard.do', saveUrl: '/accurate/company/save-freeonboard.do', value: formData.fob }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Detail",
+            "fields": [
+              {
+                "label": "Rincian Barang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailItem",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', hintText: 'searchHitSubText', url: '/accurate/inventory/search-lookup-item.do', selectUrl: root.getDetailForm('detail-item').searchLookupItemSelect(), additionalParams: { moduleType: root.moduleType, branchId: function(){ return formData.branchId();}, effectiveDate: function(){ return formData.transDate();}, priceCategoryId: function(){ return formData.customer()!==null ? formData.customer().priceCategoryId : null;}, discountCategoryId: function(){ return formData.customer()!==null ? formData.customer().discountCategoryId : null;}, branchId: function(){ return formData.branchId();}, itemtype: [ 'INVENTORY', 'NON_INVENTORY', 'SERVICE', 'GROUP' ], currencyId: function(){ return formData.currencyId()!==null ? formData.currencyId() : null;}, customerId: function(){ return formData.customer()!==null ? formData.customer().id : null;}, searchSerialNumber: true }, value: root.getDetailForm('detail-item').lookup, disabled: root.getDetailForm('detail-item').lookup() !== null, placeHolder: 'Cari/Pilih Barang & Jasa...' }"
+                  },
+                  {
+                    "name": "searchKeywordItem",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "value: searchKeywordItem, valueUpdate: 'keyup', attr: {placeholder: lang.please_type_keywords }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__delivery-order",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/detail-",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

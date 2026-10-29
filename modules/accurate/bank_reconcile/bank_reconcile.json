@@ -1,0 +1,83 @@
+{
+  "menu": "Rekonsiliasi Bank",
+  "menu_key": "bank_reconcile",
+  "module": "#accurate__cash-bank__bank-reconcile",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T16:30:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session; two-step capture including bank selection and refresh",
+  "features": [
+    "Workflow rekonsiliasi dua panel REKENING BANK dan JURNAL ACCURATE",
+    "Filter bank dan periode tanggal",
+    "Rekonsiliasi manual per mutasi",
+    "Hapus per mutasi rekening koran",
+    "Proses semua data cocok",
+    "Tampilan saldo bank aktif"
+  ],
+  "endpoints": [
+    "/accurate/cash-bank/bank-reconcile.do",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "panels": [
+      {
+        "name": "REKENING BANK",
+        "style": "card-panel-blue",
+        "buttons": [
+          {"id": "btnSelect", "label": "Pilih"},
+          {"id": "btnMultiDelete", "label": "Pilih untuk hapus / Hapus per mutasi"}
+        ]
+      },
+      {
+        "name": "JURNAL ACCURATE",
+        "style": "card-panel-red",
+        "buttons": [
+          {"id": "btnMultiReconcile", "label": "Proses semua data cocok"}
+        ]
+      }
+    ],
+    "filters": [
+      {"field": "bank", "kind": "lookup", "source": "/accurate/general-ledger/childwithtype-glaccount.do", "source_type": "CASH_BANK", "options": ["Kas Kecil 110101", "Bank 110102", "Tunai 110103", "Deposito Bank 110201"]},
+      {"field": "startDate", "kind": "date"},
+      {"field": "endDate", "kind": "date"}
+    ],
+    "columns": [],
+    "toolbar_buttons": [
+      {"id": "btnRefresh", "label": "Perbarui"},
+      {"id": "btnSelect", "label": "Pilih"},
+      {"id": "btnMultiDelete", "label": "Hapus"},
+      {"id": "btnMultiReconcile", "label": "Proses semua data cocok"}
+    ],
+    "search": null,
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Modul workflow rekonsiliasi tidak memiliki form tambah data; rekening koran diimpor melalui menu Rekening Koran atau SmartLink e-Banking."
+  },
+  "related_forms": [
+    "#accurate__cash-bank__bank-statement",
+    "#accurate__cash-bank__internet-banking"
+  ],
+  "confirmation_dialogs": [
+    {"context": "manual_reconcile", "message": "Apakah histori ini ada tercetak dalam rekening koran?"},
+    {"context": "delete_bank_statement", "message": "Apakah anda ingin menghapus Rekening koran ini?"},
+    {"context": "multi_delete_bank_statement", "message": "Apakah anda ingin menghapus … Rekening koran ini?"},
+    {"context": "delete_warning", "message": "Rekening koran yang dihapus hanya dapat dibuat kembali dengan mengimpor dari Internet Banking atau file download mutasi. Pastikan rekening koran masih dapat diimpor atau file download mutasi masih ada. Anda yakin akan menghapus rekening koran ini ?"}
+  ],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__cash-bank__bank-reconcile",
+      "detail": "DOM modul hasil REA setelah pemilihan bank dan refresh."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber pilihan akun Kas/Bank untuk filter bank."
+    }
+  ]
+}

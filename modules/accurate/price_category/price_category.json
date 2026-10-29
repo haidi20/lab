@@ -1,0 +1,121 @@
+{
+  "menu": "Kategori Penjualan",
+  "menu_key": "price_category",
+  "module": "#accurate__customer__price-category",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/price-category.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "name",
+        "label": "Nama Kategori",
+        "visible": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nama Kategori",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "notes",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__price-category",
+      "detail": "DOM modul hasil REA."
+    }
+  ]
+}

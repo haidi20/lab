@@ -1,0 +1,975 @@
+{
+  "menu": "Pelanggan",
+  "menu_key": "customer",
+  "module": "#accurate__customer__customer",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/customer.do",
+    "/accurate/cu",
+    "/accurate/company/",
+    "/accurate/general-ledger/childwithtype-glaccount.do",
+    "/accurate/inventory/lookup-"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      },
+      {
+        "field": "name",
+        "label": "Nama",
+        "visible": true
+      },
+      {
+        "field": "customerNo",
+        "label": "ID Pelanggan",
+        "visible": true
+      },
+      {
+        "field": "category.name",
+        "label": "Kategori",
+        "visible": false
+      },
+      {
+        "field": "currency.code",
+        "label": "Mata Uang",
+        "visible": false
+      },
+      {
+        "field": "wpName",
+        "label": "Nama Wajib Pajak",
+        "visible": false
+      },
+      {
+        "field": "contactInfo.name",
+        "label": "Kontak Utama",
+        "visible": true
+      },
+      {
+        "field": "countryCode",
+        "label": "Kode Negara",
+        "visible": false
+      },
+      {
+        "field": "suspended",
+        "label": "Non Aktif",
+        "visible": false
+      },
+      {
+        "field": "nitku",
+        "label": "NITKU",
+        "visible": false
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "wpType",
+        "label": "Tipe ID Wajib Pajak",
+        "visible": false
+      },
+      {
+        "field": "wpNumber",
+        "label": "Nomor Wajib Pajak",
+        "visible": false
+      },
+      {
+        "field": "defaultTerm.name",
+        "label": "Syarat Pembayaran",
+        "visible": false
+      },
+      {
+        "field": "discountCategory.name",
+        "label": "Kategori Diskon",
+        "visible": false
+      },
+      {
+        "field": "defaultWarehouse.name",
+        "label": "Gudang Default",
+        "visible": false
+      },
+      {
+        "field": "priceCategory.name",
+        "label": "Kategori Penjualan",
+        "visible": false
+      },
+      {
+        "field": "consignmentStore",
+        "label": "Konsinyasi",
+        "visible": false
+      },
+      {
+        "field": "customerNoVa",
+        "label": "Nomor VA",
+        "visible": false
+      },
+      {
+        "field": "reseller",
+        "label": "Agen",
+        "visible": false
+      },
+      {
+        "field": "lastBalanceView",
+        "label": "Saldo",
+        "visible": true
+      },
+      {
+        "field": "owingLimitDescription",
+        "label": "Limit Piutang",
+        "visible": false
+      },
+      {
+        "field": "customerBranchName",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "salesmanNameList",
+        "label": "Default Penjual",
+        "visible": false
+      },
+      {
+        "field": "shipAddress.concatFullAddress",
+        "label": "Alamat Utama",
+        "visible": false
+      },
+      {
+        "field": "billAddress.concatFullAddress",
+        "label": "Alamat Penagihan",
+        "visible": false
+      },
+      {
+        "field": "taxAddress.concatFullAddress",
+        "label": "Alamat Pajak",
+        "visible": false
+      },
+      {
+        "field": "notes",
+        "label": "Catatan",
+        "visible": false
+      },
+      {
+        "field": "contactInfoView",
+        "label": "Kontak Utama",
+        "visible": false
+      },
+      {
+        "field": "otherContactInfo1View",
+        "label": "Kontak Lainnya #1",
+        "visible": false
+      },
+      {
+        "field": "otherContactInfo2View",
+        "label": "Kontak Lainnya #2",
+        "visible": false
+      },
+      {
+        "field": "otherContactInfo3View",
+        "label": "Kontak Lainnya #3",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "display_value": "Semua"
+      },
+      {
+        "key": "categoryFilter",
+        "label": "Kategori",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnImport",
+        "label": "Impor"
+      },
+      {
+        "id": "btnExport",
+        "label": "Ekspor"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      },
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Pelanggan"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Nama",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  }
+                ]
+              },
+              {
+                "label": "Kategori",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "category",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', url: '/accurate/customer/child-customer-category.do', saveUrl: '/accurate/customer/save-customer-category.do', value:formData.category }"
+                  }
+                ]
+              },
+              {
+                "label": "No. Telp. Bisnis",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "workPhone",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.workPhone"
+                  }
+                ]
+              },
+              {
+                "label": "Handphone",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "mobilePhone",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.mobilePhone"
+                  }
+                ]
+              },
+              {
+                "label": "No. WhatsApp",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "bbmPin",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.bbmPin"
+                  }
+                ]
+              },
+              {
+                "label": "Email",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "email",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.email"
+                  }
+                ]
+              },
+              {
+                "label": "Faximili",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fax",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.fax"
+                  }
+                ]
+              },
+              {
+                "label": "Website",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "website",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.website"
+                  }
+                ]
+              },
+              {
+                "label": "Alamat Penagihan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "billStreet",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {prefix: 'Jalan'}, value: formData.billStreet"
+                  },
+                  {
+                    "name": "billCity",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Kota'}, value: formData.billCity"
+                  },
+                  {
+                    "name": "billZipCode",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'K.Pos'}, value: formData.billZipCode"
+                  },
+                  {
+                    "name": "billProvince",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Provinsi'}, value: formData.billProvince"
+                  },
+                  {
+                    "name": "billCountry",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Negara'}, value: formData.billCountry"
+                  }
+                ]
+              },
+              {
+                "label": "Dipakai di Cabang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "branch",
+                    "kind": "select",
+                    "options": [
+                      "[Semua Cabang]",
+                      "Kantor Pusat"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.branchListOption, optionsText: 'name', optionsValue: 'id', value: formData.branchId"
+                  }
+                ]
+              },
+              {
+                "label": "Sama dengan alamat penagihan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "shipSameAsBill",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.shipSameAsBill"
+                  }
+                ]
+              },
+              {
+                "label": "Jadikan Agen",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "reseller",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "checked: formData.reseller"
+                  }
+                ]
+              },
+              {
+                "label": "Kategori Harga",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "priceCategory",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'description', url: '/accurate/customer/search-price-category.do', saveUrl: '/accurate/customer/save-price-category.do', value: formData.priceCategory }"
+                  }
+                ]
+              },
+              {
+                "label": "Kategori Diskon",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "discountCategory",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'description', url: '/accurate/customer/search-price-category.do', saveUrl: '/accurate/customer/save-price-category.do', value: formData.discountCategory }"
+                  }
+                ]
+              },
+              {
+                "label": "Syarat Pembayaran",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "term",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'dueDescription', url: '/accurate/company/search-lookup-payment-term.do', additionalParams: { showInstallmentTerm: true }, value:formData.term }"
+                  }
+                ]
+              },
+              {
+                "label": "Default Penjual",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesmanList",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'number', text: 'name', subText: 'number', multiValue: true, limitValue: 5, checkboxMode : true, url: '/accurate/company/search-lookup-salesman.do', additionalParams:{ branchId: formData.branchId }, value: formData.salesmanList }"
+                  }
+                ]
+              },
+              {
+                "label": "Default Diskon (%)",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "defaultSalesDisc",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: '%'}, value: formData.defaultSalesDisc"
+                  }
+                ]
+              },
+              {
+                "label": "Default Deskripsi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "defaultInvoiceDesc",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.defaultInvoiceDesc"
+                  }
+                ]
+              },
+              {
+                "label": "Konsinyasi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "consignmentStore",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.consignmentStore"
+                  }
+                ]
+              },
+              {
+                "label": "Piutang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "customerReceivableAccountList",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', multiValue: true, checkboxMode : true, url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['ACCOUNT_RECEIVABLE'] }, submitEmpty : true, value:formData.customerReceivableAccountList, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Uang muka",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "customerDownPaymentAccountList",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', multiValue: true, checkboxMode : true, url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['ACCOUNT_PAYABLE'] }, submitEmpty : true, value:formData.customerDownPaymentAccountList, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Penjualan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { currencyId: function(){ return acc.staticData.defaultCurrency().id; }, glacctype: ['REVENUE','OTHER_INCOME','OTHER_CURRENT_ASSET','OTHER_CURRENT_LIABILITY','LONG_TERM_LIABILITY'] }, submitEmpty : true, value: formData.salesAccount, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Diskon Barang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "itemDiscountAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { currencyId: function(){ return acc.staticData.defaultCurrency().id; }, glacctype: ['REVENUE','OTHER_INCOME','OTHER_CURRENT_ASSET','OTHER_CURRENT_LIABILITY'] }, submitEmpty : true, value: formData.itemDiscountAccount, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Beban Pokok Penjualan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "costOfGoodsSoldAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { currencyId: function(){ return acc.staticData.defaultCurrency().id; }, glacctype: ['COGS'] }, submitEmpty : true, value: formData.costOfGoodsSoldAccount, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Retur Penjualan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesReturnAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { currencyId: function(){ return acc.staticData.defaultCurrency().id; }, glacctype: ['REVENUE','OTHER_INCOME','OTHER_CURRENT_ASSET','OTHER_CURRENT_LIABILITY'] }, submitEmpty : true, value: formData.salesReturnAccount, disabled : false }"
+                  }
+                ]
+              },
+              {
+                "label": "Diskon Penjualan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesDiscountAccount",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: 'no', text: 'name', referenceText: 'no', subText: 'no', rightSubText: 'accountTypeName', url: '/accurate/general-ledger/childwithtype-glaccount.do', additionalParams: { glacctype: ['REVENUE','OTHER_INCOME'] }, submitEmpty : true, value: formData.salesDiscountAccount, disabled: false }"
+                  }
+                ]
+              },
+              {
+                "label": "Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "defaultIncTax",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.defaultIncTax"
+                  }
+                ]
+              },
+              {
+                "label": "Tipe ID Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "wpType",
+                    "kind": "select",
+                    "options": [
+                      "NIK",
+                      "NPWP",
+                      "Passpor",
+                      "Lainnya"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.wpType"
+                  }
+                ]
+              },
+              {
+                "label": "Nomor Wajib Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "wpNumber",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.wpNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Nama Wajib Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "wpName",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.wpName"
+                  }
+                ]
+              },
+              {
+                "label": "NITKU",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "nitku",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.nitku"
+                  }
+                ]
+              },
+              {
+                "label": "Kode Negara",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "countryTax",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'code', compare: 'name', text: 'code', subText: 'name', url: '/accurate/customer/search-lookup-country-code.do', value: formData.countryTax, }"
+                  }
+                ]
+              },
+              {
+                "label": "Tipe Transaksi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "documentCode",
+                    "kind": "select",
+                    "options": [
+                      "Faktur Pajak",
+                      "Dokumen Tertentu",
+                      "Ekspor",
+                      "Digunggung"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.documentCode"
+                  }
+                ]
+              },
+              {
+                "label": "Alamat Pajak",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxSameAsBill",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.taxSameAsBill"
+                  },
+                  {
+                    "name": "taxStreet",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {prefix: 'Jalan'}, value: formData.taxStreet, disable: formData.taxSameAsBill"
+                  },
+                  {
+                    "name": "taxCity",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Kota'}, value: formData.taxCity, disable: formData.taxSameAsBill"
+                  },
+                  {
+                    "name": "taxZipCode",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'K.Pos'}, value: formData.taxZipCode, disable: formData.taxSameAsBill"
+                  },
+                  {
+                    "name": "taxProvince",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Provinsi'}, value: formData.taxProvince, disable: formData.taxSameAsBill"
+                  },
+                  {
+                    "name": "taxCountry",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {prefix: 'Negara'}, value: formData.taxCountry, disable: formData.taxSameAsBill"
+                  }
+                ]
+              },
+              {
+                "label": "Sama dengan alamat penagihan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "taxSameAsBill",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.taxSameAsBill"
+                  }
+                ]
+              },
+              {
+                "label": "Per Pelanggan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "groupCustomerLimit",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.groupCustomerLimitOption, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Jika ada faktur dengan umur lebih dari",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "customerLimitAge",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.customerLimitAge"
+                  }
+                ]
+              },
+              {
+                "label": "Jika total piutang & pesanan melebihi",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "customerLimitAmount",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.customerLimitAmount"
+                  }
+                ]
+              },
+              {
+                "label": "Tergabung ke Pelanggan Induk",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "groupCustomerLimit",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "checked: formData.groupCustomerLimitOption, metroRadio:{}"
+                  }
+                ]
+              },
+              {
+                "label": "Gudang Default",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "defaultWarehouse",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', url: '/accurate/inventory/lookup-search-warehouse.do', additionalParams:{ suspendedFilter: false, includeInTransitWarehouse: false }, value: formData.defaultWarehouse }"
+                  }
+                ]
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.suspended"
+                  }
+                ]
+              },
+              {
+                "label": "s/d",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fromDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: fromDate"
+                  },
+                  {
+                    "name": "toDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: toDate"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "notes",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.notes"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__customer",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/lookup-",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "menu": "Histori Bank",
+  "menu_key": "bank_book",
+  "module": "#accurate__cash-bank__bank-book",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul"
+  ],
+  "endpoints": [
+    "/accurate/cash-bank/bank-book.do",
+    "/accurate/general-ledger/childwithtype-glaccount.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "transDateView",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "transNumber",
+        "label": "No. Sumber #",
+        "visible": true
+      },
+      {
+        "field": "chequeNumber",
+        "label": "No Cek #",
+        "visible": true
+      },
+      {
+        "field": "transactionTypeName",
+        "label": "Tipe Transaksi",
+        "visible": true
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "amount",
+        "label": "Mutasi",
+        "visible": true
+      },
+      {
+        "field": "amountType",
+        "label": "Tipe",
+        "visible": true
+      },
+      {
+        "field": "balance",
+        "label": "Saldo",
+        "visible": true
+      },
+      {
+        "field": "reconciled",
+        "label": "#",
+        "visible": true
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnExport",
+        "label": "Ekspor"
+      },
+      {
+        "id": "btnToggleDrCr",
+        "label": "Debit/Kredit"
+      }
+    ],
+    "search": null,
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Menu tidak menyediakan tombol Tambah pada bukti DOM."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__cash-bank__bank-book",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/general-ledger/childwithtype-glaccount.do",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

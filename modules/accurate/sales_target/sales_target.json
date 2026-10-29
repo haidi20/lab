@@ -1,0 +1,265 @@
+{
+  "menu": "Target Penjualan",
+  "menu_key": "sales_target",
+  "module": "#accurate__budget-target__sales-target",
+  "module_type": "ST",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/budget-target/sales-target.do",
+    "/accurate/inventory/",
+    "/accurate/inventory/detail-lookup-item.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "analystName",
+        "label": "Penganalisa",
+        "visible": false
+      },
+      {
+        "field": "generalTargetYear",
+        "label": "Tahun",
+        "visible": false
+      },
+      {
+        "field": "fromDate",
+        "label": "Dari Tanggal",
+        "visible": true
+      },
+      {
+        "field": "toDate",
+        "label": "S/d Tanggal",
+        "visible": true
+      },
+      {
+        "field": "notes",
+        "label": "Catatan",
+        "visible": false
+      },
+      {
+        "field": "name",
+        "label": "Nama",
+        "visible": true
+      },
+      {
+        "field": "branchName",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "salesTargetTypeName",
+        "label": "Tipe Target",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "salesTargetTypeFilter",
+        "label": "Tipe Target",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nama Target",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  }
+                ]
+              },
+              {
+                "label": "Tipe Target",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salutation",
+                    "kind": "select",
+                    "options": [
+                      "Per Barang",
+                      "Per Kategori Barang",
+                      "Per Penjual",
+                      "Per Bulan"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.salesTargetType"
+                  }
+                ]
+              },
+              {
+                "label": "Penjualan Cabang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "branch",
+                    "kind": "select",
+                    "options": [
+                      "[Semua Cabang]",
+                      "Kantor Pusat"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.branchListOption, optionsText: 'name', optionsValue: 'id', value: formData.branchId"
+                  }
+                ]
+              },
+              {
+                "label": "Dari Tanggal",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "fromDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.fromDate"
+                  }
+                ]
+              },
+              {
+                "label": "S/d Tanggal",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "toDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.toDate"
+                  }
+                ]
+              },
+              {
+                "label": "Penganalisa",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "analystName",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.analystName"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Detail",
+            "fields": [
+              {
+                "label": "Rincian Barang",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "searchDetailItem",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', hintText: 'searchHitSubText', url: '/accurate/inventory/search-lookup-item.do', selectUrl: '/accurate/inventory/detail-lookup-item.do', value: root.getDetailForm('detail-item').lookup, disabled: root.getDetailForm('detail-item').lookup() !== null, placeHolder: 'Cari/Pilih Barang & Jasa...' }"
+                  },
+                  {
+                    "name": "searchKeywordItem",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "value: searchKeywordItem, valueUpdate: 'keyup', attr: {placeholder: lang.please_type_keywords }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Catatan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "notes",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.notes"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__budget-target__sales-target",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/detail-lookup-item.do",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}

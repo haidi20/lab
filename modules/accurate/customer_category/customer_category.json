@@ -1,0 +1,133 @@
+{
+  "menu": "Kategori Pelanggan",
+  "menu_key": "customer_category",
+  "module": "#accurate__customer__customer-category",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/customer-category.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "nameWithIndent",
+        "label": "Nama Kategori",
+        "visible": true
+      },
+      {
+        "field": "defaultCategory",
+        "label": "Kategori Default",
+        "visible": true
+      },
+      {
+        "field": "parentName",
+        "label": "Sub dari",
+        "visible": false
+      }
+    ],
+    "filters": [],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nama Kategori",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "name",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "metroTextfield: {}, value: formData.name"
+                  }
+                ]
+              },
+              {
+                "label": "Kategori Default",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "isDefault",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.defaultCategory"
+                  }
+                ]
+              },
+              {
+                "label": "Sub Kategori",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "sub",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.sub"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__customer-category",
+      "detail": "DOM modul hasil REA."
+    }
+  ]
+}

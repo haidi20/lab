@@ -1,0 +1,106 @@
+{
+  "menu": "Check In",
+  "menu_key": "sales_check_in",
+  "module": "#accurate__customer__sales-check-in",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/customer/sales-check-in.do"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "transDate",
+        "label": "Tanggal",
+        "visible": true
+      },
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "storeName",
+        "label": "Nama Pelanggan (Saat Check In)",
+        "visible": true
+      },
+      {
+        "field": "customer.name",
+        "label": "Pelanggan",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang",
+        "visible": false
+      },
+      {
+        "field": "employee.name",
+        "label": "Sales",
+        "visible": true
+      },
+      {
+        "field": "firstTransactionNumber",
+        "label": "Transaksi",
+        "visible": true
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "employeeFilter",
+        "label": "Sales",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": null,
+  "form_status": {
+    "available": false,
+    "reason": "Menu tidak menyediakan tombol Tambah pada bukti DOM."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__customer__sales-check-in",
+      "detail": "DOM modul hasil REA."
+    }
+  ]
+}

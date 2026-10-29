@@ -1,0 +1,19 @@
+{
+  "menu": "Check In",
+  "module": "#accurate__customer__sales-check-in",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "table": {
+    "columns": [
+      "Tanggal",
+      "Nomor #",
+      "Nama Pelanggan (Saat Check In)",
+      "Sales",
+      "Transaksi"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "loaded"
+}

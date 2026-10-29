@@ -1,0 +1,317 @@
+{
+  "menu": "Penyesuaian Harga/Diskon",
+  "menu_key": "sellingprice_adjustment",
+  "module": "#accurate__inventory__sellingprice-adjustment",
+  "module_type": "MODULE",
+  "captured_at": "2026-10-29T15:00:00+08:00",
+  "company": "cy",
+  "database_id": 3058374,
+  "source_capture": "REA capture-browser-scenario connected to visible Chrome debugging session",
+  "features": [
+    "Daftar dan navigasi modul",
+    "Form tambah data",
+    "Filter daftar",
+    "Pencarian"
+  ],
+  "endpoints": [
+    "/accurate/inventory/sellingprice-adjustment.do",
+    "/accurate/cu",
+    "/accurate/inventory/",
+    "/accurate/inventory/detail-lookup-item.do",
+    "/accurate/company/report-lookup-"
+  ],
+  "list_view": {
+    "columns": [
+      {
+        "field": "suspended",
+        "label": "Non Aktif",
+        "visible": false
+      },
+      {
+        "field": "number",
+        "label": "Nomor #",
+        "visible": true
+      },
+      {
+        "field": "transDate",
+        "label": "Mulai Berlaku",
+        "visible": true
+      },
+      {
+        "field": "priceCategory.name",
+        "label": "Kategori Penjualan",
+        "visible": true
+      },
+      {
+        "field": "description",
+        "label": "Keterangan",
+        "visible": true
+      },
+      {
+        "field": "attachmentExist",
+        "label": "Memiliki dokumen",
+        "visible": false
+      },
+      {
+        "field": "branch.name",
+        "label": "Cabang #1",
+        "visible": false
+      },
+      {
+        "field": "endEffectiveDate",
+        "label": "Tanggal Berakhir",
+        "visible": true
+      },
+      {
+        "field": "salesAdjustmentTypeName",
+        "label": "Tipe Penyesuaian",
+        "visible": true
+      },
+      {
+        "field": "checked",
+        "label": "[Pilih]",
+        "visible": false
+      },
+      {
+        "field": "spaBranchName",
+        "label": "Cabang",
+        "visible": false
+      }
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tanggal",
+        "display_value": "Semua"
+      },
+      {
+        "key": "suspendedFilter",
+        "label": "Non Aktif",
+        "display_value": "Semua"
+      },
+      {
+        "key": "salesAdjustmentTypeFilter",
+        "label": "Tipe Penyesuaian",
+        "display_value": "Semua"
+      },
+      {
+        "key": "priceCategoryFilter",
+        "label": "Kategori Penjualan",
+        "display_value": "Semua"
+      }
+    ],
+    "toolbar_buttons": [
+      {
+        "id": "btnToggleList",
+        "label": "Daftar/Form"
+      },
+      {
+        "id": "btnAdd",
+        "label": "Tambah"
+      },
+      {
+        "id": "btnRefresh",
+        "label": "Perbarui"
+      },
+      {
+        "id": "btnPrint",
+        "label": "Cetak"
+      },
+      {
+        "id": "btnColumnSetting",
+        "label": "Pengaturan"
+      },
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      }
+    ],
+    "search": {
+      "field": "keyword"
+    },
+    "capture_status": "loaded",
+    "actual_data_file": "data.json"
+  },
+  "form": {
+    "tabs": [
+      {
+        "name": "Form Data Baru",
+        "sections": [
+          {
+            "name": "Utama",
+            "fields": [
+              {
+                "label": "Nomor #",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "typeAutoNumber",
+                    "kind": "select",
+                    "options": [
+                      "Penyesuaian Harga/Diskon"
+                    ],
+                    "data_bind": "metroCombobox: {}, options: root.autoNumberList, optionsText: 'name', optionsValue: 'id', value: formData.typeAutoNumber"
+                  }
+                ]
+              },
+              {
+                "label": "Kategori Penjualan",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "priceCategory",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare : 'name', text: 'name', subText: 'description', url: '/accurate/customer/lookup-price-category-with-all.do', saveUrl: '/accurate/customer/save-price-category.do' , value: formData.priceCategory }"
+                  }
+                ]
+              },
+              {
+                "label": "Tipe Penyesuaian",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "salesAdjustmentType",
+                    "kind": "select",
+                    "options": [
+                      "Harga",
+                      "Diskon (%)"
+                    ],
+                    "data_bind": "metroCombobox: {}, value: formData.salesAdjustmentType"
+                  }
+                ]
+              },
+              {
+                "label": "Mulai Berlaku",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "transDate",
+                    "kind": "date",
+                    "options": [],
+                    "data_bind": "metroDatepicker: {}, value: formData.transDate"
+                  }
+                ]
+              },
+              {
+                "label": "Dipakai di Cabang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "listBranch",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', text: 'name', url: '/accurate/company/report-lookup-search-branch-and-all.do', value: formData.listBranch, multiValue: true, checkboxMode : true }"
+                  }
+                ]
+              },
+              {
+                "label": "Non Aktif",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "suspended",
+                    "kind": "checkbox",
+                    "options": [],
+                    "data_bind": "metroCheckbox: {}, checked: formData.suspended"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Detail",
+            "fields": [
+              {
+                "label": "Rincian Barang",
+                "required": true,
+                "inputs": [
+                  {
+                    "name": "searchDetailItem",
+                    "kind": "lookup",
+                    "options": [],
+                    "data_bind": "metroLookup: { key: 'id', compare: ['no', 'upcNo'], text: 'name', subText: 'no', rightSubText: 'upcNo', hintText: 'searchHitSubText', url: '/accurate/inventory/search-lookup-item.do', selectUrl: '/accurate/inventory/detail-lookup-item.do', additionalParams: { effectiveDate: function(){ return formData.transDate();}, priceCategoryId: function(){ return formData.priceCategory() !== null ? formData.priceCategory().id : null;}, discountCategoryId: function(){ return formData.priceCategory() !== null ? formData.priceCategory().id : null;}, branchId: function(){ return formData.branchId()!==null ? formData.branchId() : null;}, currencyId: function(){ return formData.currency() !== null ? formData.currency().id : null;}, itemtype: [ 'INVENTORY', 'NON_INVENTORY', 'SERVICE', 'GROUP' ], isGetFromItemHistory: true, }, value: root.detailFormLookup, disabled: root.detailFormLookup() !== null, placeHolder: 'Cari/Pilih Barang & Jasa...' }"
+                  },
+                  {
+                    "name": "searchKeywordItem",
+                    "kind": "text",
+                    "options": [],
+                    "data_bind": "value: searchKeywordItem, valueUpdate: 'keyup', attr: {placeholder: lang.please_type_keywords }"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Info Lainnya",
+            "fields": [
+              {
+                "label": "Keterangan",
+                "required": false,
+                "inputs": [
+                  {
+                    "name": "description",
+                    "kind": "textarea",
+                    "options": [],
+                    "data_bind": "metroTextarea: {}, value: formData.description"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "id": "btnGetFrom",
+        "label": "Ambil Favorit"
+      },
+      {
+        "id": "btnSaveAsDraft",
+        "label": "Sebagai Draf"
+      },
+      {
+        "id": "btnSave",
+        "label": "Simpan"
+      }
+    ]
+  },
+  "form_status": {
+    "available": true,
+    "reason": "Form data baru dan field utama terverifikasi dari DOM REA."
+  },
+  "related_forms": [],
+  "data_sources": [
+    {
+      "type": "module",
+      "source": "#accurate__inventory__sellingprice-adjustment",
+      "detail": "DOM modul hasil REA."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/cu",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/inventory/detail-lookup-item.do",
+      "detail": "Sumber data lookup pada form/filter."
+    },
+    {
+      "type": "lookup",
+      "source": "/accurate/company/report-lookup-",
+      "detail": "Sumber data lookup pada form/filter."
+    }
+  ]
+}
