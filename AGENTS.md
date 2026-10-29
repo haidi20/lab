@@ -1,5 +1,8 @@
 # Project Rules
 
+## payload
+- jangan sampai Payload too large (3555060 chars). Max 3000000. Kurangi history.
+
 ## Testing
 
 - Use Test-Driven Development (TDD) for every feature, bug fix, and task in this repository.
@@ -31,6 +34,7 @@
   documentation.
 - Retries MUST NOT run quickly; use randomized delays and limit the number
   of attempts.
+- dont capture image and dont analisa from image
 
 ## UI/UX Animation Standard: Emotion
 
