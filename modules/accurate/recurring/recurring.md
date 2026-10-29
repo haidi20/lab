@@ -9,6 +9,10 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
+## Form Data Baru
+
+Tidak ada form **Data Baru**. Capture DOM tidak menampilkan tombol `btnAdd`; menu ini hanya menyediakan daftar dan aksi **Jalankan**.
+
 ### Tombol Tersedia
 
 - Jalankan

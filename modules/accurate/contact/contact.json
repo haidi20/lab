@@ -16,6 +16,7 @@
     "Website",
     "Posisi Jabatan"
   ],
+  "form": null,
   "inputs": [
     {
       "name": "searchFilter",

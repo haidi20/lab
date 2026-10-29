@@ -3,6 +3,7 @@
   "labels": [
     "Tipe Transaksi : Semua"
   ],
+  "form": null,
   "inputs": [
     {
       "name": "keyword",

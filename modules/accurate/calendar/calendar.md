@@ -18,6 +18,10 @@
 - Subscribe
 - Buat Baru
 
+## Form Data Baru
+
+Menu Kalender tidak memakai form tambah standar modul. Capture DOM tidak menampilkan tombol `btnAdd`; aksi **Buat Baru** mengarah ke pembuatan item/jadwal kalender, bukan form master data Perusahaan.
+
 ## Kolom Tabel
 
 ### Tabel 1

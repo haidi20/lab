@@ -9,6 +9,8 @@
 - **Unduh XLS**: Ekspor daftar ke format Excel
 - **Unduh PDF**: Ekspor daftar ke format PDF
 
+## Form Data Baru
+
 Menu ini bertipe `INFORMATION` (read-only). Tidak ada form **Data Baru** karena
 log aktifitas dihasilkan otomatis oleh sistem — satu-satunya record yang muncul
 adalah jejak aktivitas pengguna (login, buat, ubah, hapus data di modul lain).
