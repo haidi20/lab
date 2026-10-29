@@ -4,21 +4,20 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Nama",
-    "No. Telepon",
-    "Non Aktif",
-    "Alamat",
-    "Kota",
-    "K.Pos",
-    "Provinsi",
-    "Negara",
-    "Akses Pengguna"
-  ],
-  "filters": [
-    "Non Aktif : Semua",
-    "Akses Pengguna : Semua Pengguna"
-  ],
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Nama",
+      "No. Telepon",
+      "Non Aktif",
+      "Alamat",
+      "Kota",
+      "K.Pos",
+      "Provinsi",
+      "Negara",
+      "Akses Pengguna"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "empty"
 }

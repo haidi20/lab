@@ -4,19 +4,15 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Kategori",
-    "Nama",
-    "Tipe Transaksi",
-    "Status"
-  ],
-  "filters": [
-    "Kategori : Semua",
-    "Tipe Transaksi : Semua",
-    "Status : Semua",
-    "Cabang"
-  ],
-  "status": "Belum ada data",
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Kategori",
+      "Nama",
+      "Tipe Transaksi",
+      "Status"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "Belum ada data"
 }

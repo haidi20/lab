@@ -1172,7 +1172,54 @@
       "Email",
       "Alamat IP"
     ],
+    "columns": [
+      "Tgl Transaksi",
+      "No/Nama Referensi",
+      "Tipe Tindakan",
+      "Tipe Transaksi",
+      "Tanggal",
+      "Pengguna",
+      "Email",
+      "Alamat IP"
+    ],
+    "filters": [
+      {
+        "key": "transDateFilter",
+        "label": "Tgl Transaksi",
+        "type": "DATE",
+        "option_count": 0
+      },
+      {
+        "key": "logDateFilter",
+        "label": "Tanggal",
+        "type": "DATE",
+        "option_count": 0
+      },
+      {
+        "key": "transactionTypeFilter",
+        "label": "Tipe Transaksi",
+        "type": "LIST",
+        "option_count": 109
+      },
+      {
+        "key": "createdByFilter",
+        "label": "Pengguna",
+        "type": "LIST",
+        "option_count": 1
+      },
+      {
+        "key": "operationTypeFilter",
+        "label": "Tipe Tindakan",
+        "type": "LIST",
+        "option_count": 3
+      }
+    ],
     "inputs": [
+      {
+        "name": "keyword",
+        "type": "text",
+        "placeholder": ""
+      },
       {
         "name": "searchFilter",
         "type": "text",
@@ -1181,46 +1228,6 @@
       {
         "name": "selectedColumn",
         "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "selectedColumn",
-        "type": "checkbox",
-        "placeholder": ""
-      },
-      {
-        "name": "keyword",
-        "type": "text",
         "placeholder": ""
       }
     ],

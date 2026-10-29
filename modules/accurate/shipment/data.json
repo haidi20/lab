@@ -4,16 +4,16 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Nama",
-    "PIC",
-    "No. Telp",
-    "Non Aktif",
-    "Alamat Pengiriman"
-  ],
-  "filters": [
-    "Non Aktif : Semua"
-  ],
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Nama",
+      "PIC",
+      "No. Telp",
+      "Non Aktif",
+      "Alamat Pengiriman"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "empty"
 }

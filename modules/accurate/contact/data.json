@@ -4,26 +4,24 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Nama Lengkap",
-    "Tipe",
-    "Perusahaan",
-    "Email",
-    "Handphone",
-    "No. Telp. Bisnis",
-    "No. Telp. Rumah",
-    "Cabang",
-    "Faximili",
-    "Catatan",
-    "No. WhatsApp",
-    "Website",
-    "Posisi Jabatan"
-  ],
-  "filters": [
-    "Tipe : Semua",
-    "Cabang"
-  ],
-  "status": "Belum ada data",
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Nama Lengkap",
+      "Tipe",
+      "Perusahaan",
+      "Email",
+      "Handphone",
+      "No. Telp. Bisnis",
+      "No. Telp. Rumah",
+      "Cabang",
+      "Faximili",
+      "Catatan",
+      "No. WhatsApp",
+      "Website",
+      "Posisi Jabatan"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "Belum ada data"
 }

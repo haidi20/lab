@@ -4,25 +4,16 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Keterangan",
-    "Tipe Pajak",
-    "Persentase",
-    "Akun Pajak Penjualan",
-    "Akun Pajak Pembelian"
-  ],
-  "filters": [
-    "Tipe Pajak : Semua"
-  ],
-  "tax_type_options": [
-    "Pajak Pertambahan Nilai",
-    "Pajak Pertambahan Barang Mewah",
-    "Pajak Penghasilan Ps.4(2)",
-    "Pajak Penghasilan Ps.15",
-    "Pajak Penghasilan Ps.21",
-    "Pajak Penghasilan Ps.22",
-    "Pajak Penghasilan Ps.23"
-  ],
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Keterangan",
+      "Tipe Pajak",
+      "Persentase",
+      "Akun Pajak Penjualan",
+      "Akun Pajak Pembelian"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "empty"
 }

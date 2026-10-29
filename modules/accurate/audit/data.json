@@ -4,30 +4,30 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Tgl Transaksi",
-    "No/Nama Referensi",
-    "Tipe Tindakan",
-    "Tipe Transaksi",
-    "Tanggal",
-    "Pengguna",
-    "Email",
-    "Alamat IP"
-  ],
-  "filters": [
-    "Tgl Transaksi : Semua",
-    "Tanggal : Semua",
-    "Tipe Transaksi : Semua",
-    "Pengguna : Semua",
-    "Tipe Tindakan : Semua"
-  ],
-  "record_count": 1,
-  "records": [
-    {
-      "tanggal": "29 Oct 2026 05:26:09",
-      "pengguna": "haidi nurhadinata",
-      "email": "haidinurhadinata@gmail.com",
-      "alamat_ip": "140.213.216.145"
-    }
-  ]
+  "table": {
+    "columns": [
+      "Tgl Transaksi",
+      "No/Nama Referensi",
+      "Tipe Tindakan",
+      "Tipe Transaksi",
+      "Tanggal",
+      "Pengguna",
+      "Email",
+      "Alamat IP"
+    ],
+    "record_count": 1,
+    "records": [
+      {
+        "Tgl Transaksi": "29 Oct 2026 05:26:09",
+        "No/Nama Referensi": "Buat Preferensi",
+        "Tipe Tindakan": "Buat",
+        "Tipe Transaksi": "Preferensi",
+        "Tanggal": "29 Oct 2026 05:26:09",
+        "Pengguna": "haidi nurhadinata",
+        "Email": "haidinurhadinata@gmail.com",
+        "Alamat IP": ""
+      }
+    ]
+  },
+  "status": "loaded"
 }

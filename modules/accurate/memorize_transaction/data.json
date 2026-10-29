@@ -4,15 +4,14 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Nama Favorit",
-    "Tipe Transaksi",
-    "Daftar Pengguna"
-  ],
-  "filters": [
-    "Tipe Transaksi : Semua"
-  ],
-  "status": "Belum ada data",
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Nama Favorit",
+      "Tipe Transaksi",
+      "Daftar Pengguna"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "Belum ada data"
 }

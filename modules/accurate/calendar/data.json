@@ -4,29 +4,10 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [],
-  "calendar_types": [
-    "Reminder",
-    "Jadwal Pembayaran Beban",
-    "Jadwal Pembayaran Gaji",
-    "Jadwal Penerimaan Barang",
-    "Jadwal Pengiriman Barang",
-    "Jadwal Stok Opname",
-    "Jatuh Tempo Giro Keluar",
-    "Jatuh Tempo Giro Masuk",
-    "Jatuh Tempo No. Produksi",
-    "Jatuh Tempo PPh Pembelian",
-    "Jatuh Tempo PPh Penjualan",
-    "Jatuh Tempo Pembayaran",
-    "Jatuh Tempo Penerimaan",
-    "Jatuh Tempo Permintaan Barang",
-    "Jatuh Tempo Piutang",
-    "Jatuh Tempo Utang",
-    "Transaksi Terjadwal",
-    "Tukar Faktur",
-    "Kegiatan"
-  ],
-  "status": "Belum ada kalender",
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "Belum ada kalender"
 }

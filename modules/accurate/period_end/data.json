@@ -4,36 +4,17 @@
   "captured_at": "2026-10-29T08:14:00+08:00",
   "company": "cy",
   "database_id": 3058374,
-  "columns": [
-    "Bulan",
-    "Tahun",
-    "Nama",
-    "Tanggal Input",
-    "Keterangan",
-    "Memiliki dokumen"
-  ],
-  "filters": [
-    "Bulan : Semua",
-    "Tahun : Semua"
-  ],
-  "month_options": [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember"
-  ],
-  "year_options": [
-    2026,
-    2027
-  ],
-  "record_count": 0,
-  "records": []
+  "table": {
+    "columns": [
+      "Bulan",
+      "Tahun",
+      "Nama",
+      "Tanggal Input",
+      "Keterangan",
+      "Memiliki dokumen"
+    ],
+    "record_count": 0,
+    "records": []
+  },
+  "status": "empty"
 }
