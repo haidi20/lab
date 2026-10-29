@@ -36,6 +36,18 @@
   of attempts.
 - dont capture image and dont analisa from image
 
+## Accurate Documentation Files
+
+- `modules/accurate/<menu>/data.json` MUST contain only the actual table
+  records captured from Accurate (`table.columns`, `table.record_count`,
+  `table.records`). It MUST NOT contain column documentation, filters,
+  inputs, buttons, or form structure.
+- Column, filter, form, and button documentation belongs in
+  `modules/accurate/<menu>/<menu>.json` and `<menu>.md` only.
+- If the table is empty, write `record_count: 0` and `records: []`.
+  Never fill `data.json` with structural documentation as a substitute
+  for missing data.
+
 ## UI/UX Animation Standard: Emotion
 
 - **Emotion adalah standar WAJIB untuk semua styling dan animasi UI/UX**
