@@ -30,11 +30,25 @@ class MysqlMessageStore:
                 message_id BIGINT NOT NULL,
                 sender VARCHAR(255) NOT NULL,
                 text MEDIUMTEXT,
+                created DATETIME NULL,
                 INDEX idx_group_title (group_title),
                 UNIQUE KEY uq_group_message (group_title, message_id)
             )
             """
         )
+        cursor.execute(
+            """
+            SELECT COUNT(*)
+            FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'telegram_messages'
+              AND COLUMN_NAME = 'created'
+            """
+        )
+        if cursor.fetchone()[0] == 0:
+            cursor.execute(
+                "ALTER TABLE telegram_messages ADD COLUMN created DATETIME NULL"
+            )
         self._connection.commit()
 
     def save_group(self, group: TelegramGroupInfo) -> None:
@@ -67,11 +81,11 @@ class MysqlMessageStore:
         cursor = self._connection.cursor()
         cursor.executemany(
             """
-            INSERT INTO telegram_messages (group_title, message_id, sender, text)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO telegram_messages (group_title, message_id, sender, text, created)
+            VALUES (%s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE sender = VALUES(sender), text = VALUES(text)
             """,
-            [(group_title, m.message_id, m.sender, m.text) for m in messages],
+            [(group_title, m.message_id, m.sender, m.text, m.date) for m in messages],
         )
         self._connection.commit()
 
@@ -79,7 +93,7 @@ class MysqlMessageStore:
         cursor = self._connection.cursor()
         cursor.execute(
             """
-            SELECT message_id, sender, text
+            SELECT message_id, sender, text, created
             FROM telegram_messages
             WHERE group_title = %s
             ORDER BY message_id
@@ -87,6 +101,6 @@ class MysqlMessageStore:
             (group_title,),
         )
         return [
-            TelegramMessage(message_id=row[0], sender=row[1], text=row[2] or "")
+            TelegramMessage(message_id=row[0], sender=row[1], text=row[2] or "", date=row[3])
             for row in cursor.fetchall()
         ]
