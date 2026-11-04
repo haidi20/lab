@@ -8,3 +8,8 @@ __pycache__/
 *.py[cod]
 **/.hermes-tmp*
 config/secret_key
+
+modules/rea/
+modules/rea_tmp/
+config/
+$null
