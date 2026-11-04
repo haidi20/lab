@@ -1,0 +1,76 @@
+import unittest
+
+from modules.vps.config import VPSConfig
+from modules.vps.fakes import FakeSSHRunner
+from modules.vps.setup import VPSSetupper
+from modules.vps.templates import BE_SERVICE, NGINX_DEFAULT
+
+
+class VPSSetupperTest(unittest.TestCase):
+    def setUp(self):
+        self.config = VPSConfig(host='203.0.113.10', user='root', password='x')
+        self.runner = FakeSSHRunner()
+        self.setupper = VPSSetupper(self.config, runner=self.runner)
+
+    def test_install_packages_uses_apt(self):
+        self.runner.outputs['command -v bun'] = ('', '', 0)
+        self.setupper.install_packages()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('apt-get update', joined)
+        self.assertIn('nginx', joined)
+        self.assertIn('python3-certbot-nginx', joined)
+
+    def test_install_bun_skips_when_present(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.install_bun()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertNotIn('bun.sh/install', joined)
+
+    def test_install_bun_runs_official_installer_when_missing(self):
+        self.setupper.install_bun()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('bun.sh/install', joined)
+
+    def test_configure_nginx_writes_all_sites_and_reloads(self):
+        self.setupper.configure_nginx()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        for name in ('default', 'be-haidi20', 'ci-monitor', 'karta', 'klinik'):
+            self.assertIn(name, joined)
+        self.assertIn('nginx -t', joined)
+        self.assertIn('systemctl reload nginx', joined)
+
+    def test_default_site_points_to_hello_and_api_proxy(self):
+        self.assertIn('/var/www/hello', NGINX_DEFAULT)
+        self.assertIn('proxy_pass http://127.0.0.1:3000', NGINX_DEFAULT)
+
+    def test_setup_be_service_enables_and_starts(self):
+        self.setupper.setup_be_service()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('/etc/systemd/system/haidi20-be.service', joined)
+        self.assertIn('daemon-reload', joined)
+        self.assertIn('enable --now haidi20-be', joined)
+
+    def test_be_service_unit_matches_running_server(self):
+        self.assertIn('WorkingDirectory=/var/www/hello-repo/be', BE_SERVICE)
+        self.assertIn('ExecStart=/root/.bun/bin/bun run src/index.ts', BE_SERVICE)
+        self.assertIn('Environment=PORT=3000', BE_SERVICE)
+
+    def test_configure_ufw_allows_web_ports(self):
+        self.setupper.configure_ufw()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('ufw allow OpenSSH', joined)
+        self.assertIn('ufw allow 80/tcp', joined)
+        self.assertIn('ufw allow 443/tcp', joined)
+        self.assertIn('ufw --force enable', joined)
+
+    def test_full_setup_runs_all_steps(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.run(skip_certs=True, skip_clone=True)
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('apt-get install', joined)
+        self.assertIn('nginx -t', joined)
+        self.assertIn('ufw --force enable', joined)
+
+
+if __name__ == '__main__':
+    unittest.main()
