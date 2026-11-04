@@ -65,3 +65,16 @@
   follow `public/ssstik.io_1793164540873.mp4` as the 100% motion reference.
   Do not change style, timing, easing, or interactive feedback without a
   new user decision.
+
+## Deploy & Push Workflow (VPS haidinata.my.id)
+
+- Setelah `git push`, tugas dianggap SELESAI. Jangan menunggu, sleeping,
+  atau SSH verifikasi ke VPS setelah push — pipeline GitHub Actions yang
+  menangani deploy, statusnya ada di tab Actions masing-masing repo.
+- Semua project di VPS UC sudah CI/CD: klinik (branch `haidi`/`main`),
+  karta (`dev`/`main`), portfolio haidi20 (`main`).
+- Build dilakukan SEBELUM commit (portfolio: `npm run build` di `fe/`),
+  bukan setelah push. CI yang melakukan build ulang untuk pipeline baru.
+- Modul `modules/vps` (`python -m modules.vps audit|health|deploy|setup`)
+  hanya untuk inspeksi darurat atau deploy manual - bukan bagian dari
+  alur push normal.
