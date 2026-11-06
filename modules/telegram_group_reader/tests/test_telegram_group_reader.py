@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 from modules.telegram_group_reader import (
