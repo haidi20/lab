@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import threading
 import time
 import urllib.request
@@ -14,9 +15,13 @@ from .hermes_chat import HermesChatClient
 
 BOT_COMMANDS = [
     {"command": "start", "description": "Mulai bot"},
-    {"command": "produk", "description": "Lihat daftar produk"},
+    {"command": "produk", "description": "Daftar produk"},
     {"command": "beli", "description": "Beli produk"},
     {"command": "cekstatus", "description": "Cek status transaksi"},
+    {"command": "saldo", "description": "Isi saldo"},
+    {"command": "mode", "description": "Lihat mode transaksi"},
+    {"command": "prod", "description": "Aktifkan mode produksi"},
+    {"command": "sandbox", "description": "Aktifkan mode sandbox"},
 ]
 BOT_COMMANDS.insert(1, {'command': 'perintah', 'description': 'Daftar perintah bot'})
 
@@ -28,6 +33,12 @@ MENU_KEYBOARD = {
             {"text": "Beli Produk", "callback_data": "/beli"},
         ],
         [{"text": "Cek Status", "callback_data": "/cekstatus"}],
+        [{"text": "Isi Saldo", "callback_data": "/saldo"}],
+        [
+            {"text": "Mode Transaksi", "callback_data": "/mode"},
+            {"text": "Prod", "callback_data": "/prod"},
+            {"text": "Sandbox", "callback_data": "/sandbox"},
+        ],
         [{"text": "Daftar Perintah", "callback_data": "/perintah"}],
     ],
 }
@@ -44,6 +55,84 @@ def load_env_file(path: str | Path = ".env") -> None:
         key, value = line.split("=", 1)
         os.environ.setdefault(key.strip(), value.strip())
 
+def format_product_list(products: list[dict[str, object]]) -> str:
+    lines = ["<b>Daftar Produk</b>", ""]
+    for index, item in enumerate(products, start=1):
+        brand = str(item.get("brand", "") or item.get("seller_name", ""))
+        category = str(item.get("category", ""))
+        lines.extend(
+            [
+                f"{index}. <b>{item['product_name']}</b>",
+                f"   {brand} • {category}",
+                f"   <code>{item['buyer_sku_code']}</code> • "
+                f"{TelegramStoreService.format_rupiah(int(item['sale_price']))}",
+                "",
+            ]
+        )
+    lines.append("Pilih berdasarkan nomor produk.")
+    return "\n".join(lines)
+
+def product_priority(item: dict[str, object]) -> tuple[int, str]:
+    haystack = " ".join(
+        str(item.get(key, "")).lower()
+        for key in ("product_name", "category", "brand", "buyer_sku_code")
+    )
+    if "pln" in haystack:
+        return (0, str(item.get("product_name", "")).lower())
+    if "pdam" in haystack or " air " in f" {haystack} ":
+        return (1, str(item.get("product_name", "")).lower())
+    if str(item.get("brand", "")).lower() == "telkomsel":
+        return (2, str(item.get("product_name", "")).lower())
+    return (3, str(item.get("product_name", "")).lower())
+
+def product_keyboard(products: list[dict[str, object]]) -> dict[str, object]:
+    ordered = sorted(products, key=product_priority)
+    rows = [
+        [{"text": str(item["product_name"]), "callback_data": f"/pilih {item['buyer_sku_code']}"}]
+        for item in ordered
+    ]
+    return {"inline_keyboard": rows}
+
+DEPOSIT_NOMINALS = (200_000, 500_000, 1_000_000, 2_000_000)
+
+def format_deposit_menu(balance: int, mode: str = "prod") -> str:
+    mode_label = "Production" if mode == "prod" else "Sandbox"
+    nominal_lines = "\n".join(
+        f"• Rp {nominal:,.0f}".replace(",", ".")
+        for nominal in DEPOSIT_NOMINALS
+    )
+    return (
+        "<b>Isi Saldo</b>\n\n"
+        f"Mode: <b>{mode_label}</b>\n"
+        f"Saldo saat ini: <code>{TelegramStoreService.format_rupiah(balance)}</code>\n\n"
+        "Pilih nominal deposit:\n"
+        f"{nominal_lines}\n\n"
+        "Minimal deposit Digiflazz adalah Rp 200.000."
+    )
+
+def format_deposit_instruction(amount: int) -> str:
+    return (
+        f"<b>Deposit {TelegramStoreService.format_rupiah(amount)}</b>\n\n"
+        "Kirim format berikut:\n"
+        f"<code>/isidaldo {amount} BCA Nama Pemilik Rekening</code>\n\n"
+        "Bank yang didukung:\n"
+        "• Perorangan: <code>Flip</code>, <code>ShopeePay</code>\n"
+        "• Perusahaan: <code>BCA</code>, <code>MANDIRI</code>, <code>BRI</code>, <code>BNI</code>"
+    )
+
+def format_deposit_ticket(deposit: dict[str, object], amount: int) -> str:
+    final_amount = int(deposit.get("amount", amount))
+    account_no = re.sub(r"[\s-]", "", str(deposit.get("account_no", "")))
+    return (
+        "<b>Tiket Deposit Dibuat</b>\n\n"
+        f"Metode: <b>{deposit.get('payment_method', '-')}</b>\n"
+        f"Bank: <code>{deposit.get('bank', '-')}</code>\n"
+        f"Nomor: <code>{account_no or '-'}</code>\n"
+        f"Nominal transfer: <code>{TelegramStoreService.format_rupiah(final_amount)}</code>\n"
+        f"Berita transfer: <code>{deposit.get('notes', '-')}</code>\n\n"
+        "Transfer tepat sesuai nominal dan isi berita transfer di atas."
+    )
+
 
 class TelegramStoreBot:
     def __init__(
@@ -59,6 +148,7 @@ class TelegramStoreBot:
         live_interval: float = 20.0,
         live_max_updates: int | None = None,
         live_duration_seconds: float = 60.0,
+        mode: str = "prod",
     ) -> None:
         self.token = token
         self.service = service
@@ -75,6 +165,10 @@ class TelegramStoreBot:
         self._hermes_chat_busy: set[int] = set()
         self._hermes_chat_pending: dict[int, str] = {}
         self._hermes_chat_sessions: set[int] = set()
+        self._selected_products: dict[int, dict[str, object]] = {}
+        self._catalog_numbers: dict[int, list[dict[str, object]]] = {}
+        self.mode = mode
+        self.service.testing = mode == "sandbox"
 
     def _send_message(
         self,
@@ -82,7 +176,11 @@ class TelegramStoreBot:
         text: str,
         reply_markup: dict[str, object] | None = None,
     ) -> None:
-        payload_data: dict[str, object] = {"chat_id": chat_id, "text": text}
+        payload_data: dict[str, object] = {
+            "chat_id": chat_id,
+            "text": text,
+            "parse_mode": "HTML",
+        }
         if reply_markup is not None:
             payload_data["reply_markup"] = reply_markup
         payload = json.dumps(payload_data).encode("utf-8")
@@ -142,6 +240,20 @@ class TelegramStoreBot:
     def _handle_text(self, chat_id: int, text: str) -> None:
         command, args = self._command(text)
         try:
+            if command.isdigit() and chat_id in self._catalog_numbers:
+                index = int(text.strip()) - 1
+                catalog = self._catalog_numbers[chat_id]
+                if 0 <= index < len(catalog):
+                    product = catalog[index]
+                    self._selected_products[chat_id] = product
+                    self.send_message(
+                        chat_id,
+                        f"Produk dipilih: <b>{product['product_name']}</b>\n"
+                        f"SKU: <code>{product['buyer_sku_code']}</code>\n"
+                        f"Harga: <code>{TelegramStoreService.format_rupiah(int(product.get('sale_price', product.get('price', 0))))}</code>\n\n"
+                        "Kirim nomor tujuan sekarang.",
+                    )
+                    return
             if command == 'perintah':
                 self.send_message(
                     chat_id,
@@ -152,6 +264,16 @@ class TelegramStoreBot:
             if not text.strip().startswith("/") and chat_id in self._hermes_chat_sessions:
                 self._contact_hermes(chat_id, text.strip())
                 return
+            if not text.strip().startswith("/") and chat_id in self._selected_products:
+                product = self._selected_products[chat_id]
+                order = self.service.order(str(product["buyer_sku_code"]), text.strip())
+                del self._selected_products[chat_id]
+                self.send_message(
+                    chat_id,
+                    f"Pesanan dibuat.\nInvoice: {order['invoice']}\n"
+                    f"Produk: {order['product']}\nStatus: {order['status']}",
+                )
+                return
             if command in {"start", "help", "bantuan"}:
                 self.send_message(
                     chat_id,
@@ -160,15 +282,25 @@ class TelegramStoreBot:
                 )
             elif command in {"produk", "product"}:
                 products = self.service.list_products(" ".join(args))
+                self._catalog_numbers[chat_id] = sorted(products, key=product_priority)
                 if not products:
                     self.send_message(chat_id, "Produk tidak ditemukan.")
                     return
-                lines = [
-                    f"{item['buyer_sku_code']} - {item['product_name']} "
-                    f"({self.service.format_rupiah(int(item['sale_price']))})"
-                    for item in products
-                ]
-                self.send_message(chat_id, "\n".join(lines))
+                self.send_message(chat_id, format_product_list(products), product_keyboard(products))
+            elif command == "pilih":
+                matches = self.service.digiflazz.price_list(args[0])
+                if not matches:
+                    self.send_message(chat_id, "Produk tidak ditemukan.")
+                    return
+                product = matches[0]
+                self._selected_products[chat_id] = product
+                self.send_message(
+                    chat_id,
+                    f"Produk dipilih: <b>{product['product_name']}</b>\n"
+                    f"SKU: <code>{product['buyer_sku_code']}</code>\n"
+                    f"Harga: <code>{TelegramStoreService.format_rupiah(int(product.get('price', 0)))}</code>\n\n"
+                    "Kirim nomor tujuan sekarang.",
+                )
             elif command == "beli":
                 if len(args) < 2:
                     self.send_message(chat_id, "Format: /beli <SKU> <nomor/id tujuan>")
@@ -189,10 +321,45 @@ class TelegramStoreBot:
                     f"Invoice: {order['invoice']}\nStatus: {order['status']}\nPesan: {order['message']}",
                 )
             elif command == "saldo":
+                balance = self.service.digiflazz.balance()
+                mode = getattr(self, "mode", "prod")
+                nominal_keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": f"Rp {nominal:,.0f}".replace(",", "."), "callback_data": f"/isidaldo {nominal}"},
+                        ]
+                        for nominal in DEPOSIT_NOMINALS
+                    ]
+                }
+                self.send_message(chat_id, format_deposit_menu(balance, mode), nominal_keyboard)
+            elif command == "mode":
+                mode = getattr(self, "mode", "prod")
+                mode_label = "Production" if mode == "prod" else "Sandbox"
                 self.send_message(
                     chat_id,
-                    "Fitur saldo belum tersedia.",
+                    f"<b>Mode Transaksi</b>\n\nMode saat ini: <b>{mode_label}</b>\n\n"
+                    "Gunakan <code>/prod</code> untuk production dan <code>/sandbox</code> untuk pengujian.",
                 )
+            elif command == "prod":
+                self.mode = "prod"
+                self.service.digiflazz.set_mode("prod")
+                self.service.testing = False
+                self.send_message(chat_id, "<b>Mode Production aktif.</b>\nSemua transaksi akan diproses nyata.")
+            elif command == "sandbox":
+                self.mode = "sandbox"
+                self.service.digiflazz.set_mode("sandbox")
+                self.service.testing = True
+                self.send_message(chat_id, "<b>Mode Sandbox aktif.</b>\nTransaksi ditandai testing=True.")
+            elif command == "isidaldo":
+                amount = int(args[0]) if args else 0
+                if len(args) == 1:
+                    self.send_message(chat_id, format_deposit_instruction(amount))
+                    return
+                if len(args) < 3:
+                    self.send_message(chat_id, "Format: /isidaldo <nominal> <bank> <nama pemilik rekening>")
+                    return
+                ticket = self.service.create_deposit(amount, args[1].upper(), " ".join(args[2:]))
+                self.send_message(chat_id, format_deposit_ticket(ticket, amount))
             elif command in {"hermes", "starthermes", "statushermes"}:
                 if self.hermes_status is None:
                     self.send_message(chat_id, "Status Hermes belum tersedia.")

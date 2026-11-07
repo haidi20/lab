@@ -19,6 +19,19 @@ class InMemoryOrderStore:
 
 
 class TelegramStoreService:
+    BLOCKED_MOBILE_BRANDS = {
+        "axis",
+        "indosat",
+        "im3",
+        "oopcare",
+        "smartfren",
+        "three",
+        "tri",
+        "xl",
+        "xl axiata",
+    }
+    PPN_PERCENT = 11.0
+
     def __init__(
         self,
         digiflazz: Any,
@@ -37,7 +50,8 @@ class TelegramStoreService:
 
     @staticmethod
     def sale_price(price: int, markup_percent: float) -> int:
-        return int(price * (1 + markup_percent / 100))
+        price_with_ppn = price * (1 + TelegramStoreService.PPN_PERCENT / 100)
+        return int(price_with_ppn * (1 + markup_percent / 100))
 
     def list_products(self, query: str = "", limit: int = 10) -> list[dict[str, object]]:
         products = self.digiflazz.price_list()
@@ -45,6 +59,15 @@ class TelegramStoreService:
         result: list[dict[str, object]] = []
         for item in products:
             if not item.get("buyer_product_status") or not item.get("seller_product_status"):
+                continue
+            haystack = " ".join(
+                str(item.get(key, "")).lower()
+                for key in ("product_name", "category", "brand", "buyer_sku_code")
+            )
+            if "free fire" in haystack:
+                continue
+            brand = str(item.get("brand", "")).strip().lower()
+            if brand in self.BLOCKED_MOBILE_BRANDS:
                 continue
             searchable = " ".join(
                 str(item.get(key, ""))
@@ -87,4 +110,23 @@ class TelegramStoreService:
         return order
 
     def status(self, invoice: str) -> dict[str, object]:
+        order = self.orders.find(invoice)
+        try:
+            response = self.digiflazz.transaction_status(
+                str(order["sku"]),
+                str(order["customer_no"]),
+                invoice,
+            )
+            order.update(
+                {
+                    "status": response.get("status", order["status"]),
+                    "message": response.get("message", order["message"]),
+                }
+            )
+            self.orders.save(order)
+        except Exception:
+            pass
         return self.orders.find(invoice)
+
+    def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
+        return self.digiflazz.create_deposit(amount, bank, owner_name)

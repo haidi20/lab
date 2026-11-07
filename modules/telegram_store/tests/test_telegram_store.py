@@ -20,7 +20,7 @@ from modules.telegram_store import (
 from modules.telegram_store.cli import _post_provider, _run_hermes_command, build_bot_from_env
 from modules.telegram_store.hermes_status import HermesStatusProvider
 from modules.telegram_store.hermes_chat import HermesChatClient
-from modules.telegram_store.bot import BOT_COMMANDS, MENU_KEYBOARD
+from modules.telegram_store.bot import BOT_COMMANDS, MENU_KEYBOARD, format_deposit_menu
 
 
 class FakeTransport:
@@ -39,9 +39,25 @@ class FakeTransport:
 class FakeDigiflazz:
     def __init__(self) -> None:
         self.orders: list[tuple[str, str, str]] = []
+        self.status_requests: list[tuple[str, str, str]] = []
+        self.status_responses: list[dict[str, object]] = []
 
     def balance(self) -> int:
         return 250_000
+
+    def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
+        self.deposit_request = (amount, bank, owner_name)
+        return {
+            "rc": "00",
+            "bank": "ShopeePay",
+            "payment_method": "Virtual Account",
+            "account_no": "0123 4567 89",
+            "amount": amount + 1,
+            "notes": "A6R5UPV",
+        }
+
+    def set_mode(self, mode: str) -> None:
+        self.mode_set = mode
 
     def price_list(self, code: str | None = None) -> list[dict[str, object]]:
         products = [
@@ -87,6 +103,17 @@ class FakeDigiflazz:
             "price": 6_200,
             "testing": testing,
         }
+
+    def transaction_status(
+        self,
+        buyer_sku_code: str,
+        customer_no: str,
+        ref_id: str,
+    ) -> dict[str, object]:
+        self.status_requests.append((buyer_sku_code, customer_no, ref_id))
+        if not self.status_responses:
+            raise AssertionError("Unexpected transaction status request")
+        return self.status_responses.pop(0)
 
 class FakeResponse:
     def __init__(self, payload: bytes) -> None:
@@ -150,6 +177,425 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertEqual(transport.calls[1][2]["customer_no"], "08123456789")
         self.assertEqual(transport.calls[1][2]["ref_id"], "INV-1")
 
+    def test_digiflazz_client_creates_deposit_ticket(self) -> None:
+        transport = FakeTransport(
+            {
+                ("POST", "https://api.digiflazz.com/v1/deposit"): {
+                    "data": {
+                        "rc": "00",
+                        "bank": "BCA",
+                        "payment_method": "Bank Transfer",
+                        "account_no": "0123 4567 89",
+                        "amount": 200001,
+                        "notes": "A6R5UPV",
+                    }
+                }
+            }
+        )
+        client = DigiflazzClient(username="store-user", api_key="api-key", transport=transport)
+
+        result = client.create_deposit(200_000, "BCA", "Haidi")
+
+        self.assertEqual(transport.calls[0][0], "POST")
+        self.assertEqual(transport.calls[0][1], "https://api.digiflazz.com/v1/deposit")
+        self.assertEqual(transport.calls[0][2]["amount"], 200_000)
+        self.assertEqual(transport.calls[0][2]["bank"], "BCA")
+        self.assertEqual(transport.calls[0][2]["owner_name"], "Haidi")
+        self.assertEqual(result["notes"], "A6R5UPV")
+
+    def test_digiflazz_client_switches_sandbox_and_production_keys(self) -> None:
+        transport = FakeTransport(
+            {
+                ("POST", "https://api.digiflazz.com/v1/transaction"): {
+                    "data": {"ref_id": "r1", "status": "Sukses"}
+                }
+            }
+        )
+        client = DigiflazzClient(
+            username="store-user",
+            api_key="production-key",
+            transport=transport,
+            development_key="development-key",
+        )
+
+        client.set_mode("sandbox")
+        client.create_transaction("xld10", "087800001230", "sandbox-ref", testing=True)
+        self.assertEqual(client.api_key, "development-key")
+        self.assertEqual(transport.calls[0][2]["sign"], client._sign("sandbox-ref"))
+
+        client.set_mode("prod")
+        client.create_transaction("xld10", "087800001230", "prod-ref")
+        self.assertEqual(client.api_key, "production-key")
+        self.assertEqual(transport.calls[1][2]["sign"], client._sign("prod-ref"))
+
+    def test_saldo_menu_shows_balance_and_deposit_nominals(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        sent: list[tuple[int, str, dict[str, object] | None]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text, reply_markup)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/saldo"}})
+
+        self.assertIn("<b>Isi Saldo</b>", sent[0][1])
+        self.assertIn("Saldo saat ini: <code>Rp 250.000</code>", sent[0][1])
+        self.assertIn("Rp 200.000", sent[0][1])
+        reply_markup = sent[0][2] or {}
+        texts = [row["text"] for item in reply_markup.get("inline_keyboard", []) for row in item]
+        self.assertIn("Rp 200.000", texts)
+
+    def test_saldo_nominal_prompts_bank_and_owner_name(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update(
+            {"callback_query": {"id": "cb-1", "data": "/isidaldo 200000", "message": {"chat": {"id": 101}}}}
+        )
+
+        self.assertIn("<b>Deposit Rp 200.000</b>", sent[0][1])
+        self.assertIn("/isidaldo 200000 BCA Nama Pemilik Rekening", sent[0][1])
+
+    def test_deposit_ticket_normalizes_account_number_for_copy(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update(
+            {"message": {"chat": {"id": 101}, "text": "/isidaldo 200000 BCA Haidi"}}
+        )
+
+        self.assertIn("<code>0123456789</code>", sent[0][1])
+        self.assertNotIn("<code>0123 4567 89</code>", sent[0][1])
+
+    def test_digiflazz_client_checks_transaction_status(self) -> None:
+        transport = FakeTransport(
+            {
+                ("POST", "https://api.digiflazz.com/v1/transaction"): {
+                    "data": {"ref_id": "invoice-1", "status": "Sukses", "rc": "00"}
+                }
+            }
+        )
+        client = DigiflazzClient(username="store-user", api_key="api-key", transport=transport)
+
+        result = client.transaction_status("SKU1", "08123456789", "invoice-1")
+
+        self.assertEqual(transport.calls[0][2]["cmd"], "status")
+        self.assertEqual(transport.calls[0][2]["buyer_sku_code"], "SKU1")
+        self.assertEqual(transport.calls[0][2]["customer_no"], "08123456789")
+        self.assertEqual(transport.calls[0][2]["ref_id"], "invoice-1")
+        self.assertEqual(result["status"], "Sukses")
+
+    def test_cekstatus_refreshes_pending_order_from_digiflazz(self) -> None:
+        digiflazz = FakeDigiflazz()
+        service = TelegramStoreService(digiflazz)
+        order = service.order("BRIZZI5", "08123456789")
+        service.orders.save({**order, "status": "Pending"})
+        digiflazz.status_responses.append(
+            {"ref_id": order["invoice"], "status": "Sukses", "rc": "00", "message": "Transaksi sukses"}
+        )
+
+        refreshed = service.status(order["invoice"])
+
+        self.assertEqual(digiflazz.status_requests[0], ("BRIZZI5", "08123456789", order["invoice"]))
+        self.assertEqual(refreshed["status"], "Sukses")
+        self.assertEqual(service.orders.find(order["invoice"])["status"], "Sukses")
+
+    def test_product_number_selects_product_and_prompts_customer_number(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "1"}})
+
+        self.assertIn("Produk dipilih: <b>Token PLN 100</b>", sent[1][1])
+        self.assertIn("Harga: <code>Rp 14.041</code>", sent[1][1])
+        self.assertIn("Kirim nomor tujuan sekarang.", sent[1][1])
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "12345678901"}})
+        self.assertIn("Pesanan dibuat.", sent[2][1])
+
+    def test_product_list_shows_sorted_inline_buttons(self) -> None:
+        class CatalogDigiflazz:
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                products = [
+                    {
+                        "buyer_sku_code": "OTHER1",
+                        "product_name": "Produk Lain",
+                        "category": "Games",
+                        "brand": "OTHER",
+                        "price": 10_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "tsel10",
+                        "product_name": "Telkomsel 10.000",
+                        "category": "Pulsa",
+                        "brand": "TELKOMSEL",
+                        "price": 10_800,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "pdam20",
+                        "product_name": "PDAM 20.000",
+                        "category": "PDAM",
+                        "brand": "PDAM",
+                        "price": 20_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "pln20",
+                        "product_name": "PLN 20.000",
+                        "category": "PLN",
+                        "brand": "PLN",
+                        "price": 21_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                ]
+                if code:
+                    return [item for item in products if item["buyer_sku_code"] == code]
+                return products
+
+        service = TelegramStoreService(CatalogDigiflazz())
+        sent: list[tuple[int, str, dict[str, object] | None]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text, reply_markup)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+
+        markup = sent[0][2]
+        self.assertIsNotNone(markup)
+        callbacks = [
+            button["callback_data"]
+            for rows in markup["inline_keyboard"]
+            for button in rows
+        ]
+        self.assertEqual(callbacks, ["/pilih pln20", "/pilih pdam20", "/pilih tsel10", "/pilih OTHER1"])
+
+    def test_selected_product_accepts_manual_customer_number(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/pilih BRIZZI5"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "08123456789"}})
+
+        self.assertIn("Produk dipilih: <b>Brizzi 5</b>", sent[0][1])
+        self.assertIn("Kirim nomor tujuan", sent[0][1])
+        self.assertIn("Pesanan dibuat", sent[1][1])
+        self.assertEqual(service.digiflazz.orders[0][0], "BRIZZI5")
+        self.assertEqual(service.digiflazz.orders[0][1], "08123456789")
+
+    def test_product_list_excludes_free_fire(self) -> None:
+        class CatalogDigiflazz:
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                products = [
+                    {
+                        "buyer_sku_code": "ff50",
+                        "product_name": "Free Fire 50 Diamond",
+                        "category": "Games",
+                        "brand": "FREE FIRE",
+                        "price": 5_880,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "s10",
+                        "product_name": "Telkomsel 10.000",
+                        "category": "Pulsa",
+                        "brand": "TELKOMSEL",
+                        "price": 10_823,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                ]
+                if code:
+                    return [item for item in products if item["buyer_sku_code"] == code]
+                return products
+
+        service = TelegramStoreService(CatalogDigiflazz())
+        sent: list[tuple[int, str, dict[str, object] | None]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text, reply_markup)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+
+        self.assertNotIn("Free Fire 50 Diamond", sent[0][1])
+        markup = sent[0][2] or {}
+        texts = [button["text"] for rows in markup.get("inline_keyboard", []) for button in rows]
+        self.assertNotIn("Free Fire 50 Diamond", texts)
+        self.assertIn("Telkomsel 10.000", texts)
+
+    def test_product_list_shows_only_telkomsel_mobile_products(self) -> None:
+        class CatalogDigiflazz:
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                products = [
+                    {
+                        "buyer_sku_code": "ax10",
+                        "product_name": "Axis 10.000",
+                        "category": "Pulsa",
+                        "brand": "AXIS",
+                        "price": 10_992,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "s10",
+                        "product_name": "Telkomsel 10.000",
+                        "category": "Pulsa",
+                        "brand": "TELKOMSEL",
+                        "price": 10_823,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "pln20",
+                        "product_name": "PLN 20.000",
+                        "category": "PLN",
+                        "brand": "PLN",
+                        "price": 21_260,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "pdam20",
+                        "product_name": "PDAM 20.000",
+                        "category": "PDAM",
+                        "brand": "PDAM",
+                        "price": 20_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                ]
+                if code:
+                    return [item for item in products if item["buyer_sku_code"] == code]
+                return products
+
+        service = TelegramStoreService(CatalogDigiflazz())
+        sent: list[tuple[int, str, dict[str, object] | None]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text, reply_markup)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+
+        self.assertNotIn("Axis 10.000", sent[0][1])
+        markup = sent[0][2] or {}
+        texts = [button["text"] for rows in markup.get("inline_keyboard", []) for button in rows]
+        self.assertNotIn("Axis 10.000", texts)
+
+    def test_product_list_blocks_mobile_providers_even_with_unknown_category(self) -> None:
+        class CatalogDigiflazz:
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                return [
+                    {
+                        "buyer_sku_code": "xld10",
+                        "product_name": "XL Data 10.000",
+                        "category": "Paket Data Baru",
+                        "brand": "XL",
+                        "price": 10_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "tsel10",
+                        "product_name": "Telkomsel 10.000",
+                        "category": "Pulsa",
+                        "brand": "TELKOMSEL",
+                        "price": 10_800,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                ]
+
+        service = TelegramStoreService(CatalogDigiflazz())
+        products = service.list_products()
+
+        self.assertEqual([item["buyer_sku_code"] for item in products], ["tsel10"])
+
+    def test_bot_defaults_to_production_mode(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        bot = TelegramStoreBot(token="token", service=service)
+
+        self.assertEqual(bot.mode, "prod")
+        self.assertEqual(service.testing, False)
+        self.assertIn("Mode: <b>Production</b>", format_deposit_menu(service.digiflazz.balance()))
+
+    def test_bot_switches_to_sandbox_and_back_to_production(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            send_message=lambda chat_id, text, reply_markup=None: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/sandbox"}})
+
+        self.assertEqual(bot.mode, "sandbox")
+        self.assertEqual(service.testing, True)
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/prod"}})
+
+        self.assertEqual(bot.mode, "prod")
+        self.assertEqual(service.testing, False)
+
+    def test_sandbox_purchase_uses_testing_flag(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz())
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/sandbox"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/beli BRIZZI5 08123456789"}})
+
+        self.assertEqual(service.digiflazz.orders[0][0], "BRIZZI5")
+
     def test_store_lists_products_with_markup_and_orders_as_buyer(self) -> None:
         digiflazz = FakeDigiflazz()
         orders = InMemoryOrderStore()
@@ -157,7 +603,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         products = service.list_products("PLN")
         self.assertEqual(len(products), 1)
-        self.assertEqual(products[0]["sale_price"], 12_650)
+        self.assertEqual(products[0]["sale_price"], 14_041)
 
         order = service.order("BRIZZI5", "08123456789")
         self.assertTrue(order["invoice"].startswith("HN-"))
@@ -185,7 +631,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         self.assertIn("@hn_assistent_bot", sent[0][1])
         self.assertIn("Brizzi 5", sent[1][1])
-        self.assertIn("Rp 6.820", sent[1][1])
+        self.assertIn("Rp 7.570", sent[1][1])
         self.assertIn(purchase["invoice"], sent[2][1])
 
     def test_bot_accepts_product_alias(self) -> None:
@@ -201,6 +647,30 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/product BRIZZI"}})
 
         self.assertIn("Brizzi 5", sent[0][1])
+
+    def test_product_list_uses_scannable_catalog_layout(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+
+        expected = (
+            "<b>Daftar Produk</b>\n\n"
+            "1. <b>Brizzi 5</b>\n"
+            "   BRIZZI • E-Money\n"
+            "   <code>BRIZZI5</code> • Rp 7.570\n\n"
+            "2. <b>Token PLN 100</b>\n"
+            "   PLN • PLN\n"
+            "   <code>PLN100</code> • Rp 14.041\n\n"
+            "Pilih berdasarkan nomor produk."
+        )
+        self.assertEqual(expected, sent[0][1])
 
     def test_bot_accepts_indonesian_command_aliases(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
@@ -397,14 +867,14 @@ class TelegramStoreTests(unittest.TestCase):
         markup = sent[0][2]
         self.assertIsNotNone(markup)
         rows = markup["inline_keyboard"]
-        self.assertEqual(len(rows), 4)
+        self.assertEqual(len(rows), 6)
         self.assertEqual(len(rows[1]), 2)
         self.assertEqual(len(rows[2]), 1)
         row_texts = {button["text"] for row in rows for button in row}
         self.assertIn("Daftar Produk", row_texts)
         self.assertIn("Beli Produk", row_texts)
         self.assertIn("Cek Status", row_texts)
-        self.assertNotIn("Saldo", row_texts)
+        self.assertIn("Isi Saldo", row_texts)
 
     def test_start_omits_hermes_monitoring_buttons(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
@@ -1018,8 +1488,8 @@ class TelegramStoreTests(unittest.TestCase):
         request = fake_urlopen.call_args[0][0]
         self.assertIn("/setMyCommands", request.full_url)
         self.assertIn(b'"produk"', request.data)
-        self.assertIn(b'Lihat daftar produk', request.data)
-        self.assertNotIn(b'"saldo"', request.data)
+        self.assertIn(b'Daftar produk', request.data)
+        self.assertIn(b'"saldo"', request.data)
 
     def test_bot_commands_match_menu_keyboard(self) -> None:
         command_texts = {callback['callback_data'] for row in MENU_KEYBOARD['inline_keyboard'] for callback in row}
@@ -1228,6 +1698,6 @@ class TelegramStoreTests(unittest.TestCase):
 
             self.assertIn("Selamat datang", sent[0][1])
             self.assertIn("Produk tidak ditemukan", sent[1][1])
-            self.assertIn("belum tersedia", sent[2][1])
+            self.assertIn("Saldo saat ini", sent[2][1])
         finally:
             env_path.unlink(missing_ok=True)

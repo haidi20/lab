@@ -15,11 +15,17 @@ class DigiflazzClient:
         api_key: str,
         base_url: str = "https://api.digiflazz.com",
         transport: Transport | None = None,
+        development_key: str | None = None,
     ) -> None:
         self.username = username
+        self.production_key = api_key
+        self.development_key = development_key or api_key
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.transport = transport or self._http_transport
+
+    def set_mode(self, mode: str) -> None:
+        self.api_key = self.production_key if mode == "prod" else self.development_key
 
     @staticmethod
     def _http_transport(method: str, url: str, payload: dict[str, object]) -> dict[str, object]:
@@ -43,6 +49,21 @@ class DigiflazzClient:
         )
         data = response.get("data", {})
         return int(data.get("deposit", 0)) if isinstance(data, dict) else 0
+
+    def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
+        response = self.transport(
+            "POST",
+            f"{self.base_url}/v1/deposit",
+            {
+                "username": self.username,
+                "amount": amount,
+                "bank": bank,
+                "owner_name": owner_name,
+                "sign": self._sign("deposit"),
+            },
+        )
+        data = response.get("data", response)
+        return data if isinstance(data, dict) else dict(response)
 
     def price_list(self, code: str | None = None) -> list[dict[str, object]]:
         payload: dict[str, object] = {
@@ -72,6 +93,24 @@ class DigiflazzClient:
         }
         if testing:
             payload["testing"] = True
+        response = self.transport("POST", f"{self.base_url}/v1/transaction", payload)
+        data = response.get("data", response)
+        return data if isinstance(data, dict) else dict(response)
+
+    def transaction_status(
+        self,
+        buyer_sku_code: str,
+        customer_no: str,
+        ref_id: str,
+    ) -> dict[str, object]:
+        payload = {
+            "cmd": "status",
+            "username": self.username,
+            "buyer_sku_code": buyer_sku_code,
+            "customer_no": customer_no,
+            "ref_id": ref_id,
+            "sign": self._sign("status"),
+        }
         response = self.transport("POST", f"{self.base_url}/v1/transaction", payload)
         data = response.get("data", response)
         return data if isinstance(data, dict) else dict(response)
