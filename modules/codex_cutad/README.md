@@ -54,6 +54,21 @@ python3 -m modules.codex_cutad.fix_wire_api          # perbaiki + backup
 
 ## Catatan lanjutan
 
+- **Update 7 Nov 2026 (glm-5.2 tidak bisa di-ping):** dicek live ulang — ICMP ke
+  `ai.cutad.web.id` normal (42 ms, 0% loss), tapi **`z-ai/glm-5.2` kini
+  `HTTP 403 upstream_error` di SEMUA jalur** (chat/completions & responses,
+  stream & non-stream, diretry). Beda dari kasus 6 Nov (400
+  `unsupported_parameter` karena `stream:true`) — ini channel upstream model
+  glm-5.2 di proxy cutad yang mati (model masih terdaftar di `/v1/models`
+  tapi semua completion gagal). Buktinya proxy sehat: `deepseek-v4-pro` 200
+  (jawab PONG) dan `glm-5.3-flash` 200 — **nama model `z-ai/glm-5.3-flash`
+  sudah di-rename jadi `glm-5.3-flash`** (tanpa prefix), monitor lama yang
+  masih pakai nama lama bakal 404. Jalur Codex→9Router juga benar: request
+  `cd/z-ai/glm-5.2` via 9Router diteruskan dan 403-nya di-relay (503 + circuit
+  breaker reset 2m). Tidak ada yang perlu (dan bisa) diperbaiki client-side;
+  pilih model lain dulu (`cd/glm-5.3-flash` / `cd/deepseek-v4-pro`) atau
+  tunggu operator cutad memperbaiki upstream glm-5.2.
+
 - **Update 6 Nov 2026 (reinstall Codex):** Codex modern (0.149+ npm, termasuk
   bundel ChatGPT.app 0.167-alpha) **menolak `wire_api = "chat"`** — hanya
   menerima `responses`. Karena upstream cutad menolak `stream:true` di
