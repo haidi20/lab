@@ -19,8 +19,14 @@
 | 7 | Griphub Router | *bukan langganan* — Rp300/kredit | 600 RPM · 5 concurrent | ~7+ |
 | 8 | Jerouter | Trial 1h / Basic 3h / Plus 7h | reseller: unlimited sesi/IP/RPM | ~17 |
 | 9 | **APIGOD** | **Rp100.000 (7 hari)** — tidak ada paket 30 hari | **60 RPM · "UNLIMITED TOKEN"** | tidak dirinci |
+| 10 | **TipRouter** | **Rp40.000 (30 hari / Pro)** | tidak dirinci di pengumuman | tidak dirinci |
+| 11 | **MahiCenter Router** | **Rp12.000 (7 hari)** — tidak ada 30 hari | **60 RPM · Kimi K3 cap 300K token/hari** | **19** |
+| 12 | **ClaudeUnli** (Notion AI) | Rp30.000/hari (invite) | klaim "unlimited tokens and usage" · garansi 1–2 jam | Claude Opus 5.5, GPT-6.1 |
 
-**Rentang harga: Rp40.000 → Rp598.800 (selisih 15×).**
+> **Tabel ini tidak terpaku pada 1 bulan.** Kriteria masuk: menawarkan **unlimited token**
+> atau **unlimited kredit**, berapa pun durasi paketnya.
+
+**Rentang harga: Rp3.000 (6 jam / 1 hari) → Rp598.800 (reseller 30 hari).**
 
 **Inti model bisnis:** semua menagih per **waktu**, bukan per token. Tapi semuanya memasang
 plafon di **request/hari**, **RPM**, **concurrent**, atau **slot pembelian**.
@@ -237,6 +243,100 @@ di iklannya. Tidak ada paket 30 hari — paket terpanjang 7 hari.
 
 Artinya ada dua jalur pembelian: bot resmi `@apigodz_bot` atau reseller marketplace.
 
+---
+
+### 6.2 TipRouter — `tiprouter.my.id`
+
+Paket lengkap dengan harga resmi yang diumumkan (12 Okt 2026).
+
+| Paket | Durasi | Harga |
+|---|---|---|
+| **Trial** | 1 hari | **Rp3.000** |
+| **Basic** | 3 hari | **Rp8.000** |
+| **Plus** | 7 hari | **Rp15.000** |
+| **Essential** | 14 hari | **Rp24.000** |
+| **Pro** | **30 hari** | **Rp40.000** |
+
+- Promo: `HEMAT10` (diskon 10%, maks 50x) · juga rutin kode harian, mis. `07NOV26`
+- Status model: `https://tiprouter.my.id/status`
+- Ada "model stealth" versi TipRouter
+
+**Catatan negatif dari grup:** 20 Okt 2026 ada keluhan "semua model tidak bisa, saya mau
+perpanjang ke 1 bulan tapi semua tidak bisa... di platform lain bisa, hanya di tiprouter".
+28 Okt 2026 juga "bbrp hari ini srg gangguan" — penyedia ini paling sering dilaporkan down.
+
+Grup: `Tiprouter chat`, `Tiprouter CH`, `Tippery Ch.`
+
+---
+
+### 6.3 MahiCenter Router — `api2.mahicenter.cloud/v1` / `@mahicenterrouterbot`
+
+Penyedia **termurah** di seluruh survei ini.
+
+| Paket | Harga |
+|---|---|
+| 1 hari | **Rp3.000** |
+| 3 hari | **Rp6.000** |
+| 7 hari | **Rp12.000** |
+
+**Batas yang diumumkan sangat rinci** (jarang ada penyedia sejujur ini):
+
+> "Limits-nya adil: **60 request/menit** per kunci + **Kimi K3 cap 300.000 token/hari**
+> (label dihargai mahal bagi sistem kami); model ekonomis-semua diberikan **unlimited sepuasnya**."
+
+→ Artinya **BUKAN unlimited untuk semua model**: Kimi K3 dibatasi token/hari, sementara
+model murah unlimited. Ini pengakuan paling jujur soal ekonomi layanan.
+
+**19 model tersedia:**
+
+| Kategori | Model |
+|---|---|
+| Cloud High-Speed (10) | Kimi K3 · DeepSeek V4.1 Flash (+ varian 1017) · GLM 5.3 Flash · Step 3.7 Flash · Step 5 Preview · Step 3.5 Flash · Step 3.5 Flash 2603 · Qwen 3.8 27B · Nemotron 3.5 Ultra 120B |
+| Flash Series (9) | Beam · Big Pickle · DeepSeek V4.1 Flash · Flint 40B · GLM 5.3 Flash · MiMo V2.6 Flash · Nemotron 3 Ultra · Nemotron 3.5 Lightning · Nemotron 3.5 Super VL |
+
+**Fitur lain:** Base URL `https://api2.mahicenter.cloud/v1`, format OpenAI standar
+(chat/completions, streaming, non-streaming, SSE), **auto-failover** ke jalur cadangan,
+bayar QRIS (GoPay/DANA/OVO/ShopeePay/M-Banking), verifikasi manual oleh owner,
+riwayat paket via `/buy` atau `/riwayat`, leaderboard live di web.
+
+Grup/sumber: diiklankan di `ELF GANK™ chat` sebagai "pengganti yang murah, mirip harga lama tapi unlimited".
+
+---
+
+### 6.4 ClaudeUnli (reseller Notion AI) — `t.me/ClaudeUnli`
+
+**Model bisnis berbeda: bukan API key/router**, tapi invite akun Notion AI.
+
+> "Claude Opus 5.5 + GPT-6.1 Sol + banyak ai model lainnya (Support Max Effort)
+> **UNLIMITED tokens and usage** 1 hari = Rp30rb aja!
+> Garansi 2 jam / 1 jam · Via Notion AI, tinggal kirim email, langsung di-invite.
+> BCA / BNI / Mandiri / BRI / CIMB / QRIS"
+
+| Item | Detail |
+|---|---|
+| Harga | Rp20.000–Rp30.000 per hari (bervariasi) |
+| Akses | Invite Gmail ke workspace Notion AI |
+| Garansi | 1–2 jam saja |
+| Model | Claude Opus 5.5 · GPT-6.1 Sol · model lain (Max Effort) |
+
+**PERINGATAN dari penjual sendiri (kutipan asli):**
+
+> "PLEASE NOTE: There is no guarantee, as I don't know when Notion might patch this bug."
+
+→ Ini **bukan layanan resmi** — memanfaatkan celah invite Notion. Bisa mati kapan saja
+tanpa refund, dan melanggar ToS Notion. **Garis merah: tidak layak untuk kerja produksi.**
+
+---
+
+### 6.5 Reseller & grup lain
+
+| Sumber | Produk | Harga | Catatan |
+|---|---|---|---|
+| `@rapforum99` (Market AI / Rap Market) | API key paket unlimited | **Rp300.000** | "rpm 32 · tpm 3.000.000 · **unlimited token**" — sisa 2 slot (28 Okt 2026) |
+| Notion AI Bisnis 2 Bulan (Ramba Store) | Claude Opus 5, Sonnet 5, Kimi, GPT 5.6, DeepSeek Pro v4 | Rp10.000 | versi murah dari ClaudeUnli, masa 2 bulan |
+| Metode Gemini AI Pro 18 Bulan (Tippery Shop) | teks/metode | **Rp3.000** | bukan akun jadi — panduan metode |
+
+
 **⚠️ Catatan data (penting):** pesan paket APIGOD di grup mereka bertanggal
 **2 Okt 2026 dan lebih lama**, sehingga **di luar rentang sync 1 bulan** (8 Okt – 7 Nov).
 Itu sebabnya APIGOD tidak muncul di pemindaian awal berbasis DB. Data di atas
@@ -269,7 +369,9 @@ celah plan keluarga/promo, bukan menjual ulang API.
 
 ---
 
-## 8. Perbandingan Paket 30 Hari (fokus bulanan)
+## 8. Perbandingan Semua Paket Unlimited (lintas durasi)
+
+> Tidak dibatasi 1 bulan. Yang penting: menawarkan **unlimited token** atau **unlimited kredit**.
 
 | Penyedia | Harga 30 hari | Batas diumumkan | Model unggulan |
 |---|---|---|---|
@@ -282,11 +384,19 @@ celah plan keluarga/promo, bukan menjual ulang API.
 | **Griphub Router** | *Rp300/kredit, tanpa langganan* | 600 RPM · 5 concurrent · $5/hari | Claude Fable 5.1, Opus 5.5, GPT 6 |
 | **Jerouter** | bertingkat (1/3/7 hari) | reseller: unlimited sesi/IP/RPM | step-3.5-flash |
 | **APIGOD** | *tidak ada 30 hari* — 7 hari = Rp100.000 | **60 RPM** · "UNLIMITED TOKEN" | tidak dirinci (klaim "semua model") |
+| **TipRouter** | **Rp40.000** (Pro) | tidak dirinci | tidak dirinci |
+| **MahiCenter** | *tidak ada 30 hari* — 7 hari = Rp12.000 | **60 RPM** · Kimi K3 cap 300K token/hari | 19 model |
+| **@rapforum99** (reseller) | **Rp300.000** | rpm 32 · tpm 3.000.000 | tidak dirinci, "unlimited token" |
+| **ClaudeUnli** | Rp30.000/hari (invite Notion) | garansi 1–2 jam saja | Claude Opus 5.5, GPT-6.1 |
 
-**Selisih harga 15× (Rp40.000 → Rp598.800).** Bedanya bukan cuma kualitas model,
-tapi **kejujuran & kelonggaran batas**:
-- Yang murah membatasi RPM ketat (50 RPM ≈ 1 request/detik — tidak nyaman untuk agent berlapis)
-- Yang mahal mengumumkan kuota request harian besar + konkurensi tinggi
+**Selisih harga ekstrem: Rp3.000 (6 jam / 1 hari MahiCenter, TipRouter Trial) → Rp598.800
+(NilovrAI reseller 30 hari).** Bedanya bukan cuma kualitas model, tapi **kejujuran &
+kelonggaran batas**:
+
+- Yang sangat murah (Rp3.000) membatasi RPM ketat (50–60 RPM ≈ 1 request/detik) — tidak
+  nyaman untuk agent berlapis, dan MahiCenter bahkan membatasi Kimi K3 di 300K token/hari
+- Yang mahal (Rp499.000+) mengumumkan kuota request harian besar + konkurensi tinggi
+- Yang "unlimited" tapi murah tanpa angka RPM → kemungkinan besar ada plafon tersembunyi
 
 ---
 
@@ -331,9 +441,15 @@ Konsekuensi praktis:
 |---|---|
 | Coding agent harian (butuh stabil) | **NilovrAI Tanpa Batas** Rp499.000/30 hari — paling transparan batasnya |
 | Eksperimen murah | **Limo Router** 40K/30 hari — tapi sadari 50 RPM |
-| Coba dulu sebelum bayar | **Nocta** (gratis trial) atau **Jerouter Trial** (+1 hari) |
+| **Paling murah (coba sebentar)** | **MahiCenter Rp3.000/hari** atau **TipRouter Trial Rp3.000/hari** |
+| **Bulanan murah + resmi** | **TipRouter Pro Rp40.000/30 hari** (ada pengumuman harga resmi) |
+| Coba dulu sebelum bayar | **Nocta** (gratis trial), **Jerouter Trial** (+1 hari), **MAZOV** (free $10) |
 | Model frontier (Claude/GPT terbaru) | **Griphub Router** — kredit Rp300, tanpa langganan |
+| Model frontier tapi murah | **ClaudeUnli** Rp30.000/hari ⚠️ garansi 1–2 jam, pakai celah Notion |
 | Mau ikut model acuan survei | **Cutad** Daily → Ultimate |
+
+**Hindari untuk kerja serius:** ClaudeUnli dan produk sejenis (invite Notion AI).
+Penjualnya sendiri menulis "no guarantee" — bisa mati kapan saja tanpa refund.
 
 **Saran uji sebelum bayar:**
 1. `curl` ke `/v1/models` — pastikan model yang dijanjikan benar-benar ada
@@ -537,22 +653,56 @@ Base URL OpenAI-compatible.
 
 ---
 
-### 13.8 Ringkasan: siapa punya model apa
+### 13.9 TipRouter — model tidak dipublikasi lengkap
 
-| Keluarga Model | Cutad | NilovrAI | Jerouter | Limo | Griphub | Nocta |
-|---|---|---|---|---|---|---|
-| **DeepSeek v4 / v4.1** | ✅ | ✅ | ✅ | ✅ | — | ✅ (uncensored) |
-| **GLM 5.2 / 5.3** | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| **Claude Opus/Sonnet/Fable** | — | — | — | — | ✅ | — |
-| **GPT 6 / 5.6** | — | — | — | — | ✅ | — |
-| **Kimi K2.7 / K3** | — | — | ✅ | — | ✅ | — |
-| **MiniMax** | — | ✅ (m2.7) | ✅ (m3) | — | ✅ | — |
-| **Muse** | — | ✅ | — | ✅ | — | — |
-| **Qwen** | — | — | ✅ | — | ✅ (vision) | — |
-| **StepFun** | ✅ (step-5) | ✅ (step-5) | ✅ (step-3.5) | — | — | — |
-| **Solar / Upstage** | ✅ (solar-pro4) | — | ✅ | — | — | — |
-| **Uncensored/unrestricted** | — | ✅ | ✅ (terbanyak) | ✅ | — | ✅ |
-| **Jumlah model** | **9** | **13** Unlimited / 36 kredit | **~17** | **9** | **~7+** | tidak disebut |
+Status model real-time: `https://tiprouter.my.id/status`. Ada "model stealth" versi
+TipRouter (nama tidak diumumkan). Daftar ID model harus dicek via `/v1/models`.
+
+---
+
+### 13.10 MahiCenter Router — 19 model (diumumkan lengkap)
+
+| Kategori | Model |
+|---|---|
+| **Cloud High-Speed (10)** | Kimi K3 · DeepSeek V4.1 Flash · DeepSeek V4.1 Flash 1017 · GLM 5.3 Flash · Step 3.7 Flash · Step 5 Preview · Step 3.5 Flash · Step 3.5 Flash 2603 · Qwen 3.8 27B · Nemotron 3.5 Ultra 120B |
+| **Flash Series (9)** | Beam · Big Pickle · DeepSeek V4.1 Flash · Flint 40B · GLM 5.3 Flash · MiMo V2.6 Flash · Nemotron 3 Ultra · Nemotron 3.5 Lightning · Nemotron 3.5 Super VL |
+
+**Batas khusus:** Kimi K3 dibatasi **300.000 token/hari**; model ekonomis unlimited.
+Base URL: `https://api2.mahicenter.cloud/v1`
+
+---
+
+### 13.11 ClaudeUnli — via Notion AI (bukan API key)
+
+| Model | Catatan |
+|---|---|
+| Claude Opus 5.5 | via invite workspace Notion AI |
+| GPT-6.1 Sol | idem |
+| + model lain | "Support Max Effort" |
+
+**Bukan API router** — tidak ada base URL. Akses lewat invite Gmail ke Notion AI.
+Garansi penjual hanya 1–2 jam dan penjual sendiri menyatakan bisa dipatch Notion kapan saja.
+
+---
+
+### 13.12 Ringkasan: siapa punya model apa
+
+| Keluarga Model | Cutad | NilovrAI | Jerouter | Limo | Griphub | Nocta | MahiCenter |
+|---|---|---|---|---|---|---|---|
+| **DeepSeek v4 / v4.1** | ✅ | ✅ | ✅ | ✅ | — | ✅ (uncensored) | ✅ |
+| **GLM 5.2 / 5.3** | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| **Claude Opus/Sonnet/Fable** | — | — | — | — | ✅ | — | — |
+| **GPT 6 / 5.6** | — | — | — | — | ✅ | — | — |
+| **Kimi K2.7 / K3** | — | — | ✅ | — | ✅ | — | ✅ (cap 300K/hari) |
+| **MiniMax** | — | ✅ (m2.7) | ✅ (m3) | — | ✅ | — | — |
+| **Muse** | — | ✅ | — | ✅ | — | — | — |
+| **Qwen** | — | — | ✅ | — | ✅ (vision) | — | ✅ (3.8 27B) |
+| **StepFun** | ✅ (step-5) | ✅ (step-5) | ✅ (step-3.5) | — | — | — | ✅ (3.5/3.7/5) |
+| **Solar / Upstage** | ✅ (solar-pro4) | — | ✅ | — | — | — | — |
+| **Nemotron** | — | — | — | — | — | — | ✅ (3 varian) |
+| **MiMo** | — | — | ✅ | — | — | — | ✅ |
+| **Uncensored/unrestricted** | — | ✅ | ✅ (terbanyak) | ✅ | — | ✅ | — |
+| **Jumlah model** | **9** | **13** / 36 | **~17** | **9** | **~7+** | ? | **19** |
 
 **Kesimpulan:**
 
