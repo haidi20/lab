@@ -20,6 +20,7 @@ class HermesChatClient:
         timeout: float = 180.0,
         provider_post: Callable[[dict[str, object]], object] | None = None,
         provider_model: str = 'cd',
+        fallback_providers: list[dict[str, object]] | None = None,
     ) -> None:
         self.runner = runner
         self.hermes_binary = hermes_binary
@@ -28,6 +29,7 @@ class HermesChatClient:
         self.timeout = timeout
         self.provider_post = provider_post
         self.provider_model = provider_model
+        self.fallback_providers = fallback_providers or []
 
     def ask(self, question: str) -> str:
         clean_question = question.strip()
@@ -50,37 +52,85 @@ class HermesChatClient:
         ]
         try:
             completed = self.runner(command, self._query(clean_question).encode('utf-8'), self.timeout)
+            stdout = self._decode_output(getattr(completed, 'stdout', ''))
+            stderr = self._decode_output(getattr(completed, 'stderr', ''))
+            if int(getattr(completed, 'returncode', 1)) != 0:
+                message = stderr.strip() or stdout.strip() or 'Hermes gagal menjawab.'
+                if self._can_use_provider_fallback(message):
+                    return self._ask_provider(clean_question)
+                raise RuntimeError(message)
+            answer = self._clean_answer(stdout)
+
+            if not answer:
+                raise RuntimeError('Hermes mengembalikan jawaban kosong.')
+            return self._limited(answer)
         except subprocess.TimeoutExpired as error:
             raise RuntimeError('Hermes tidak menjawab sebelum batas waktu.') from error
         except RuntimeError as error:
-            if self.provider_post is not None and self._can_use_provider_fallback(str(error)):
+            message = str(error)
+            if (
+                self._can_use_provider_fallback(message)
+                or (self.fallback_providers and self.provider_post is None)
+            ):
                 return self._ask_provider(clean_question)
             raise
 
-        stdout = self._decode_output(getattr(completed, 'stdout', ''))
-        stderr = self._decode_output(getattr(completed, 'stderr', ''))
-        if int(getattr(completed, 'returncode', 1)) != 0:
-            message = stderr.strip() or stdout.strip() or 'Hermes gagal menjawab.'
-            if self.provider_post is not None and self._can_use_provider_fallback(message):
-                return self._ask_provider(clean_question)
-            raise RuntimeError(message)
-        answer = self._clean_answer(stdout)
+    def _ask_provider(self, question: str) -> str:
+        if self.provider_post is None:
+            return self._ask_fallback_provider(question)
+        try:
+            response = self.provider_post({
+                'model': self.provider_model,
+                'input': self._query(question),
+                'stream': False,
+            })
+            answer = self._extract_output_text(response)
+        except Exception:
+            return self._ask_fallback_provider(question)
         if not answer:
-            raise RuntimeError('Hermes mengembalikan jawaban kosong.')
+            return self._ask_fallback_provider(question)
         return self._limited(answer)
 
-    def _ask_provider(self, question: str) -> str:
-        assert self.provider_post is not None
-        payload = {
-            'model': self.provider_model,
-            'input': self._query(question),
-            'stream': False,
-        }
-        response = self.provider_post(payload)
-        answer = self._extract_output_text(response)
-        if not answer:
+    def _ask_fallback_provider(self, question: str) -> str:
+        if not self.fallback_providers:
             raise RuntimeError('Provider Hermes mengembalikan jawaban kosong.')
-        return self._limited(answer)
+        last_error: Exception | None = None
+        for provider in self.fallback_providers:
+            post = provider.get('post')
+            if post is None:
+                continue
+            payload = {
+                'model': provider.get('model', ''),
+                'messages': [
+                    {'role': 'user', 'content': self._query(question)},
+                ],
+            }
+            try:
+                response = post(payload)
+            except Exception as error:
+                last_error = error
+                continue
+            answer = self._extract_chat_text(response)
+            if answer:
+                return self._limited(answer)
+        if last_error is not None:
+            raise RuntimeError(str(last_error))
+        raise RuntimeError('Semua provider fallback gagal menjawab.')
+
+    @staticmethod
+    def _extract_chat_text(response: object) -> str:
+        if not isinstance(response, dict):
+            return ''
+        choices = response.get('choices', [])
+        if not isinstance(choices, list) or not choices:
+            return ''
+        first = choices[0]
+        if not isinstance(first, dict):
+            return ''
+        message = first.get('message', {})
+        if not isinstance(message, dict):
+            return ''
+        return str(message.get('content', '')).strip()
 
     @staticmethod
     def _decode_output(value: object) -> str:

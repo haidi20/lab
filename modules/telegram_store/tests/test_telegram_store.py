@@ -725,6 +725,146 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertEqual(provider_calls[0]['model'], 'cd')
         self.assertIn('Apa status Hermes?', str(provider_calls[0]['input']))
 
+    def test_hermes_chat_client_uses_fallback_provider_after_primary_fails(self) -> None:
+        def runner(command: list[str], input_bytes: bytes, timeout: float) -> object:
+            raise RuntimeError('Gateway inaccessible: gateway_other_session')
+
+        def provider_post(payload: dict[str, object]) -> dict[str, object]:
+            raise RuntimeError('primary provider mati')
+
+        fallback_payloads: list[dict[str, object]] = []
+
+        def limo_post(payload: dict[str, object]) -> dict[str, object]:
+            fallback_payloads.append(payload)
+            return {
+                'choices': [
+                    {'message': {'role': 'assistant', 'content': 'Jawaban fallback Limo'}}
+                ]
+            }
+
+        fallback_providers = [
+            {
+                'name': 'limo_router',
+                'base_url': 'https://limo.example/v1',
+                'api_key': 'limo-key',
+                'model': 'kimi-k3',
+                'post': limo_post,
+            },
+        ]
+        client = HermesChatClient(
+            runner=runner,
+            hermes_binary='hermes.exe',
+            workdir=Path('D:/projects/klinik-git'),
+            status_provider=FakeHermesStatus(),
+            timeout=30,
+            provider_post=provider_post,
+            provider_model='cd',
+            fallback_providers=fallback_providers,
+        )
+
+        answer = client.ask('Apa status Hermes?')
+
+        self.assertEqual(answer, 'Jawaban fallback Limo')
+        self.assertEqual(len(fallback_payloads), 1)
+        self.assertEqual(fallback_payloads[0]['model'], 'kimi-k3')
+        self.assertIn('Apa status Hermes?', str(fallback_payloads[0]['messages'][0]['content']))
+
+    def test_hermes_chat_client_uses_second_fallback_when_first_fails(self) -> None:
+        def runner(command: list[str], input_bytes: bytes, timeout: float) -> object:
+            raise RuntimeError('Gateway inaccessible: gateway_other_session')
+
+        def limo_post(payload: dict[str, object]) -> dict[str, object]:
+            raise RuntimeError('limo mati')
+
+        def nilovr_post(payload: dict[str, object]) -> dict[str, object]:
+            return {
+                'choices': [
+                    {'message': {'role': 'assistant', 'content': 'Jawaban fallback Nilovr'}}
+                ]
+            }
+
+        fallback_providers = [
+            {
+                'name': 'limo_router',
+                'base_url': 'https://limo.example/v1',
+                'api_key': 'limo-key',
+                'model': 'kimi-k3',
+                'post': limo_post,
+            },
+            {
+                'name': 'nilovr',
+                'base_url': 'https://nilovr.example/v1',
+                'api_key': 'nilovr-key',
+                'model': 'glm-5.3-flash',
+                'post': nilovr_post,
+            },
+        ]
+        client = HermesChatClient(
+            runner=runner,
+            hermes_binary='hermes.exe',
+            workdir=Path('D:/projects/klinik-git'),
+            status_provider=None,
+            timeout=30,
+            fallback_providers=fallback_providers,
+        )
+
+        answer = client.ask('Apa status Hermes?')
+
+        self.assertEqual(answer, 'Jawaban fallback Nilovr')
+
+    def test_build_bot_from_env_loads_fallback_providers_from_env(self) -> None:
+        env_path = Path(tempfile.gettempdir()) / 'telegram_store_fallback.env'
+        env_path.write_text(
+            'TELEGRAM_BOT_TOKEN=token-abc\n'
+            'LIMO_ROUTER_BASE_URL=https://limo.example/v1\n'
+            'LIMO_ROUTER_API_KEY=limo-key\n'
+            'LIMO_ROUTER_MODEL=kimi-k3\n'
+            'NILOVR_BASE_URL=https://nilovr.example/v1\n'
+            'NILOVR_API_KEY=nilovr-key\n'
+            'NILOVR_MODEL=glm-5.3-flash\n'
+            'NOCTA_BASE_URL=https://nocta.example/v1\n'
+            'NOCTA_API_KEY=nocta-key\n',
+            encoding='utf-8',
+        )
+        env_keys = [
+            'TELEGRAM_BOT_TOKEN',
+            'LIMO_ROUTER_BASE_URL',
+            'LIMO_ROUTER_API_KEY',
+            'LIMO_ROUTER_MODEL',
+            'NILOVR_BASE_URL',
+            'NILOVR_API_KEY',
+            'NILOVR_MODEL',
+            'NOCTA_BASE_URL',
+            'NOCTA_API_KEY',
+            'NOCTA_MODEL',
+            'MAHI_CENTER_BASE_URL',
+            'MAHI_CENTER_API_KEY',
+            'MAHI_CENTER_MODEL',
+            'TIP_ROUTER_BASE_URL',
+            'TIP_ROUTER_API_KEY',
+            'TIP_ROUTER_MODEL',
+            'MAZOV_BASE_URL',
+            'MAZOV_API_KEY',
+            'MAZOV_MODEL',
+        ]
+        try:
+            for key in env_keys:
+                os.environ.pop(key, None)
+            bot = build_bot_from_env(env_path=env_path)
+
+            fallback = bot.hermes_chat.fallback_providers
+            self.assertEqual(
+                [(provider['name'], provider['model']) for provider in fallback],
+                [
+                    ('limo_router', 'kimi-k3'),
+                    ('nilovr', 'glm-5.3-flash'),
+                ],
+            )
+        finally:
+            env_path.unlink(missing_ok=True)
+            for key in env_keys:
+                os.environ.pop(key, None)
+
     def test_hermes_chat_client_does_not_fallback_for_other_errors(self) -> None:
         def runner(command: list[str], input_bytes: bytes, timeout: float) -> object:
             raise RuntimeError('model gagal')

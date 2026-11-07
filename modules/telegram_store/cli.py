@@ -81,6 +81,7 @@ def build_bot_from_env(
         if provider_base_url and provider_api_key
         else None
     )
+    fallback_providers = _fallback_providers_from_env()
     hermes_chat = HermesChatClient(
         runner=_run_hermes_command,
         hermes_binary=hermes_binary,
@@ -89,6 +90,7 @@ def build_bot_from_env(
         timeout=float(os.environ.get("HERMES_CHAT_TIMEOUT_SECONDS", "900")),
         provider_post=provider_post,
         provider_model=provider_model,
+        fallback_providers=fallback_providers,
     )
     return TelegramStoreBot(
         token,
@@ -144,3 +146,47 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+def _fallback_providers_from_env() -> list[dict[str, object]]:
+    providers: list[dict[str, object]] = []
+    definitions = [
+        ("limo_router", "LIMO_ROUTER"),
+        ("nilovr", "NILOVR"),
+        ("nocta", "NOCTA"),
+        ("mahi_center", "MAHI_CENTER"),
+        ("tip_router", "TIP_ROUTER"),
+        ("mazov", "MAZOV"),
+    ]
+    for name, prefix in definitions:
+        base_url = os.environ.get(f"{prefix}_BASE_URL", "").strip()
+        api_key = os.environ.get(f"{prefix}_API_KEY", "").strip()
+        model = os.environ.get(f"{prefix}_MODEL", "").strip()
+        if base_url and api_key and model:
+            providers.append(
+                {
+                    "name": name,
+                    "base_url": base_url,
+                    "api_key": api_key,
+                    "model": model,
+                    "post": _post_fallback_provider,
+                }
+            )
+    return providers
+
+def _post_fallback_provider(payload: dict[str, object]) -> object:
+    provider = payload.pop("provider", {})
+    assert isinstance(provider, dict)
+    base_url = str(provider.get("base_url", "")).rstrip("/")
+    api_key = str(provider.get("api_key", ""))
+    timeout = float(os.environ.get("HERMES_CHAT_TIMEOUT_SECONDS", "900"))
+    request = urllib.request.Request(
+        f"{base_url}/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return json.loads(response.read().decode("utf-8"))

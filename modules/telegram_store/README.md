@@ -24,6 +24,24 @@ HERMES_WORKDIR=D:\projects\klinik-git
 HERMES_PROVIDER_BASE_URL=http://127.0.0.1:20128/v1
 HERMES_PROVIDER_API_KEY=provider-key
 HERMES_PROVIDER_MODEL=cd
+LIMO_ROUTER_BASE_URL=https://limo-router-endpoint/v1
+LIMO_ROUTER_API_KEY=limo-api-key
+LIMO_ROUTER_MODEL=nama-model
+NILOVR_BASE_URL=https://platform.nilovr.com/v1
+NILOVR_API_KEY=nilovr-api-key
+NILOVR_MODEL=nama-model
+NOCTA_BASE_URL=https://nocta-endpoint/v1
+NOCTA_API_KEY=nocta-api-key
+NOCTA_MODEL=nama-model
+MAHI_CENTER_BASE_URL=https://api2.mahicenter.cloud/v1
+MAHI_CENTER_API_KEY=mahi-api-key
+MAHI_CENTER_MODEL=nama-model
+TIP_ROUTER_BASE_URL=https://tiprouter-endpoint/v1
+TIP_ROUTER_API_KEY=tiprouter-api-key
+TIP_ROUTER_MODEL=nama-model
+MAZOV_BASE_URL=https://mazov.site/v1
+MAZOV_API_KEY=mazov-api-key
+MAZOV_MODEL=nama-model
 ```
 
 Jangan commit `.env` berisi kredensial asli.
@@ -58,6 +76,9 @@ di aplikasi Telegram.
   `--yolo`, jadi Hermes boleh menjalankan perubahan sesuai permintaan.
   Kalau gateway Hermes terkunci sesi Windows, bot memakai fallback provider
   Hermes; fallback ini hanya menjawab teks dan tidak menjalankan tool.
+Penyedia fallback tambahan bisa diisi lewat `LIMO_ROUTER_*`, `NILOVR_*`,
+`NOCTA_*`, `MAHI_CENTER_*`, `TIP_ROUTER_*`, atau `MAZOV_*`. Bot memakai
+provider pertama yang aktif jika provider utama gagal.
 - `/akhirihermes` atau `/tutuphermes`: akhiri mode komunikasi Hermes.
 
 `/saldo` dinonaktifkan sampai payment gateway aktif. Perintah itu hanya
