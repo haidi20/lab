@@ -548,6 +548,74 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertEqual(service.digiflazz.orders[0][0], "BRIZZI5")
         self.assertEqual(service.digiflazz.orders[0][1], "08123456789")
 
+    def test_product_selection_to_successful_payment_status_flow(self) -> None:
+        digiflazz = FakeDigiflazz(balance=1_000_000)
+        orders = InMemoryOrderStore()
+        service = TelegramStoreService(digiflazz, orders=orders)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "2"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "081234554320"}})
+
+        self.assertIn("Pesanan dibuat", sent[2][1])
+        order_message = sent[2][1]
+        invoice = order_message.split("Invoice: <code>")[-1].split("</code>")[0] if "Invoice: <code>" in order_message else order_message.split("Invoice: ")[-1].splitlines()[0]
+        self.assertEqual("BRIZZI5", digiflazz.orders[0][0])
+        self.assertEqual("081234554320", digiflazz.orders[0][1])
+
+        digiflazz.status_responses.append(
+            {
+                "ref_id": invoice,
+                "status": "Sukses",
+                "rc": "00",
+                "message": "Transaksi sukses",
+                "price": 11_500,
+            }
+        )
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": f"/cekstatus {invoice}"}})
+
+        self.assertIn("Invoice:", sent[3][1])
+        self.assertIn("Status: Sukses", sent[3][1])
+        self.assertEqual("Sukses", orders.find(invoice)["status"])
+        self.assertEqual(1, len(orders.ledger_entries(invoice)))
+        self.assertLess(orders.ledger_entries(invoice)[0]["amount"], 0)
+
+    def test_product_selection_to_failed_payment_status_flow(self) -> None:
+        digiflazz = FakeDigiflazz(balance=1_000_000)
+        orders = InMemoryOrderStore()
+        service = TelegramStoreService(digiflazz, orders=orders)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "2"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "081234554320"}})
+        order_message = sent[2][1]
+        invoice = order_message.split("Invoice: <code>")[-1].split("</code>")[0] if "Invoice: <code>" in order_message else order_message.split("Invoice: ")[-1].splitlines()[0]
+
+        digiflazz.status_responses.append(
+            {"ref_id": invoice, "status": "Gagal", "rc": "X", "message": "Transaksi gagal", "price": 11_500}
+        )
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": f"/cekstatus {invoice}"}})
+
+        self.assertIn("Status: Gagal", sent[3][1])
+        self.assertEqual("Gagal", orders.find(invoice)["status"])
+        self.assertGreater(orders.ledger_entries(invoice)[0]["amount"], 0)
+
     def test_product_list_excludes_free_fire(self) -> None:
         class CatalogDigiflazz:
             def price_list(self, code: str | None = None) -> list[dict[str, object]]:

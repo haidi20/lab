@@ -13,6 +13,7 @@ from .webhook import verify_digiflazz_signature
 class InMemoryOrderStore:
     def __init__(self) -> None:
         self._orders: dict[str, dict[str, object]] = {}
+        self._ledger: dict[str, list[dict[str, object]]] = {}
 
     def save(self, order: dict[str, object]) -> None:
         self._orders[str(order["invoice"])] = dict(order)
@@ -26,7 +27,14 @@ class InMemoryOrderStore:
         return [dict(order) for order in self._orders.values()]
 
     def record_ledger(self, invoice: str, event_type: str, amount: int) -> bool:
+        records = self._ledger.setdefault(invoice, [])
+        if any(entry["event_type"] == event_type for entry in records):
+            return False
+        records.append({"invoice": invoice, "event_type": event_type, "amount": amount})
         return True
+
+    def ledger_entries(self, invoice: str) -> list[dict[str, object]]:
+        return [dict(entry) for entry in self._ledger.get(invoice, [])]
 
 
 class TelegramStoreService:
@@ -214,13 +222,7 @@ class TelegramStoreService:
                 str(order["customer_no"]),
                 invoice,
             )
-            order.update(
-                {
-                    "status": response.get("status", order["status"]),
-                    "message": response.get("message", order["message"]),
-                }
-            )
-            self.orders.save(order)
+            return self.apply_status(invoice, response)
         except Exception:
             pass
         return self.orders.find(invoice)
