@@ -13,6 +13,7 @@ from .client import DigiflazzClient
 from .hermes_status import HermesStatusProvider
 from .hermes_chat import HermesChatClient
 from .service import TelegramStoreService
+from .catalog import SQLiteProductCatalog
 
 TRELLO_PROGRESS_LIST_ID = "6ad7fee5455f933ec728788c"
 _WINDOWS_HIDE_FLAGS = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
@@ -50,6 +51,7 @@ def build_bot_from_env(
         digiflazz,
         markup_percent=float(os.environ.get("STORE_MARKUP_PERCENT", "0")),
         testing=os.environ.get("DIGIFLAZZ_TESTING", "false").lower() == "true",
+        catalog=SQLiteProductCatalog(os.environ.get("PRODUCT_CATALOG_PATH", "modules/telegram_store/data/products.sqlite3")),
     )
     trello_key = os.environ.get("TRELLO_API_KEY", "")
     trello_token = os.environ.get("TRELLO_TOKEN", "")
@@ -102,6 +104,7 @@ def build_bot_from_env(
         hermes_chat=hermes_chat,
         live_interval=float(os.environ.get("HERMES_LIVE_INTERVAL_SECONDS", "5")),
         live_duration_seconds=float(os.environ.get("HERMES_LIVE_DURATION_SECONDS", "60")),
+        deposit_owner_name=os.environ.get("DIGIFLAZZ_OWNER_NAME", ""),
     )
 
 

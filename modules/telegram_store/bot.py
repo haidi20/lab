@@ -39,7 +39,6 @@ MENU_KEYBOARD = {
             {"text": "Prod", "callback_data": "/prod"},
             {"text": "Sandbox", "callback_data": "/sandbox"},
         ],
-        [{"text": "Daftar Perintah", "callback_data": "/perintah"}],
     ],
 }
 
@@ -94,6 +93,8 @@ def product_keyboard(products: list[dict[str, object]]) -> dict[str, object]:
     return {"inline_keyboard": rows}
 
 DEPOSIT_NOMINALS = (200_000, 500_000, 1_000_000, 2_000_000)
+PRODUCTION_BANKS = ("BCA", "MANDIRI", "BRI", "BNI", "Flip", "ShopeePay")
+SANDBOX_BANKS = ("Flip", "ShopeePay")
 
 def format_deposit_menu(balance: int, mode: str = "prod") -> str:
     mode_label = "Production" if mode == "prod" else "Sandbox"
@@ -119,6 +120,15 @@ def format_deposit_instruction(amount: int) -> str:
         "• Perorangan: <code>Flip</code>, <code>ShopeePay</code>\n"
         "• Perusahaan: <code>BCA</code>, <code>MANDIRI</code>, <code>BRI</code>, <code>BNI</code>"
     )
+
+def bank_keyboard(amount: int, mode: str) -> dict[str, object]:
+    banks = SANDBOX_BANKS if mode == "sandbox" else PRODUCTION_BANKS
+    return {
+        "inline_keyboard": [
+            [{"text": bank, "callback_data": f"/bank {amount} {bank}"}]
+            for bank in banks
+        ]
+    }
 
 def format_deposit_ticket(deposit: dict[str, object], amount: int) -> str:
     final_amount = int(deposit.get("amount", amount))
@@ -149,6 +159,7 @@ class TelegramStoreBot:
         live_max_updates: int | None = None,
         live_duration_seconds: float = 60.0,
         mode: str = "prod",
+        deposit_owner_name: str = "",
     ) -> None:
         self.token = token
         self.service = service
@@ -167,6 +178,9 @@ class TelegramStoreBot:
         self._hermes_chat_sessions: set[int] = set()
         self._selected_products: dict[int, dict[str, object]] = {}
         self._catalog_numbers: dict[int, list[dict[str, object]]] = {}
+        self._deposit_amounts: dict[int, int] = {}
+        self._deposit_banks: dict[int, tuple[int, str]] = {}
+        self.deposit_owner_name = deposit_owner_name
         self.mode = mode
         self.service.testing = mode == "sandbox"
 
@@ -254,6 +268,18 @@ class TelegramStoreBot:
                         "Kirim nomor tujuan sekarang.",
                     )
                     return
+            if command.isdigit() and chat_id in self._deposit_amounts:
+                amount = int(command)
+                if amount < 200_000:
+                    self.send_message(chat_id, "Minimal deposit Digiflazz adalah Rp 200.000.")
+                    return
+                del self._deposit_amounts[chat_id]
+                self.send_message(
+                    chat_id,
+                    f"<b>Pilih Bank</b>\n\nDeposit: <b>{TelegramStoreService.format_rupiah(amount)}</b>",
+                    bank_keyboard(amount, getattr(self, "mode", "prod")),
+                )
+                return
             if command == 'perintah':
                 self.send_message(
                     chat_id,
@@ -273,6 +299,33 @@ class TelegramStoreBot:
                     f"Pesanan dibuat.\nInvoice: {order['invoice']}\n"
                     f"Produk: {order['product']}\nStatus: {order['status']}",
                 )
+                return
+            if command == "nominal":
+                self._deposit_amounts[chat_id] = 0
+                self.send_message(
+                    chat_id,
+                    "Kirim nominal deposit.\nMinimal <b>Rp 200.000</b>.",
+                )
+                return
+            if command.isdigit() and chat_id in self._deposit_amounts:
+                amount = int(command)
+                if amount < 200_000:
+                    self.send_message(chat_id, "Minimal deposit Digiflazz adalah Rp 200.000.")
+                    return
+                del self._deposit_amounts[chat_id]
+                self.send_message(
+                    chat_id,
+                    f"<b>Pilih Bank</b>\n\nDeposit: <b>{TelegramStoreService.format_rupiah(amount)}</b>",
+                    bank_keyboard(amount, getattr(self, "mode", "prod")),
+                )
+                return
+            if not text.strip().startswith("/") and chat_id in self._deposit_banks:
+                amount, bank = self._deposit_banks[chat_id]
+                owner_name = self.deposit_owner_name or text.strip()
+                if owner_name:
+                    del self._deposit_banks[chat_id]
+                    ticket = self.service.create_deposit(amount, bank, owner_name)
+                    self.send_message(chat_id, format_deposit_ticket(ticket, amount))
                 return
             if command in {"start", "help", "bantuan"}:
                 self.send_message(
@@ -329,7 +382,7 @@ class TelegramStoreBot:
                             {"text": f"Rp {nominal:,.0f}".replace(",", "."), "callback_data": f"/isidaldo {nominal}"},
                         ]
                         for nominal in DEPOSIT_NOMINALS
-                    ]
+                    ] + [[{"text": "Input Nominal", "callback_data": "/nominal"}]]
                 }
                 self.send_message(chat_id, format_deposit_menu(balance, mode), nominal_keyboard)
             elif command == "mode":
@@ -342,23 +395,63 @@ class TelegramStoreBot:
                 )
             elif command == "prod":
                 self.mode = "prod"
+                self._selected_products.clear()
+                self._deposit_amounts.clear()
+                self._deposit_banks.clear()
                 self.service.digiflazz.set_mode("prod")
                 self.service.testing = False
                 self.send_message(chat_id, "<b>Mode Production aktif.</b>\nSemua transaksi akan diproses nyata.")
             elif command == "sandbox":
                 self.mode = "sandbox"
+                self._selected_products.clear()
+                self._deposit_amounts.clear()
+                self._deposit_banks.clear()
                 self.service.digiflazz.set_mode("sandbox")
                 self.service.testing = True
                 self.send_message(chat_id, "<b>Mode Sandbox aktif.</b>\nTransaksi ditandai testing=True.")
+            elif command == "bank":
+                amount = int(args[0])
+                bank = args[1].upper() if args[1].lower() in {"bca", "mandiri", "bri", "bni"} else args[1].title()
+                if bank.lower() == "shopeepay":
+                    bank = "ShopeePay"
+                if self.deposit_owner_name:
+                    ticket = self.service.create_deposit(amount, bank, self.deposit_owner_name)
+                    self.send_message(chat_id, format_deposit_ticket(ticket, amount))
+                else:
+                    self._deposit_banks[chat_id] = (amount, bank)
+                    self.send_message(
+                        chat_id,
+                        f"<b>Deposit {TelegramStoreService.format_rupiah(amount)}</b>\n\n"
+                        f"Bank: <b>{bank}</b>\n"
+                        "Kirim nama pemilik rekening.",
+                    )
+                return
             elif command == "isidaldo":
                 amount = int(args[0]) if args else 0
+                if amount < 200_000:
+                    self.send_message(chat_id, "Minimal deposit Digiflazz adalah Rp 200.000.")
+                    return
                 if len(args) == 1:
-                    self.send_message(chat_id, format_deposit_instruction(amount))
+                    self._deposit_amounts[chat_id] = amount
+                    self.send_message(
+                        chat_id,
+                        f"<b>Pilih Bank</b>\n\nDeposit: <b>{TelegramStoreService.format_rupiah(amount)}</b>",
+                        bank_keyboard(amount, getattr(self, "mode", "prod")),
+                    )
                     return
-                if len(args) < 3:
-                    self.send_message(chat_id, "Format: /isidaldo <nominal> <bank> <nama pemilik rekening>")
+                if len(args) == 2:
+                    bank = args[1].upper() if args[1].lower() in {"bca", "mandiri", "bri", "bni"} else args[1].title()
+                    if bank.lower() == "shopeepay":
+                        bank = "ShopeePay"
+                    self._deposit_banks[chat_id] = (amount, bank)
+                    self.send_message(
+                        chat_id,
+                        f"<b>Deposit {TelegramStoreService.format_rupiah(amount)}</b>\n\n"
+                        f"Bank: <b>{bank}</b>\n"
+                        "Kirim nama pemilik rekening.",
+                    )
                     return
-                ticket = self.service.create_deposit(amount, args[1].upper(), " ".join(args[2:]))
+                ticket = self.service.create_deposit(amount, args[1].upper() if args[1].lower() in {"bca", "mandiri", "bri", "bni"} else (args[1].title().replace("Shopeepay", "ShopeePay")), " ".join(args[2:]))
                 self.send_message(chat_id, format_deposit_ticket(ticket, amount))
             elif command in {"hermes", "starthermes", "statushermes"}:
                 if self.hermes_status is None:
