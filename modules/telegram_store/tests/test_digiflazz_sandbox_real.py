@@ -5,10 +5,16 @@ import os
 import unittest
 import urllib.error
 import urllib.request
+from time import sleep
 import uuid
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from modules.telegram_store.bot import load_env_file
 from modules.telegram_store.client import DigiflazzClient
+from modules.telegram_store.service import TelegramStoreService
+from modules.telegram_store.store import SQLiteOrderStore
+from modules.telegram_store.bot import SANDBOX_BANKS
 
 
 PREPAID_CASES: list[tuple[str, str]] = [
@@ -129,6 +135,8 @@ class DigiflazzSandboxRealTests(unittest.TestCase):
             development_key=cls.development_key,
         )
         cls.client.set_mode("sandbox")
+        if os.environ.get("DIGIFLAZZ_REAL_TESTS", "0") != "1":
+            raise unittest.SkipTest("Real Digiflazz tests require DIGIFLAZZ_REAL_TESTS=1")
 
     def request(self, payload: dict[str, object]) -> dict[str, object]:
         request = urllib.request.Request(
@@ -158,6 +166,15 @@ class DigiflazzSandboxRealTests(unittest.TestCase):
         )["data"]
         self.assertEqual(response["ref_id"], ref_id)
         self.assertEqual(response["status"], expected_status)
+
+    def price_list_with_limit_retry(self) -> list[dict[str, object]]:
+        for attempt in range(2):
+            products = self.client.price_list()
+            if products:
+                return products
+            if attempt == 0:
+                sleep(61)
+        self.fail("Digiflazz masih membatasi price list setelah dua percobaan")
 
     def postpaid(
         self,
@@ -265,3 +282,80 @@ class DigiflazzSandboxRealTests(unittest.TestCase):
         for customer_no, inquiry_status, payment_status in POSTPAID_CASES["hp"]:
             with self.subTest(customer_no=customer_no):
                 self.postpaid("hp", customer_no, inquiry_status, payment_status)
+
+    def test_sandbox_real_deposit_each_supported_bank(self) -> None:
+        self.assertEqual(("Flip", "ShopeePay"), SANDBOX_BANKS)
+        for bank in SANDBOX_BANKS:
+            with self.subTest(bank=bank):
+                ticket = self.client.create_deposit(200_000, bank, "Sandbox Real Bank Test")
+                self.assertEqual(ticket.get("rc"), "00")
+                self.assertIn(bank, str(ticket.get("bank", "")))
+                self.assertTrue(str(ticket.get("account_no", "")))
+
+    def test_sandbox_real_payment_infrastructure_flow(self) -> None:
+        with TemporaryDirectory() as directory:
+            service = TelegramStoreService(
+                self.client,
+                orders=SQLiteOrderStore(Path(directory) / "orders.sqlite3"),
+                markup_percent=10,
+                digiflazz_username=self.username,
+                digiflazz_api_key=self.development_key,
+            )
+            ref_id = f"HN-INFRA-{uuid.uuid4().hex[:12].upper()}"
+            provider = self.client.create_transaction("xld10", "087800001232", ref_id, testing=True)
+            initial = {
+                "invoice": ref_id,
+                "sku": "xld10",
+                "customer_no": "087800001232",
+                "product": "Sandbox Payment Infrastructure",
+                "price": 10_000,
+                "sale_price": 11_000,
+                "status": provider.get("status", "Pending"),
+                "message": provider.get("message", ""),
+            }
+            service.orders.save(initial)
+            status = str(provider.get("status", ""))
+            self.assertIn(status, {"Sukses", "Gagal", "Pending"})
+
+            service.apply_status(ref_id, provider)
+            service.apply_status(ref_id, provider)
+            entries = service.orders.ledger_entries(ref_id)
+
+            self.assertEqual(status, service.orders.find(ref_id)["status"])
+            self.assertEqual(1, len(entries))
+            if status == "Sukses":
+                self.assertLess(entries[0]["amount"], 0)
+            elif status == "Gagal":
+                self.assertGreater(entries[0]["amount"], 0)
+
+            refreshed = self.client.transaction_status("xld10", "087800001232", ref_id)
+            self.assertEqual(status, refreshed.get("status", status))
+
+    def test_sandbox_real_purchase_every_product(self) -> None:
+        products = self.price_list_with_limit_retry()
+        self.assertEqual(74, len(products))
+        customer_by_category = {
+            "games": "1234567890",
+            "gas": "0110014601",
+            "pln": "530000000001",
+            "tv": "127246500101",
+        }
+        default_customer = "081234554320"
+
+        for product in products:
+            sku = str(product.get("buyer_sku_code", ""))
+            category = str(product.get("category", "")).lower()
+            customer_no = customer_by_category.get(category, default_customer)
+            if category == "e-money":
+                customer_no = "082100000001"
+            with self.subTest(sku=sku, category=product.get("category")):
+                invoice = f"HN-ALL-{sku.upper()}-{uuid.uuid4().hex[:8].upper()}"
+                response = self.client.create_transaction(
+                    sku,
+                    customer_no,
+                    invoice,
+                    testing=True,
+                )
+
+                self.assertEqual(invoice, response.get("ref_id"))
+                self.assertIn(str(response.get("status", "")).lower(), {"sukses", "pending"})
