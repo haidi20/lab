@@ -20,7 +20,7 @@ from modules.telegram_store import (
 from modules.telegram_store.cli import _post_provider, _run_hermes_command, build_bot_from_env
 from modules.telegram_store.hermes_status import HermesStatusProvider
 from modules.telegram_store.hermes_chat import HermesChatClient
-from modules.telegram_store.bot import BOT_COMMANDS
+from modules.telegram_store.bot import BOT_COMMANDS, MENU_KEYBOARD
 
 
 class FakeTransport:
@@ -397,9 +397,9 @@ class TelegramStoreTests(unittest.TestCase):
         markup = sent[0][2]
         self.assertIsNotNone(markup)
         rows = markup["inline_keyboard"]
-        self.assertEqual(len(rows), 4)
-        self.assertEqual(len(rows[0]), 2)
-        self.assertEqual(len(rows[1]), 1)
+        self.assertEqual(len(rows), 7)
+        self.assertEqual(len(rows[1]), 2)
+        self.assertEqual(len(rows[2]), 1)
         row_texts = {button["text"] for row in rows for button in row}
         self.assertIn("Lihat Produk", row_texts)
         self.assertIn("Beli Produk", row_texts)
@@ -424,21 +424,11 @@ class TelegramStoreTests(unittest.TestCase):
         assert markup is not None
         rows = markup['inline_keyboard']
         row_texts = {button['text'] for row in rows for button in row}
-        self.assertNotIn('Hermes Live', row_texts)
-        self.assertNotIn('Stop Live', row_texts)
+        self.assertIn('Hermes Live', row_texts)
+        self.assertIn('Stop Hermes Live', row_texts)
         self.assertEqual(
             rows[-1],
-            [
-                {'text': 'Hubungi Hermes', 'callback_data': '/hubungihermes'},
-                {'text': 'Tutup Hermes', 'callback_data': '/akhirihermes'},
-            ],
-        )
-        self.assertEqual(
-            rows[-1],
-            [
-                {'text': 'Hubungi Hermes', 'callback_data': '/hubungihermes'},
-                {'text': 'Tutup Hermes', 'callback_data': '/akhirihermes'},
-            ],
+            [{'text': 'Daftar Perintah', 'callback_data': '/perintah'}],
         )
 
     def test_perintah_shows_menu_buttons(self) -> None:
@@ -1029,6 +1019,12 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIn(b'"produk"', request.data)
         self.assertIn(b'Lihat daftar produk', request.data)
         self.assertNotIn(b'"saldo"', request.data)
+
+    def test_bot_commands_match_menu_keyboard(self) -> None:
+        command_texts = {callback['callback_data'] for row in MENU_KEYBOARD['inline_keyboard'] for callback in row}
+        registered = {f"/{item['command']}" for item in BOT_COMMANDS}
+
+        self.assertEqual(command_texts, registered)
 
     def test_run_registers_commands_before_polling(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)

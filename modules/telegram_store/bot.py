@@ -14,7 +14,6 @@ from .hermes_chat import HermesChatClient
 
 BOT_COMMANDS = [
     {"command": "start", "description": "Mulai bot"},
-    {"command": "bantuan", "description": "Bantuan penggunaan"},
     {"command": "produk", "description": "Lihat daftar produk"},
     {"command": "beli", "description": "Beli produk"},
     {"command": "cekstatus", "description": "Cek status transaksi"},
@@ -28,6 +27,7 @@ BOT_COMMANDS.insert(1, {'command': 'perintah', 'description': 'Daftar perintah b
 
 MENU_KEYBOARD = {
     "inline_keyboard": [
+        [{"text": "Mulai", "callback_data": "/start"}],
         [
             {"text": "Lihat Produk", "callback_data": "/produk"},
             {"text": "Beli Produk", "callback_data": "/beli"},
@@ -35,10 +35,15 @@ MENU_KEYBOARD = {
         [{"text": "Cek Status", "callback_data": "/cekstatus"}],
         [{"text": "Status Hermes", "callback_data": "/hermes"}],
         [
+            {"text": "Hermes Live", "callback_data": "/hermeslive"},
+            {"text": "Stop Hermes Live", "callback_data": "/hermesstop"},
+        ],
+        [
             {"text": "Hubungi Hermes", "callback_data": "/hubungihermes"},
             {"text": "Tutup Hermes", "callback_data": "/akhirihermes"},
         ],
-    ]
+        [{"text": "Daftar Perintah", "callback_data": "/perintah"}],
+    ],
 }
 
 
