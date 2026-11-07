@@ -18,6 +18,7 @@
 | 6 | NilovrAI (Reseller) | **Rp598.800** | RPM 120 · 80 concurrent | 13 (kredit: 36) |
 | 7 | Griphub Router | *bukan langganan* — Rp300/kredit | 600 RPM · 5 concurrent | ~7+ |
 | 8 | Jerouter | Trial 1h / Basic 3h / Plus 7h | reseller: unlimited sesi/IP/RPM | ~17 |
+| 9 | **APIGOD** | **Rp100.000 (7 hari)** — tidak ada paket 30 hari | **60 RPM · "UNLIMITED TOKEN"** | tidak dirinci |
 
 **Rentang harga: Rp40.000 → Rp598.800 (selisih 15×).**
 
@@ -201,9 +202,50 @@ sering dibandingkan dengan paket unlimited.
 
 Grup: `Griphub Router` (5.473 pesan dalam 1 bulan).
 
+### 6.1 APIGOD — `apigod.cloud` / `@apigodz_bot`
+
+**Paket paling lengkap datanya** karena dikirim sebagai pesan teks murni di grup
+`APIGOD - Discussion https://apigod.cloud/` (bukan gambar flyer).
+
+| Durasi | Harga |
+|---|---|
+| Unlimited 6 Jam | **Rp12.000** |
+| Unlimited 1 Day | **Rp17.000** |
+| Unlimited 3 Day | **Rp48.000** |
+| Unlimited 7 Day | **Rp100.000** |
+
+**Klaim yang tertulis eksplisit:**
+
+> "BISA SEMUA MODEL · **UNLIMITED TOKEN** · **60 RPM**"
+> "Langsung `@apigodz_bot` · #salampecut"
+
+→ **Satu-satunya penyedia yang menulis "UNLIMITED TOKEN" secara harfiah** plus angka RPM
+di iklannya. Tidak ada paket 30 hari — paket terpanjang 7 hari.
+
+**Promo musiman (17–20 Agustus 2026):**
+
+| Produk | Harga |
+|---|---|
+| 500 Juta Token — tanpa waktu (pakai sampai habis), all model | Rp100.000 |
+| 1 Billion Token — tanpa waktu, all model | Rp200.000 |
+| Paket Unlimited Token 7 Hari (all model) | Rp100.000 |
+
+**Dijual juga di marketplace pihak ketiga:**
+
+> "!APIGOD **UNLIMITED API CLAUDE SONNET 4.5** 1 DAY — Rp17.000"
+> — 3 transaksi di `[Notifikasi Bot Sedulur Store]` (11 Okt, 18 Okt, 2 Nov 2026)
+
+Artinya ada dua jalur pembelian: bot resmi `@apigodz_bot` atau reseller marketplace.
+
+**⚠️ Catatan data (penting):** pesan paket APIGOD di grup mereka bertanggal
+**2 Okt 2026 dan lebih lama**, sehingga **di luar rentang sync 1 bulan** (8 Okt – 7 Nov).
+Itu sebabnya APIGOD tidak muncul di pemindaian awal berbasis DB. Data di atas
+diambil langsung dari Telegram, bukan dari `telegram_data`.
+
 ---
 
 ## 7. Produk Sejenis dari Grup Jualan (akun premium, bukan API key)
+
 
 Muncul di `Grup Rich Store`, `HEAVENPREM GANK`, `TESTIMONI RUMAH PRMIUM`, `BuatPremium Channel`.
 **Bukan** router API — ini penjualan akun/plan resmi dengan harga patungan.
@@ -239,6 +281,7 @@ celah plan keluarga/promo, bukan menjual ulang API.
 | **NilovrAI (reseller)** | **Rp598.800** | RPM 120 · 80 concurrent | sama |
 | **Griphub Router** | *Rp300/kredit, tanpa langganan* | 600 RPM · 5 concurrent · $5/hari | Claude Fable 5.1, Opus 5.5, GPT 6 |
 | **Jerouter** | bertingkat (1/3/7 hari) | reseller: unlimited sesi/IP/RPM | step-3.5-flash |
+| **APIGOD** | *tidak ada 30 hari* — 7 hari = Rp100.000 | **60 RPM** · "UNLIMITED TOKEN" | tidak dirinci (klaim "semua model") |
 
 **Selisih harga 15× (Rp40.000 → Rp598.800).** Bedanya bukan cuma kualitas model,
 tapi **kejujuran & kelonggaran batas**:
@@ -307,6 +350,9 @@ Konsekuensi praktis:
 - Harga & paket dapat berubah kapan saja; semua angka adalah kondisi **8 Okt – 7 Nov 2026**
 - Klaim "100% direct upstream" / "garansi" **belum diverifikasi independen** — itu klaim penjual
 - DB hanya menyimpan **teks**; gambar harga, flyer, dan lampiran tidak ikut sehingga detail bisa hilang
+- **Grup `APIGOD - Discussion` berisi 46 pesan tapi semuanya media/kosong** — paket APIGOD
+  hanya muncul di 4 pesan teks bertanggal 2 Okt 2026 ke belakang, di luar rentang sync 1 bulan.
+  Penyedia yang beriklan **hanya lewat flyer gambar** berisiko tidak terdeteksi sama sekali
 - Email pembeli di notifikasi sudah tersamar (`voodokinxxx@gmail.com`) — jangan direkonstruksi
 - Penamaan model bisa berubah: `z-ai/glm-5.3-flash` tercatat berganti jadi `glm-5.3-flash` (7 Nov 2026)
 
