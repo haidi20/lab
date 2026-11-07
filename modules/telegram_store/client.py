@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import urllib.error
 import urllib.request
 from typing import Callable
 
@@ -16,6 +17,7 @@ class DigiflazzClient:
         base_url: str = "https://api.digiflazz.com",
         transport: Transport | None = None,
         development_key: str | None = None,
+        timeout: float = 30,
     ) -> None:
         self.username = username
         self.production_key = api_key
@@ -23,26 +25,37 @@ class DigiflazzClient:
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.transport = transport or self._http_transport
+        self.timeout = timeout
 
     def set_mode(self, mode: str) -> None:
         self.api_key = self.production_key if mode == "prod" else self.development_key
 
-    @staticmethod
-    def _http_transport(method: str, url: str, payload: dict[str, object]) -> dict[str, object]:
+    def _http_transport(self, method: str, url: str, payload: dict[str, object]) -> dict[str, object]:
         request = urllib.request.Request(
             url,
             data=json.dumps(payload).encode("utf-8"),
             headers={"Content-Type": "application/json"},
             method=method,
         )
-        with urllib.request.urlopen(request, timeout=30) as response:
-            return json.loads(response.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except TimeoutError:
+            raise RuntimeError("Digiflazz tidak merespons. Coba lagi beberapa saat.")
+        except urllib.error.HTTPError as error:
+            return json.loads(error.read().decode("utf-8"))
 
     def _sign(self, action: str) -> str:
         return hashlib.md5(f"{self.username}{self.api_key}{action}".encode()).hexdigest()
 
+    def _invoke(self, method: str, url: str, payload: dict[str, object]) -> dict[str, object]:
+        try:
+            return self.transport(method, url, payload)
+        except TimeoutError:
+            raise RuntimeError("Digiflazz tidak merespons. Coba lagi beberapa saat.")
+
     def balance(self) -> int:
-        response = self.transport(
+        response = self._invoke(
             "POST",
             f"{self.base_url}/v1/cek-saldo",
             {"cmd": "deposit", "username": self.username, "sign": self._sign("deposit")},
@@ -51,7 +64,7 @@ class DigiflazzClient:
         return int(data.get("deposit", 0)) if isinstance(data, dict) else 0
 
     def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
-        response = self.transport(
+        response = self._invoke(
             "POST",
             f"{self.base_url}/v1/deposit",
             {
@@ -73,7 +86,7 @@ class DigiflazzClient:
         }
         if code:
             payload["code"] = code
-        response = self.transport("POST", f"{self.base_url}/v1/price-list", payload)
+        response = self._invoke("POST", f"{self.base_url}/v1/price-list", payload)
         data = response.get("data", [])
         return data if isinstance(data, list) else []
 
@@ -93,7 +106,7 @@ class DigiflazzClient:
         }
         if testing:
             payload["testing"] = True
-        response = self.transport("POST", f"{self.base_url}/v1/transaction", payload)
+        response = self._invoke("POST", f"{self.base_url}/v1/transaction", payload)
         data = response.get("data", response)
         return data if isinstance(data, dict) else dict(response)
 
@@ -111,6 +124,6 @@ class DigiflazzClient:
             "ref_id": ref_id,
             "sign": self._sign("status"),
         }
-        response = self.transport("POST", f"{self.base_url}/v1/transaction", payload)
+        response = self._invoke("POST", f"{self.base_url}/v1/transaction", payload)
         data = response.get("data", response)
         return data if isinstance(data, dict) else dict(response)
