@@ -8,6 +8,7 @@ __pycache__/
 *.py[cod]
 **/.hermes-tmp*
 config/secret_key
+modules/telegram_store/data/
 
 modules/rea/
 modules/rea_tmp/
