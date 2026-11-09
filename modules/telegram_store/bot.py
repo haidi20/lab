@@ -595,4 +595,9 @@ class TelegramStoreBot:
             for update in self.get_updates(offset):
                 update_id = int(update.get("update_id", 0))
                 offset = max(offset, update_id + 1)
-                self.handle_update(update)
+                try:
+                    self.handle_update(update)
+                except urllib.error.HTTPError as error:
+                    print(f"Telegram update failed: HTTP {error.code}", flush=True)
+                except Exception as error:
+                    print(f"Telegram update failed: {error}", flush=True)
