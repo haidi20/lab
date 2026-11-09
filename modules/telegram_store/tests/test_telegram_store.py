@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import urllib.error
 import threading
 import time
 from unittest.mock import patch
@@ -1783,6 +1784,43 @@ class TelegramStoreTests(unittest.TestCase):
             bot.run()
 
         self.assertEqual(calls, ["commands"])
+
+    def test_run_continues_after_failed_update_delivery(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[str] = []
+        replies: list[str] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: None,
+            answer_callback_query=lambda callback_query_id: None,
+        )
+        bot.set_my_commands = lambda: None
+        bot.send_message = (
+            lambda chat_id, text, reply_markup=None: replies.append(text)
+            if chat_id != 999
+            else (_ for _ in ()).throw(
+                urllib.error.HTTPError("", 400, "Bad Request", {}, FakeResponse(b'{"ok":false}'))
+            )
+        )
+        updates = [
+            {"update_id": 1, "message": {"chat": {"id": 999}, "text": "/cekstatus"}},
+            {"update_id": 2, "message": {"chat": {"id": 101}, "text": "/produk"}},
+        ]
+        responses = iter([updates, Exception("stop")])
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            value = next(responses)
+            if isinstance(value, Exception):
+                raise value
+            return value
+
+        bot.get_updates = polling
+        with self.assertRaises(Exception):
+            bot.run()
+
+        self.assertIn("<b>Daftar Produk</b>", replies[-1])
 
     def test_load_env_file_sets_missing_bot_config(self) -> None:
         with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as handle:
