@@ -50,6 +50,7 @@ class TelegramStoreService:
         "xl axiata",
     }
     PPN_PERCENT = 11.0
+    BLOCKED_SKUS = {"kvision180d", "kvision30d", "ml10"}
 
     def __init__(
         self,
@@ -99,6 +100,8 @@ class TelegramStoreService:
             haystack = self.searchable_text(item)
             if "free fire" in haystack:
                 continue
+            if str(item.get("buyer_sku_code", "")).lower() in self.BLOCKED_SKUS:
+                continue
             brand = str(item.get("brand", "")).strip().lower()
             if brand in self.BLOCKED_MOBILE_BRANDS:
                 continue
@@ -113,7 +116,7 @@ class TelegramStoreService:
 
     def order(self, buyer_sku_code: str, customer_no: str) -> dict[str, object]:
         balance = int(self.digiflazz.balance())
-        if balance <= 0:
+        if balance <= 0 and not self.testing:
             raise ValueError("Isi saldo dulu melalui menu Isi Saldo.")
         matches = self.digiflazz.price_list(buyer_sku_code)
         if not matches and self.catalog is not None:
@@ -124,7 +127,7 @@ class TelegramStoreService:
         if not product.get("buyer_product_status") or not product.get("seller_product_status"):
             raise ValueError(f"Produk tidak tersedia: {buyer_sku_code}")
         sale_price = self.sale_price(int(product.get("price", 0)), self.markup_percent)
-        if balance < sale_price:
+        if balance < sale_price and not self.testing:
             raise ValueError(
                 f"Saldo tidak cukup. Butuh {self.format_rupiah(sale_price)}, "
                 f"saldo {self.format_rupiah(balance)}."
@@ -236,6 +239,8 @@ class TelegramStoreService:
 
     def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
         deposit = dict(self.digiflazz.create_deposit(amount, bank, owner_name))
+        if str(deposit.get("rc", "00")) != "00":
+            raise RuntimeError(str(deposit.get("message", "Digiflazz menolak permintaan deposit.")))
         deposit.setdefault("status", "Pending")
         if not deposit.get("notes"):
             deposit["notes"] = f"DEP-{time.strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex[:8].upper()}"

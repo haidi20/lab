@@ -529,6 +529,32 @@ class TelegramStoreTests(unittest.TestCase):
         ]
         self.assertEqual(callbacks, ["/pilih pln20", "/pilih pdam20", "/pilih tsel10", "/pilih OTHER1"])
 
+    def test_product_list_uses_stale_catalog_when_provider_returns_empty(self) -> None:
+        class RateLimitedDigiflazz(FakeDigiflazz):
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                return []
+
+        class FakeCatalog:
+            def get_all(self) -> list[dict[str, object]]:
+                return [{
+                    "buyer_sku_code": "PLN100",
+                    "product_name": "Token PLN 100",
+                    "category": "PLN",
+                    "brand": "PLN",
+                    "seller_name": "Digiflazz",
+                    "price": 11_500,
+                    "buyer_product_status": True,
+                    "seller_product_status": True,
+                }]
+
+        service = TelegramStoreService(RateLimitedDigiflazz(), markup_percent=10, catalog=FakeCatalog())
+
+        products = service.list_products(limit=10)
+
+        self.assertEqual(1, len(products))
+        self.assertEqual("PLN100", products[0]["buyer_sku_code"])
+        self.assertEqual(14_041, products[0]["sale_price"])
+
     def test_selected_product_accepts_manual_customer_number(self) -> None:
         service = TelegramStoreService(FakeDigiflazz())
         sent: list[tuple[int, str]] = []
@@ -661,6 +687,48 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertNotIn("Free Fire 50 Diamond", texts)
         self.assertIn("Telkomsel 10.000", texts)
 
+    def test_product_list_excludes_requested_game_and_tv_skus(self) -> None:
+        class ExtendedDigiflazz(FakeDigiflazz):
+            def price_list(self, code: str | None = None) -> list[dict[str, object]]:
+                products = super().price_list(code)
+                products.extend([
+                    {
+                        "buyer_sku_code": "kvision180d",
+                        "product_name": "K-Vision & GOL Paket CLING (CL06)  180 Hari",
+                        "category": "TV",
+                        "brand": "K-VISION dan GOL",
+                        "price": 75_000,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "kvision30d",
+                        "product_name": "K-Vision & GOL Paket CLING (CL01)  30 Hari",
+                        "category": "TV",
+                        "brand": "K-VISION dan GOL",
+                        "price": 17_500,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                    {
+                        "buyer_sku_code": "ml10",
+                        "product_name": "MOBILE LEGENDS 10 Diamond",
+                        "category": "Games",
+                        "brand": "MOBILE LEGENDS",
+                        "price": 2_800,
+                        "buyer_product_status": True,
+                        "seller_product_status": True,
+                    },
+                ])
+                return products
+
+        products = TelegramStoreService(ExtendedDigiflazz(), markup_percent=10).list_products(limit=20)
+
+        skus = {str(product["buyer_sku_code"]) for product in products}
+        self.assertNotIn("kvision180d", skus)
+        self.assertNotIn("kvision30d", skus)
+        self.assertNotIn("ml10", skus)
+
     def test_product_list_shows_only_telkomsel_mobile_products(self) -> None:
         class CatalogDigiflazz:
             def price_list(self, code: str | None = None) -> list[dict[str, object]]:
@@ -790,6 +858,15 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/beli BRIZZI5 08123456789"}})
 
         self.assertEqual(service.digiflazz.orders[0][0], "BRIZZI5")
+
+    def test_sandbox_purchase_allows_zero_new_balance_pending_ticket(self) -> None:
+        digiflazz = FakeDigiflazz(balance=0)
+        service = TelegramStoreService(digiflazz, markup_percent=10, testing=True)
+
+        order = service.order("BRIZZI5", "081234554320")
+
+        self.assertEqual("Pending", order["status"])
+        self.assertEqual(1, len(digiflazz.orders))
 
     def test_store_lists_products_with_markup_and_orders_as_buyer(self) -> None:
         digiflazz = FakeDigiflazz()
