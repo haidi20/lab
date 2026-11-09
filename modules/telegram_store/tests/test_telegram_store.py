@@ -245,7 +245,7 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIn("<b>Isi Saldo</b>", sent[0][1])
         self.assertIn("Saldo saat ini: <code>Rp 250.000</code>", sent[0][1])
         self.assertIn("Rp 200.000", sent[0][1])
-        reply_markup = sent[0][2] or {}
+        reply_markup = next(item[2] for item in sent if item[2] is not None) or {}
         texts = [row["text"] for item in reply_markup.get("inline_keyboard", []) for row in item]
         self.assertIn("Rp 200.000", texts)
 
@@ -265,7 +265,7 @@ class TelegramStoreTests(unittest.TestCase):
         )
 
         self.assertIn("<b>Pilih Bank</b>", sent[0][1])
-        markup = sent[0][2] or {}
+        markup = next(item[2] for item in sent if item[2] is not None) or {}
         buttons = [button["text"] for row in markup.get("inline_keyboard", []) for button in row]
         self.assertEqual(["BCA", "MANDIRI", "BRI", "BNI", "Flip", "ShopeePay"], buttons)
         callbacks = [button["callback_data"] for row in markup.get("inline_keyboard", []) for button in row]
@@ -456,12 +456,12 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "1"}})
 
-        self.assertIn("Produk dipilih: <b>Token PLN 100</b>", sent[1][1])
-        self.assertIn("Harga: <code>Rp 14.041</code>", sent[1][1])
-        self.assertIn("Kirim nomor tujuan sekarang.", sent[1][1])
+        self.assertIn("Produk dipilih: <b>Token PLN 100</b>", sent[-1][1])
+        self.assertIn("Harga: <code>Rp 14.041</code>", sent[-1][1])
+        self.assertIn("Kirim nomor tujuan sekarang.", sent[-1][1])
 
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "081234554320"}})
-        self.assertIn("Pesanan dibuat.", sent[2][1])
+        self.assertIn("Pesanan Dibuat", sent[-1][1])
 
     def test_product_list_shows_sorted_inline_buttons(self) -> None:
         class CatalogDigiflazz:
@@ -520,7 +520,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
 
-        markup = sent[0][2]
+        markup = next(item[2] for item in sent if item[2] is not None)
         self.assertIsNotNone(markup)
         callbacks = [
             button["callback_data"]
@@ -545,7 +545,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         self.assertIn("Produk dipilih: <b>Brizzi 5</b>", sent[0][1])
         self.assertIn("Kirim nomor tujuan", sent[0][1])
-        self.assertIn("Pesanan dibuat", sent[1][1])
+        self.assertIn("Pesanan Dibuat", sent[-1][1])
         self.assertEqual(service.digiflazz.orders[0][0], "BRIZZI5")
         self.assertEqual(service.digiflazz.orders[0][1], "08123456789")
 
@@ -566,8 +566,8 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "2"}})
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "081234554320"}})
 
-        self.assertIn("Pesanan dibuat", sent[2][1])
-        order_message = sent[2][1]
+        self.assertIn("Pesanan Dibuat", sent[-1][1])
+        order_message = sent[-1][1]
         invoice = order_message.split("Invoice: <code>")[-1].split("</code>")[0] if "Invoice: <code>" in order_message else order_message.split("Invoice: ")[-1].splitlines()[0]
         self.assertEqual("BRIZZI5", digiflazz.orders[0][0])
         self.assertEqual("081234554320", digiflazz.orders[0][1])
@@ -583,8 +583,8 @@ class TelegramStoreTests(unittest.TestCase):
         )
         bot.handle_update({"message": {"chat": {"id": 101}, "text": f"/cekstatus {invoice}"}})
 
-        self.assertIn("Invoice:", sent[3][1])
-        self.assertIn("Status: Sukses", sent[3][1])
+        self.assertIn("Invoice:", sent[-1][1])
+        self.assertIn("Status: <b>Sukses</b>", sent[-1][1])
         self.assertEqual("Sukses", orders.find(invoice)["status"])
         self.assertEqual(1, len(orders.ledger_entries(invoice)))
         self.assertLess(orders.ledger_entries(invoice)[0]["amount"], 0)
@@ -605,7 +605,7 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "2"}})
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "081234554320"}})
-        order_message = sent[2][1]
+        order_message = sent[-1][1]
         invoice = order_message.split("Invoice: <code>")[-1].split("</code>")[0] if "Invoice: <code>" in order_message else order_message.split("Invoice: ")[-1].splitlines()[0]
 
         digiflazz.status_responses.append(
@@ -613,7 +613,7 @@ class TelegramStoreTests(unittest.TestCase):
         )
         bot.handle_update({"message": {"chat": {"id": 101}, "text": f"/cekstatus {invoice}"}})
 
-        self.assertIn("Status: Gagal", sent[3][1])
+        self.assertIn("Status: <b>Gagal</b>", sent[-1][1])
         self.assertEqual("Gagal", orders.find(invoice)["status"])
         self.assertGreater(orders.ledger_entries(invoice)[0]["amount"], 0)
 
@@ -656,7 +656,7 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
 
         self.assertNotIn("Free Fire 50 Diamond", sent[0][1])
-        markup = sent[0][2] or {}
+        markup = next(item[2] for item in sent if item[2] is not None) or {}
         texts = [button["text"] for rows in markup.get("inline_keyboard", []) for button in rows]
         self.assertNotIn("Free Fire 50 Diamond", texts)
         self.assertIn("Telkomsel 10.000", texts)
@@ -718,7 +718,7 @@ class TelegramStoreTests(unittest.TestCase):
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/produk"}})
 
         self.assertNotIn("Axis 10.000", sent[0][1])
-        markup = sent[0][2] or {}
+        markup = next(item[2] for item in sent if item[2] is not None) or {}
         texts = [button["text"] for rows in markup.get("inline_keyboard", []) for button in rows]
         self.assertNotIn("Axis 10.000", texts)
 
@@ -842,9 +842,9 @@ class TelegramStoreTests(unittest.TestCase):
         )
 
         self.assertIn("@hn_assistent_bot", sent[0][1])
-        self.assertIn("Brizzi 5", sent[1][1])
-        self.assertIn("Rp 7.570", sent[1][1])
-        self.assertIn(purchase["invoice"], sent[2][1])
+        self.assertIn("Brizzi 5", sent[2][1])
+        self.assertIn("Rp 7.570", sent[2][1])
+        self.assertIn(purchase["invoice"], sent[-1][1])
 
     def test_bot_accepts_product_alias(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
@@ -858,7 +858,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/product BRIZZI"}})
 
-        self.assertIn("Brizzi 5", sent[0][1])
+        self.assertIn("Brizzi 5", sent[-1][1])
 
     def test_product_list_uses_scannable_catalog_layout(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
@@ -882,7 +882,7 @@ class TelegramStoreTests(unittest.TestCase):
             "   <code>PLN100</code> • Rp 14.041\n\n"
             "Pilih berdasarkan nomor produk."
         )
-        self.assertEqual(expected, sent[0][1])
+        self.assertEqual(expected, sent[-1][1])
 
     def test_bot_accepts_indonesian_command_aliases(self) -> None:
         service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
@@ -902,8 +902,8 @@ class TelegramStoreTests(unittest.TestCase):
         )
 
         self.assertIn("Selamat datang", sent[0][1])
-        self.assertIn("Brizzi 5", sent[1][1])
-        self.assertIn(purchase["invoice"], sent[2][1])
+        self.assertIn("Brizzi 5", sent[2][1])
+        self.assertIn(purchase["invoice"], sent[-1][1])
 
     def test_hermes_status_provider_summarizes_progress_cards(self) -> None:
         calls: list[str] = []
@@ -1076,7 +1076,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         bot.handle_update({"message": {"chat": {"id": 101}, "text": "/start"}})
 
-        markup = sent[0][2]
+        markup = next(item[2] for item in sent if item[2] is not None)
         self.assertIsNotNone(markup)
         rows = markup["inline_keyboard"]
         self.assertEqual(len(rows), 5)
@@ -1102,7 +1102,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         bot.handle_update({'message': {'chat': {'id': 101}, 'text': '/start'}})
 
-        markup = sent[0][2]
+        markup = next(item[2] for item in sent if item[2] is not None)
         assert markup is not None
         rows = markup['inline_keyboard']
         row_texts = {button['text'] for row in rows for button in row}
@@ -1124,7 +1124,7 @@ class TelegramStoreTests(unittest.TestCase):
 
         bot.handle_update({'message': {'chat': {'id': 101}, 'text': '/perintah'}})
 
-        markup = sent[0][2]
+        markup = next(item[2] for item in sent if item[2] is not None)
         assert markup is not None
         row_texts = {button['text'] for row in markup['inline_keyboard'] for button in row}
         self.assertIn('Daftar Produk', row_texts)
@@ -1654,7 +1654,7 @@ class TelegramStoreTests(unittest.TestCase):
             }
         )
 
-        self.assertIn("Brizzi 5", sent[0][1])
+        self.assertIn("Brizzi 5", sent[-1][1])
         self.assertEqual(answered, ["cb-1"])
 
     def test_bot_commands_exclude_hermes_status(self) -> None:
@@ -1762,7 +1762,7 @@ class TelegramStoreTests(unittest.TestCase):
                 )
 
                 self.assertTrue(sent, f"Menu tidak mengirim balasan: {command}")
-                self.assertIn(expected, sent[0][1])
+                self.assertIn(expected, sent[-1][1])
                 self.assertNotIn("Perintah tidak dikenal", sent[0][1])
 
     def test_run_registers_commands_before_polling(self) -> None:
@@ -1780,8 +1780,7 @@ class TelegramStoreTests(unittest.TestCase):
             raise KeyboardInterrupt
 
         bot.get_updates = stop_polling
-        with self.assertRaises(KeyboardInterrupt):
-            bot.run()
+        bot.run()
 
         self.assertEqual(calls, ["commands"])
 
@@ -1808,19 +1807,333 @@ class TelegramStoreTests(unittest.TestCase):
             {"update_id": 1, "message": {"chat": {"id": 999}, "text": "/cekstatus"}},
             {"update_id": 2, "message": {"chat": {"id": 101}, "text": "/produk"}},
         ]
-        responses = iter([updates, Exception("stop")])
+        responses = list([updates, KeyboardInterrupt()])
 
         def polling(offset: int = 0) -> list[dict[str, object]]:
-            value = next(responses)
-            if isinstance(value, Exception):
+            value = responses.pop(0)
+            if isinstance(value, BaseException):
                 raise value
             return value
 
         bot.get_updates = polling
-        with self.assertRaises(Exception):
-            bot.run()
+        bot.run()
 
         self.assertIn("<b>Daftar Produk</b>", replies[-1])
+
+    def test_run_continues_after_get_updates_recoverable_failure(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        replies: list[str] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: replies.append(text),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+        bot.set_my_commands = lambda: None
+        responses: list[object] = [
+            RuntimeError("getUpdates temporarily failed"),
+            [{"update_id": 1, "message": {"chat": {"id": 101}, "text": "/produk"}}],
+            KeyboardInterrupt(),
+        ]
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            value = responses.pop(0)
+            if isinstance(value, BaseException):
+                raise value
+            return value
+
+        bot.get_updates = polling
+        bot.run()
+
+        self.assertIn("<b>Daftar Produk</b>", replies[-1])
+
+    def test_command_setup_failure_does_not_stop_polling(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        replies: list[str] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: replies.append(text),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+        commands_attempts = 0
+
+        def failing_commands() -> None:
+            nonlocal commands_attempts
+            commands_attempts += 1
+            raise RuntimeError("Telegram command setup failed")
+
+        bot.set_my_commands = failing_commands
+
+        responses = [[{"update_id": 1, "message": {"chat": {"id": 101}, "text": "/health"}}], KeyboardInterrupt()]
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            value = responses.pop(0)
+            if isinstance(value, BaseException):
+                raise value
+            return value
+
+        bot.get_updates = polling
+
+        bot.run()
+
+        self.assertEqual(1, commands_attempts)
+        self.assertIn("<b>Status Bot</b>", replies[0])
+
+    def test_offset_store_failure_does_not_stop_polling(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        replies: list[str] = []
+        set_calls = 0
+
+        class FailingStateStore:
+            def get_update_offset(self) -> int:
+                return 0
+
+            def set_update_offset(self, value: int) -> None:
+                nonlocal set_calls
+                set_calls += 1
+                raise RuntimeError("state db locked")
+
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: replies.append(text),
+            answer_callback_query=lambda callback_query_id: None,
+            update_offset_store=FailingStateStore(),
+        )
+        bot.set_my_commands = lambda: None
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            if set_calls == 0:
+                return [{"update_id": 1, "message": {"chat": {"id": 101}, "text": "/produk"}}]
+            raise KeyboardInterrupt()
+
+        bot.get_updates = polling
+        bot.run()
+
+        self.assertEqual(1, set_calls)
+        self.assertIn("<b>Daftar Produk</b>", replies[-1])
+
+    def test_unexpected_fatal_polling_failure_restarts_loop(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        replies: list[str] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: replies.append(text),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+        bot.set_my_commands = lambda: None
+        calls = {"count": 0}
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            calls["count"] += 1
+            if calls["count"] == 1:
+                raise SystemExit("temporary fatal polling failure")
+            raise KeyboardInterrupt()
+
+        bot.get_updates = polling
+        bot.run()
+
+        self.assertEqual(2, calls["count"])
+        self.assertEqual([], replies)
+
+    def test_polling_offset_is_restored_and_saved_from_state_store(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        offsets: list[int] = []
+        seen_offsets: list[int] = []
+
+        class StateStore:
+            def get_update_offset(self) -> int:
+                return 42
+
+            def set_update_offset(self, value: int) -> None:
+                offsets.append(value)
+
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: None,
+            answer_callback_query=lambda callback_query_id: None,
+            update_offset_store=StateStore(),
+        )
+        bot.set_my_commands = lambda: None
+        updates = [
+            {"update_id": 43, "message": {"chat": {"id": 101}, "text": "/start"}},
+            {"update_id": 44, "message": {"chat": {"id": 101}, "text": "/produk"}},
+        ]
+
+        def polling(offset: int = 0) -> list[dict[str, object]]:
+            seen_offsets.append(offset)
+            if len(seen_offsets) == 1:
+                return updates
+            raise KeyboardInterrupt
+
+        bot.get_updates = polling
+        bot.run()
+
+        self.assertEqual([42, 45], seen_offsets)
+        self.assertEqual([44, 45], offsets)
+
+    def test_invalid_telegram_message_does_not_stop_processing(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        replies: list[str] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: replies.append(text),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"callback_query": {"id": "cb-1", "data": "/produk"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/cekstatus"}})
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "normal message"}})
+
+        self.assertEqual("Format: /status <invoice>", replies[0])
+        self.assertEqual("Perintah tidak dikenal. Gunakan /help.", replies[1])
+
+    def test_internal_message_fallback_when_html_is_rejected(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: None,
+            answer_callback_query=lambda callback_query_id: None,
+        )
+        payloads: list[bytes] = []
+        responses = iter([
+            urllib.error.HTTPError("", 400, "Bad Request", {}, FakeResponse(b'{"ok":false}')),
+            FakeResponse(b'{"ok":true}'),
+        ])
+
+        def fake_urlopen(request, timeout=0):
+            payloads.append(request.data)
+            response = next(responses)
+            if isinstance(response, Exception):
+                raise response
+            return response
+
+        with patch('modules.telegram_store.bot.urllib.request.urlopen', side_effect=fake_urlopen):
+            bot._send_message(101, "<b>Agensi <script>alert('x')</script></b>")
+
+        self.assertEqual(2, len(payloads))
+        self.assertIn("Agensi alert('x')", payloads[1].decode())
+
+    def test_health_command_reports_component_status(self) -> None:
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/health"}})
+
+        self.assertIn("<b>Status Bot</b>", sent[0][1])
+        self.assertIn("Polling: <b>OK</b>", sent[0][1])
+        self.assertIn("Digiflazz: <b>OK</b>", sent[0][1])
+        self.assertIn("Mode: <b>Production</b>", sent[0][1])
+
+    def test_health_command_reports_cache_and_state_db(self) -> None:
+        class FakeCatalog:
+            def get_all(self) -> list[dict[str, object]]:
+                return [{"buyer_sku_code": "SKU1"}, {"buyer_sku_code": "SKU2"}]
+
+        class FakeStateStore:
+            def get_update_offset(self) -> int:
+                return 123
+
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        service.catalog = FakeCatalog()
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            update_offset_store=FakeStateStore(),
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/health"}})
+
+        self.assertIn("Cache produk: <b>2 produk</b>", sent[0][1])
+        self.assertIn("State DB: <b>OK</b>", sent[0][1])
+        self.assertIn("Update offset: <code>123</code>", sent[0][1])
+
+    def test_health_command_reports_digiflazz_failure_without_crash(self) -> None:
+        class FailingDigiflazz(FakeDigiflazz):
+            def balance(self) -> int:
+                raise RuntimeError("Digiflazz unavailable")
+
+        service = TelegramStoreService(FailingDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/health"}})
+
+        self.assertIn("Digiflazz: <b>Gagal</b>", sent[0][1])
+
+    def test_health_command_reports_database_integrity(self) -> None:
+        from modules.telegram_store.store import SQLiteOrderStore
+        import tempfile as temp
+
+        path = temp.TemporaryDirectory().name + ".sqlite3"
+        store = SQLiteOrderStore(path)
+        service = TelegramStoreService(FakeDigiflazz(), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            update_offset_store=store,
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/health"}})
+
+        self.assertIn("Integritas DB: <b>OK</b>", sent[0][1])
+
+    def test_provider_runtime_error_is_reported_to_user_without_crash(self) -> None:
+        class FailingDigiflazz(FakeDigiflazz):
+            def create_transaction(self, buyer_sku_code: str, customer_no: str, ref_id: str, testing: bool = False) -> dict[str, object]:
+                raise RuntimeError("Digiflazz connection failed")
+
+        service = TelegramStoreService(FailingDigiflazz(balance=1_000_000), markup_percent=10)
+        sent: list[tuple[int, str]] = []
+        bot = TelegramStoreBot(
+            token="token",
+            service=service,
+            bot_username="@hn_assistent_bot",
+            send_message=lambda chat_id, text, reply_markup=None: sent.append((chat_id, text)),
+            answer_callback_query=lambda callback_query_id: None,
+        )
+
+        bot.handle_update({"message": {"chat": {"id": 101}, "text": "/beli BRIZZI5 081234554320"}})
+
+        self.assertIn("Digiflazz gagal diproses", sent[-1][1])
+
+    def test_health_command_is_registered_for_slash_menu(self) -> None:
+        commands = {item['command'] for item in BOT_COMMANDS}
+
+        self.assertIn('health', commands)
 
     def test_load_env_file_sets_missing_bot_config(self) -> None:
         with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as handle:
@@ -1984,7 +2297,7 @@ class TelegramStoreTests(unittest.TestCase):
             bot.handle_update({"message": {"chat": {"id": 101}, "text": "/saldo"}})
 
             self.assertIn("Selamat datang", sent[0][1])
-            self.assertIn("Produk tidak ditemukan", sent[1][1]) if bot.service.catalog is None or not bot.service.catalog.get_all() else self.assertIn("<b>Daftar Produk</b>", sent[1][1])
-            self.assertIn("Saldo saat ini", sent[2][1])
+            self.assertIn("Produk tidak ditemukan", sent[2][1]) if bot.service.catalog is None or not bot.service.catalog.get_all() else self.assertIn("<b>Daftar Produk</b>", sent[2][1])
+            self.assertIn("Saldo saat ini", sent[-1][1])
         finally:
             env_path.unlink(missing_ok=True)

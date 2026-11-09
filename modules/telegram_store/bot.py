@@ -8,6 +8,7 @@ import time
 import urllib.request
 from pathlib import Path
 from typing import Callable
+from typing import Any
 
 from .service import TelegramStoreService
 from .hermes_status import HermesStatusProvider
@@ -20,6 +21,7 @@ BOT_COMMANDS = [
     {"command": "cekstatus", "description": "Cek status transaksi"},
     {"command": "saldo", "description": "Isi saldo"},
     {"command": "mode", "description": "Lihat mode transaksi"},
+    {"command": "health", "description": "Status bot"},
     {"command": "prod", "description": "Aktifkan mode produksi"},
     {"command": "sandbox", "description": "Aktifkan mode sandbox"},
 ]
@@ -72,10 +74,10 @@ def format_product_list(products: list[dict[str, object]]) -> str:
     return "\n".join(lines)
 
 def product_priority(item: dict[str, object]) -> tuple[int, str]:
-    haystack = " ".join(
-        str(item.get(key, "")).lower()
-        for key in ("product_name", "category", "brand", "buyer_sku_code")
-    )
+    parts: list[str] = []
+    for key in ("product_name", "category", "brand", "buyer_sku_code"):
+        parts.append(str(item.get(key, "")).lower())
+    haystack = " ".join(parts)
     if "pln" in haystack:
         return (0, str(item.get("product_name", "")).lower())
     if "pdam" in haystack or " air " in f" {haystack} ":
@@ -145,6 +147,25 @@ def format_deposit_ticket(deposit: dict[str, object], amount: int) -> str:
 
 
 class TelegramStoreBot:
+    STATE_TTL_SECONDS = 1800
+
+    def safe_send_message(
+        self,
+        chat_id: int,
+        text: str,
+        reply_markup: dict[str, object] | None = None,
+    ) -> None:
+        try:
+            self.send_message(chat_id, text, reply_markup)
+        except Exception as error:
+            print(f"Telegram message failed: {error}", flush=True)
+
+    def safe_answer_callback(self, callback_query_id: str) -> None:
+        try:
+            self.answer_callback_query(callback_query_id)
+        except Exception as error:
+            print(f"Telegram callback acknowledgement failed: {error}", flush=True)
+
     def __init__(
         self,
         token: str,
@@ -160,6 +181,7 @@ class TelegramStoreBot:
         live_duration_seconds: float = 60.0,
         mode: str = "prod",
         deposit_owner_name: str = "",
+        update_offset_store: Any | None = None,
     ) -> None:
         self.token = token
         self.service = service
@@ -180,7 +202,9 @@ class TelegramStoreBot:
         self._catalog_numbers: dict[int, list[dict[str, object]]] = {}
         self._deposit_amounts: dict[int, int] = {}
         self._deposit_banks: dict[int, tuple[int, str]] = {}
+        self._state_last_seen: dict[int, float] = {}
         self.deposit_owner_name = deposit_owner_name
+        self.update_offset_store = update_offset_store
         self.mode = mode
         self.service.testing = mode == "sandbox"
 
@@ -197,15 +221,25 @@ class TelegramStoreBot:
         }
         if reply_markup is not None:
             payload_data["reply_markup"] = reply_markup
+        request = self._send_telegram_payload("/sendMessage", payload_data)
+        try:
+            with urllib.request.urlopen(request, timeout=30):
+                pass
+        except urllib.error.HTTPError:
+            payload_data.pop("parse_mode", None)
+            payload_data["text"] = re.sub(r"<[^>]+>", "", str(payload_data.get("text", "")))
+            request = self._send_telegram_payload("/sendMessage", payload_data)
+            with urllib.request.urlopen(request, timeout=30):
+                pass
+
+    def _send_telegram_payload(self, method: str, payload_data: dict[str, object]) -> urllib.request.Request:
         payload = json.dumps(payload_data).encode("utf-8")
-        request = urllib.request.Request(
-            f"{self.api_base_url}/bot{self.token}/sendMessage",
+        return urllib.request.Request(
+            f"{self.api_base_url}/bot{self.token}/{method.lstrip('/')}",
             data=payload,
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=30):
-            pass
 
     def _answer_callback_query(self, callback_query_id: str) -> None:
         payload = json.dumps({"callback_query_id": callback_query_id}).encode("utf-8")
@@ -249,10 +283,11 @@ class TelegramStoreBot:
                 self._handle_text(int(chat.get("id", 0)), data)
         query_id = callback.get("id")
         if isinstance(query_id, str):
-            self.answer_callback_query(query_id)
+            self.safe_answer_callback(query_id)
 
     def _handle_text(self, chat_id: int, text: str) -> None:
         command, args = self._command(text)
+        self.touch_state(chat_id)
         try:
             if command.isdigit() and chat_id in self._catalog_numbers:
                 index = int(text.strip()) - 1
@@ -292,13 +327,25 @@ class TelegramStoreBot:
                 return
             if not text.strip().startswith("/") and chat_id in self._selected_products:
                 product = self._selected_products[chat_id]
+                self.safe_send_message(chat_id, "⏳ <b>Memproses pesanan…</b>")
                 order = self.service.order(str(product["buyer_sku_code"]), text.strip())
                 del self._selected_products[chat_id]
-                self.send_message(
-                    chat_id,
-                    f"Pesanan dibuat.\nInvoice: {order['invoice']}\n"
-                    f"Produk: {order['product']}\nStatus: {order['status']}",
-                )
+                result_sent = False
+                try:
+                    self.send_message(
+                        chat_id,
+                        "<b>Pesanan Dibuat</b>\n\n"
+                        f"Invoice: <code>{order['invoice']}</code>\n"
+                        f"Produk: <b>{order['product']}</b>\n"
+                        f"Status: <b>{order['status']}</b>\n\n"
+                        "Gunakan <code>/status " + str(order['invoice']) + "</code> untuk memantau.",
+                    )
+                    result_sent = True
+                except Exception as error:
+                    print(f"Telegram message failed: {error}", flush=True)
+                if not result_sent:
+                    self._selected_products[chat_id] = product
+                    self.safe_send_message(chat_id, "⚠️ Pesanan sudah dibuat, tetapi pesan gagal dikirim. Kirim <code>/status " + str(order['invoice']) + "</code> untuk memantau.")
                 return
             if command == "nominal":
                 self._deposit_amounts[chat_id] = 0
@@ -334,6 +381,7 @@ class TelegramStoreBot:
                     reply_markup=MENU_KEYBOARD,
                 )
             elif command in {"produk", "product"}:
+                self.safe_send_message(chat_id, "⏳ <b>Memuat produk…</b>")
                 products = self.service.list_products(" ".join(args))
                 self._catalog_numbers[chat_id] = sorted(products, key=product_priority)
                 if not products:
@@ -358,20 +406,28 @@ class TelegramStoreBot:
                 if len(args) < 2:
                     self.send_message(chat_id, "Format: /beli <SKU> <nomor/id tujuan>")
                     return
+                self.safe_send_message(chat_id, "⏳ <b>Memproses pesanan…</b>")
                 order = self.service.order(args[0], " ".join(args[1:]))
                 self.send_message(
                     chat_id,
-                    f"Pesanan dibuat.\nInvoice: {order['invoice']}\n"
-                    f"Produk: {order['product']}\nStatus: {order['status']}",
+                    "<b>Pesanan Dibuat</b>\n\n"
+                    f"Invoice: <code>{order['invoice']}</code>\n"
+                    f"Produk: <b>{order['product']}</b>\n"
+                    f"Status: <b>{order['status']}</b>\n\n"
+                    "Gunakan <code>/status " + str(order['invoice']) + "</code> untuk memantau.",
                 )
             elif command in {"status", "cekstatus"}:
                 if not args:
                     self.send_message(chat_id, "Format: /status <invoice>")
                     return
+                self.safe_send_message(chat_id, "⏳ <b>Memeriksa status…</b>")
                 order = self.service.status(args[0])
-                self.send_message(
+                self.safe_send_message(
                     chat_id,
-                    f"Invoice: {order['invoice']}\nStatus: {order['status']}\nPesan: {order['message']}",
+                    "<b>Status Transaksi</b>\n\n"
+                    f"Invoice: <code>{order['invoice']}</code>\n"
+                    f"Status: <b>{order['status']}</b>\n"
+                    f"Pesan: {order['message']}",
                 )
             elif command == "saldo":
                 balance = self.service.digiflazz.balance()
@@ -392,6 +448,47 @@ class TelegramStoreBot:
                     chat_id,
                     f"<b>Mode Transaksi</b>\n\nMode saat ini: <b>{mode_label}</b>\n\n"
                     "Gunakan <code>/prod</code> untuk production dan <code>/sandbox</code> untuk pengujian.",
+                )
+            elif command == "health":
+                try:
+                    balance = self.service.digiflazz.balance()
+                    digiflazz_status = "OK"
+                except Exception:
+                    digiflazz_status = "Gagal"
+                    balance = 0
+                try:
+                    product_count = len(self.service.catalog.get_all()) if self.service.catalog else 0
+                except Exception:
+                    product_count = 0
+                mode_label = "Production" if getattr(self, "mode", "prod") == "prod" else "Sandbox"
+                try:
+                    offset = int(self.update_offset_store.get_update_offset()) if self.update_offset_store else None
+                    state_status = "OK" if self.update_offset_store else "Belum aktif"
+                except Exception:
+                    state_status = "Gagal"
+                    offset = None
+                try:
+                    db_integrity = (
+                        str(self.update_offset_store.connection.execute("PRAGMA integrity_check").fetchone()[0]).upper()
+                        if self.update_offset_store else None
+                    )
+                except Exception:
+                    db_integrity = None
+                integrity_status = "OK" if db_integrity == "OK" else (db_integrity or "Belum aktif")
+                cache_line = f"Cache produk: <b>{product_count} produk</b>"
+                state_lines = f"State DB: <b>{state_status}</b>"
+                state_lines += f"\nIntegritas DB: <b>{integrity_status}</b>"
+                if offset is not None:
+                    state_lines += f"\nUpdate offset: <code>{offset}</code>"
+                self.send_message(
+                    chat_id,
+                    "<b>Status Bot</b>\n\n"
+                    "Polling: <b>OK</b>\n"
+                    f"Digiflazz: <b>{digiflazz_status}</b>\n"
+                    f"Saldo: <code>{TelegramStoreService.format_rupiah(balance)}</code>\n"
+                    f"Mode: <b>{mode_label}</b>\n"
+                    f"{cache_line}\n"
+                    f"{state_lines}",
                 )
             elif command == "prod":
                 self.mode = "prod"
@@ -481,6 +578,29 @@ class TelegramStoreBot:
                 self.send_message(chat_id, "Perintah tidak dikenal. Gunakan /help.")
         except (KeyError, ValueError) as error:
             self.send_message(chat_id, f"Gagal: {error}")
+        except RuntimeError as error:
+            self.send_message(chat_id, f"Digiflazz gagal diproses: {error}")
+        except urllib.error.URLError as error:
+            self.send_message(chat_id, f"Digiflazz gagal diproses: {error.reason}")
+
+    def touch_state(self, chat_id: int, now: float | None = None) -> float:
+        timestamp = time.monotonic() if now is None else now
+        self._state_last_seen[chat_id] = timestamp
+        return timestamp
+
+    def cleanup_expired_state(self, now: float | None = None) -> None:
+        current = time.monotonic() if now is None else now
+        expired = [
+            chat_id
+            for chat_id, seen_at in self._state_last_seen.items()
+            if current - seen_at >= self.STATE_TTL_SECONDS
+        ]
+        for chat_id in expired:
+            self._catalog_numbers.pop(chat_id, None)
+            self._selected_products.pop(chat_id, None)
+            self._deposit_amounts.pop(chat_id, None)
+            self._deposit_banks.pop(chat_id, None)
+            self._state_last_seen.pop(chat_id, None)
 
     def _start_hermes_live(self, chat_id: int) -> None:
         if self.hermes_status is None:
@@ -589,15 +709,56 @@ class TelegramStoreBot:
             pass
 
     def run(self) -> None:
-        self.set_my_commands()
-        offset = 0
+        try:
+            self.set_my_commands()
+        except Exception as error:
+            print(f"Telegram command setup failed: {error}", flush=True)
+        offset = int(self.update_offset_store.get_update_offset()) if self.update_offset_store else 0
         while True:
-            for update in self.get_updates(offset):
-                update_id = int(update.get("update_id", 0))
+            try:
+                updates = self.get_updates(offset)
+            except KeyboardInterrupt:
+                break
+            except SystemExit as error:
+                print(f"Telegram polling fatal failure, restarting loop: {error}", flush=True)
+                time.sleep(1)
+                continue
+            except Exception as error:
+                print(f"Telegram polling failed: {error}", flush=True)
+                time.sleep(1)
+                continue
+            if not isinstance(updates, list):
+                print(f"Telegram polling returned invalid payload: {type(updates).__name__}", flush=True)
+                continue
+            self.cleanup_expired_state()
+            for update in updates:
+                if not isinstance(update, dict):
+                    print("Telegram polling skipped invalid update payload", flush=True)
+                    continue
+                try:
+                    update_id = int(update.get("update_id", 0))
+                except (TypeError, ValueError):
+                    print("Telegram polling skipped invalid update id", flush=True)
+                    continue
                 offset = max(offset, update_id + 1)
+                if self.update_offset_store:
+                    try:
+                        self.update_offset_store.set_update_offset(offset)
+                    except Exception as error:
+                        print(f"Telegram offset state failed: {error}", flush=True)
                 try:
                     self.handle_update(update)
                 except urllib.error.HTTPError as error:
                     print(f"Telegram update failed: HTTP {error.code}", flush=True)
+                    if self.update_offset_store and hasattr(self.update_offset_store, "record_update_error"):
+                        try:
+                            self.update_offset_store.record_update_error(update_id, f"HTTP {error.code}", update)
+                        except Exception as record_error:
+                            print(f"Telegram update error persistence failed: {record_error}", flush=True)
                 except Exception as error:
                     print(f"Telegram update failed: {error}", flush=True)
+                    if self.update_offset_store and hasattr(self.update_offset_store, "record_update_error"):
+                        try:
+                            self.update_offset_store.record_update_error(update_id, str(error), update)
+                        except Exception as record_error:
+                            print(f"Telegram update error persistence failed: {record_error}", flush=True)

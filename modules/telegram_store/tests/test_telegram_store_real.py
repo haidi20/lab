@@ -42,8 +42,8 @@ class TelegramStoreRealDigiflazzTests(unittest.TestCase):
 
         bot.handle_update({"message": {"chat": {"id": 999001}, "text": "/produk"}})
 
-        text = sent[0][1]
-        markup = sent[0][2] or {}
+        text = sent[-1][1]
+        markup = sent[-1][2] or {}
         buttons = [button["text"] for row in markup.get("inline_keyboard", []) for button in row]
         self.assertIn("<b>Daftar Produk</b>", text)
         self.assertTrue(buttons)
