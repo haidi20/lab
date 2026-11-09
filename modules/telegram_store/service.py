@@ -78,6 +78,13 @@ class TelegramStoreService:
         price_with_ppn = price * (1 + TelegramStoreService.PPN_PERCENT / 100)
         return int(price_with_ppn * (1 + markup_percent / 100))
 
+    @staticmethod
+    def searchable_text(item: dict[str, object]) -> str:
+        parts: list[str] = []
+        for key in ("product_name", "category", "brand", "buyer_sku_code"):
+            parts.append(str(item.get(key, "")))
+        return " ".join(parts).lower()
+
     def list_products(self, query: str = "", limit: int = 10) -> list[dict[str, object]]:
         products = self.digiflazz.price_list()
         if not products and self.catalog is not None:
@@ -89,19 +96,13 @@ class TelegramStoreService:
         for item in products:
             if not item.get("buyer_product_status") or not item.get("seller_product_status"):
                 continue
-            haystack = " ".join(
-                str(item.get(key, "")).lower()
-                for key in ("product_name", "category", "brand", "buyer_sku_code")
-            )
+            haystack = self.searchable_text(item)
             if "free fire" in haystack:
                 continue
             brand = str(item.get("brand", "")).strip().lower()
             if brand in self.BLOCKED_MOBILE_BRANDS:
                 continue
-            searchable = " ".join(
-                str(item.get(key, ""))
-                for key in ("product_name", "category", "brand", "buyer_sku_code")
-            ).lower()
+            searchable = self.searchable_text(item)
             if needle and needle not in searchable:
                 continue
             price = int(item.get("price", 0))
@@ -168,6 +169,9 @@ class TelegramStoreService:
         )
         self.orders.save(order)
         self._record_ledger(invoice, str(order.get("sale_price", 0)), str(order["status"]), "status")
+        record_audit = getattr(self.orders, "record_audit", None)
+        if record_audit is not None:
+            record_audit(invoice, "status", str(order["status"]), str(order.get("message", "")))
         return self.orders.find(invoice)
 
     def apply_webhook(
@@ -193,6 +197,9 @@ class TelegramStoreService:
         except KeyError:
             return False
         if current.get("status") == payload.get("status"):
+            return False
+        record_webhook = getattr(self.orders, "record_webhook", None)
+        if record_webhook is not None and not record_webhook(payload):
             return False
         self.apply_status(invoice, payload)
         return True
@@ -228,4 +235,10 @@ class TelegramStoreService:
         return self.orders.find(invoice)
 
     def create_deposit(self, amount: int, bank: str, owner_name: str) -> dict[str, object]:
-        return self.digiflazz.create_deposit(amount, bank, owner_name)
+        deposit = dict(self.digiflazz.create_deposit(amount, bank, owner_name))
+        deposit.setdefault("status", "Pending")
+        if not deposit.get("notes"):
+            deposit["notes"] = f"DEP-{time.strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex[:8].upper()}"
+        if hasattr(self.orders, "save_deposit"):
+            self.orders.save_deposit(deposit)
+        return deposit
