@@ -1157,11 +1157,10 @@ class TelegramStoreTests(unittest.TestCase):
         self.assertIsNotNone(markup)
         rows = markup["inline_keyboard"]
         self.assertEqual(len(rows), 5)
-        self.assertEqual(len(rows[1]), 2)
         self.assertEqual(len(rows[2]), 1)
         row_texts = {button["text"] for row in rows for button in row}
         self.assertIn("Daftar Produk", row_texts)
-        self.assertIn("Beli Produk", row_texts)
+        self.assertNotIn("Beli Produk", row_texts)
         self.assertIn("Cek Status", row_texts)
         self.assertIn("Isi Saldo", row_texts)
 
@@ -1816,7 +1815,6 @@ class TelegramStoreTests(unittest.TestCase):
         expectations = {
             "/start": "Selamat datang di @hn_assistent_bot",
             "/produk": "<b>Daftar Produk</b>",
-            "/beli": "Format: /beli <SKU> <nomor/id tujuan>",
             "/cekstatus": "Format: /status <invoice>",
             "/saldo": "<b>Isi Saldo</b>",
             "/mode": "<b>Mode Transaksi</b>",
@@ -2321,6 +2319,31 @@ class TelegramStoreTests(unittest.TestCase):
             env_path.unlink(missing_ok=True)
             os.environ.pop('TELEGRAM_BOT_TOKEN', None)
             os.environ.pop('HERMES_CHAT_TIMEOUT_SECONDS', None)
+
+    def test_build_bot_from_env_uses_development_signature_key_in_sandbox(self) -> None:
+        env_path = Path(tempfile.gettempdir()) / 'telegram_store_sandbox_signature.env'
+        env_path.write_text(
+            'TELEGRAM_BOT_TOKEN=token-abc\n'
+            'DIGIFLAZZ_USERNAME=store-user\n'
+            'DIGIFLAZZ_API_KEY=production-key\n'
+            'DIGIFLAZZ_DEVELOPMENT_KEY=development-key\n'
+            'DIGIFLAZZ_TESTING=true\n',
+            encoding='utf-8',
+        )
+        env_keys = ['TELEGRAM_BOT_TOKEN', 'DIGIFLAZZ_USERNAME', 'DIGIFLAZZ_API_KEY', 'DIGIFLAZZ_DEVELOPMENT_KEY', 'DIGIFLAZZ_TESTING']
+        try:
+            for key in env_keys:
+                os.environ.pop(key, None)
+            bot = build_bot_from_env(env_path=env_path)
+
+            self.assertEqual('development-key', bot.service.digiflazz.api_key)
+            self.assertEqual('development-key', bot.service.verify_signature_key())
+            self.assertEqual('development-key', bot.service.digiflazz_api_key)
+            self.assertTrue(bot.service.testing)
+        finally:
+            env_path.unlink(missing_ok=True)
+            for key in env_keys:
+                os.environ.pop(key, None)
 
     def test_post_provider_uses_configured_hermes_timeout(self) -> None:
         env_path = Path(tempfile.gettempdir()) / 'telegram_store_provider_timeout.env'

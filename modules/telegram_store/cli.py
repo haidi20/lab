@@ -41,11 +41,16 @@ def build_bot_from_env(
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     digiflazz_username = os.environ.get("DIGIFLAZZ_USERNAME", "")
     digiflazz_api_key = os.environ.get("DIGIFLAZZ_API_KEY", "")
+    digiflazz_development_key = os.environ.get("DIGIFLAZZ_DEVELOPMENT_KEY", "")
     if not token:
         raise RuntimeError("Environment belum lengkap: TELEGRAM_BOT_TOKEN")
 
     if digiflazz_username and digiflazz_api_key:
-        digiflazz = DigiflazzClient(digiflazz_username, digiflazz_api_key)
+        digiflazz = DigiflazzClient(
+            digiflazz_username,
+            digiflazz_api_key,
+            development_key=digiflazz_development_key or digiflazz_api_key,
+        )
     else:
         digiflazz = UnconfiguredDigiflazzClient()
     service = TelegramStoreService(
@@ -54,8 +59,13 @@ def build_bot_from_env(
         testing=os.environ.get("DIGIFLAZZ_TESTING", "false").lower() == "true",
         catalog=SQLiteProductCatalog(os.environ.get("PRODUCT_CATALOG_PATH", "modules/telegram_store/data/products.sqlite3")),
     )
+    service.testing = os.environ.get("DIGIFLAZZ_TESTING", "false").lower() == "true"
     update_store = SQLiteOrderStore(os.environ.get("TELEGRAM_STORE_STATE_PATH", "modules/telegram_store/data/store.sqlite3"))
     service.orders = update_store
+    webhook_key = os.environ.get("DIGIFLAZZ_WEBHOOK_API_KEY", "")
+    if not webhook_key:
+        webhook_key = digiflazz_development_key if service.testing else digiflazz_api_key
+    service.digiflazz_api_key = webhook_key
     trello_key = os.environ.get("TRELLO_API_KEY", "")
     trello_token = os.environ.get("TRELLO_TOKEN", "")
     hermes_status: HermesStatusProvider | None = None
@@ -97,6 +107,8 @@ def build_bot_from_env(
         provider_model=provider_model,
         fallback_providers=fallback_providers,
     )
+    if digiflazz_username and digiflazz_api_key:
+        digiflazz.set_mode("sandbox" if service.testing else "prod")
     return TelegramStoreBot(
         token,
         service,
@@ -109,6 +121,7 @@ def build_bot_from_env(
         live_duration_seconds=float(os.environ.get("HERMES_LIVE_DURATION_SECONDS", "60")),
         deposit_owner_name=os.environ.get("DIGIFLAZZ_OWNER_NAME", ""),
         update_offset_store=update_store,
+        mode="sandbox" if service.testing else "prod",
     )
 
 
