@@ -32,7 +32,6 @@ MENU_KEYBOARD = {
         [{"text": "Mulai", "callback_data": "/start"}],
         [
             {"text": "Daftar Produk", "callback_data": "/produk"},
-            {"text": "Beli Produk", "callback_data": "/beli"},
         ],
         [{"text": "Cek Status", "callback_data": "/cekstatus"}],
         [{"text": "Isi Saldo", "callback_data": "/saldo"}],
