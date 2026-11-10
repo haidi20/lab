@@ -242,3 +242,67 @@ Catatan: skill eksternal tidak boleh menggantikan alur REA yang diwajibkan
 capture Accurate. Skill eksternal akuntansi/audit yang tersedia saat pencarian
 semuanya di bawah 2K installs dan generik, sehingga tidak direkomendasikan;
 skill lokal di atas sudah lebih spesifik terhadap proses pembuatan fitur.
+
+## Gap Menu vs Trello Klinik
+
+Analisa board Trello `Inventory` (`vB4uz4Qb`) per 10 November 2026
+menemukan menu berikut belum memiliki kartu. Satu kartu per gap, format
+judul, deskripsi, dan checklist AC siap tempel ke Trello.
+
+### 1. Aset Tetap
+
+**Card:** `[MVP] Bangun modul fixed asset: kategori, lokasi, akuisisi, depresiasi, penjualan, dan penghapusan aset`
+
+**Description:**
+
+- Context: Menu Aset Tetap Accurate punya 7 item (akuisisi, depresiasi,
+  penjualan aset, penghapusan, kategori, lokasi, laporan) tetapi board
+  Trello klinik hanya punya satu kartu jurnal depreciation adjustment.
+  Modul aset tetap belum ada sebagai fitur utuh.
+- Acceptance Criteria:
+  - [ ] CRUD kategori aset dan lokasi aset per tenant
+  - [ ] Akuisisi aset: form input harga perolehan, tanggal, akun COA, dan jurnal otomatis
+  - [ ] Depresiasi: method garis lurus dan saldo menurun, jurnal bulanan otomatis
+  - [ ] Penjualan aset: hitung gain/loss, jurnal otomatis, bersihkan nilai buku
+  - [ ] Penghapusan aset: jurnal penghapusan, nilai buku nol
+  - [ ] Laporan daftar aset dan depresiasi per periode
+  - [ ] PHPUnit untuk setiap alur di atas
+- Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
+- Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Aset Tetap.
+
+### 2. SmartLink Tax
+
+**Card:** `[MVP] Bangun modul e-Faktur: faktur pajak keluaran/masukan, email faktur, dan SPT PPN`
+
+**Description:**
+
+- Context: Menu SmartLink Tax Accurate punya e-Faktur CTAS dan email faktur
+  pajak; daftar laporan punya SPT PPN/PPNBM. Board Trello klinik tidak
+  punya satu pun kartu pajak (efaktur, SPT, PPN).
+- Acceptance Criteria:
+  - [ ] Generate faktur pajak keluaran dari sales invoice (NSFP, masa, tahun)
+  - [ ] Catat faktur pajak masukan dari purchase invoice
+  - [ ] Kirim faktur pajak via email ke pelanggan
+  - [ ] Rekap PPN keluaran dan masukan per masa
+  - [ ] Generate SPT PPN masa (CSV/format DJP) dari rekap
+  - [ ] PHPUnit untuk generate, rekap, dan SPT
+- Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
+- Ref: `modules/accurate/accurate-sidebar-menu.md` bagian SmartLink Tax.
+
+### 3. Kas & Bank
+
+**Card:** `[MVP] Bangun modul bank: transfer antar rekening, rekonsiliasi bank, dan import rekening koran`
+
+**Description:**
+
+- Context: Pembayaran/penerimaan sudah ada via piutang-hutang, tetapi
+  transfer bank antar rekening sendiri, rekonsiliasi bank, dan import
+  rekening koran belum ada kartunya.
+- Acceptance Criteria:
+  - [ ] Transfer bank antar rekening: jurnal dua sisi otomatis
+  - [ ] Import rekening koran CSV/MT940 ke draft transaksi
+  - [ ] Rekonsiliasi: match statement ke transaksi GL, hitung selisih
+  - [ ] Laporan histori bank (bank book) per rekening per periode
+  - [ ] PHPUnit untuk transfer, import, dan rekonsiliasi
+- Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
+- Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Kas & Bank.
