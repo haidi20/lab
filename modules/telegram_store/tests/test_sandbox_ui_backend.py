@@ -18,6 +18,8 @@ from modules.telegram_store.store import SQLiteOrderStore
 class SandboxUiBackendFlowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        if os.environ.get("DIGIFLAZZ_REAL_TESTS", "0") != "1":
+            raise unittest.SkipTest("Real Digiflazz tests require DIGIFLAZZ_REAL_TESTS=1")
         load_env_file(".env")
         cls.username = os.environ.get("DIGIFLAZZ_USERNAME", "")
         production_key = os.environ.get("DIGIFLAZZ_API_KEY", "")

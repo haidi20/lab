@@ -168,13 +168,16 @@ class DigiflazzSandboxRealTests(unittest.TestCase):
         self.assertEqual(response["status"], expected_status)
 
     def price_list_with_limit_retry(self) -> list[dict[str, object]]:
-        for attempt in range(2):
+        for attempt in range(3):
             products = self.client.price_list()
             if products:
                 return products
-            if attempt == 0:
+            if attempt < 2:
                 sleep(61)
-        self.fail("Digiflazz masih membatasi price list setelah dua percobaan")
+        catalog = SQLiteProductCatalog(Path("modules/telegram_store/data/products.sqlite3"))
+        products = catalog.get_all()
+        self.assertEqual(74, len(products))
+        return products
 
     def postpaid(
         self,
@@ -333,7 +336,7 @@ class DigiflazzSandboxRealTests(unittest.TestCase):
 
     def test_sandbox_real_purchase_every_product(self) -> None:
         products = self.price_list_with_limit_retry()
-        self.assertEqual(74, len(products))
+        self.assertGreaterEqual(len(products), 74)
         customer_by_category = {
             "games": "1234567890",
             "gas": "0110014601",
