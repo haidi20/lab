@@ -337,3 +337,26 @@ judul, deskripsi, dan checklist AC siap tempel ke Trello.
   - [ ] PHPUnit untuk transfer, import, dan rekonsiliasi
 - Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 - Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Kas & Bank.
+
+### Perencanaan Lengkap Per Menu
+
+Rencana migration (table fields), form input (field-by-field), tab layout,
+dan business flow per card tersimpan lengkap di
+`modules/accurate/trello-gap-cards.md`. Ringkasan di bawah merujuk card
+tersebut sebagai sumber detail.
+
+| Menu | Card | Tab Layout | Tabel Utama | Form Input Ringkas | Business Flow |
+| --- | --- | --- | --- | --- | --- |
+| Aset Tetap | 1 | Ya — 3 tab: Informasi, Depresiasi, Penghapusan | `asset_categories`, `asset_locations`, `fixed_assets`, `fixed_asset_depreciations`, `fixed_asset_disposals` | Kode, nama, kategori, lokasi, cabang, tanggal, harga, salvage, masa manfaat, metode depresiasi, akun COA | Akuisisi → jurnal Debit FA / Kredit Kas-AP → depresiasi bulanan → penjualan (gain/loss) → penghapusan → laporan |
+| SmartLink Tax | 2 | Ya — faktur: 2 tab (Informasi, Email); SPT: single form | `tax_invoices`, `tax_invoice_emails`, `spt_ppn_filings` | Tipe (output/input), NSFP, masa, tahun, dokumen sumber, DPP, PPN, email tujuan | Sales invoice → faktur keluaran → email → rekap per masa → SPT CSV DJP → filed |
+| Kas & Bank | 3 | Ya — 3 tab: Transfer, Import Statement, Rekonsiliasi | `bank_transfers`, `bank_statements`, `bank_statement_lines`, `bank_reconciliations` | Transfer: rekening asal/tujuan, jumlah, fee. Import: file CSV/MT940, saldo awal/akhir. Rekonsiliasi: rekening, periode, match, selisih | Transfer → jurnal 2 sisi. Import → parse → validasi. Rekonsiliasi → auto/manual match → jurnal penyesuaian → bank book |
+| Perusahaan | 4 | Ya — Karyawan 2 tab (Informasi, Komponen Gaji); master lain single form | `payment_terms`, `shipments`, `free_on_boards`, `employees`, `employee_fees`, `document_sequences` | Payment term: nama, tipe, hari. Karyawan: nama, NIK, jabatan, gaji. Penomoran: tipe dok, prefix, padding | Payment term → due_date invoice. Shipment/FOB → dropdown di SO/DO. Karyawan → komponen gaji → payroll. Penomoran → prefix per cabang per tipe |
+| Penjualan | 5 | Ya — Quotation 2 tab (Informasi, Detail Item); lainnya single form | `sales_quotations(+items)`, `sales_down_payments`, `customer_categories`, `price_categories`, `sales_commissions`, `sales_targets` | Quotation: pelanggan, item (produk, qty, harga, diskon). DP: pelanggan, jumlah, rekening. Komisi: salesman, rate, invoice. Target: karyawan/cabang, periode, jumlah | Quotation → won → konversi SO. DP → terima → alokasi ke invoice. Komisi → hitung per invoice → paid. Target → capaian vs aktual |
+| Pembelian | 6 | Ya — Perintah Pembayaran 2 tab (Informasi, Detail multi-vendor); lainnya single form | `purchase_down_payments`, `vendor_prices`, `vendor_categories`, `transfer_orders(+payments)` | DP: pemasok, jumlah, rekening. Harga: pemasok, produk, harga, qty min, tgl efektif. Transfer order: pemasok, invoice hutang, jumlah | DP → bayar → alokasi faktur. Harga → suggest di PO. Perintah pembayaran → approve → transfer → jurnal Debit AP / Kredit Kas |
+| Buku Besar | 7 | Ya — 4 sub-fitur: Anggaran, Transfer Anggaran, Pencatatan Beban, Histori Akun | `account_budgets`, `account_budget_transfers`, `expense_accruals` | Anggaran: cabang, akun, periode, target. Transfer: dari/ke budget, jumlah. Beban: akun, jumlah, tanggal. Histori: filter akun + periode (report-only) | Set budget → jurnal update actual → monitor vs target. Transfer antar akun. Akrual → reversing entry. Histori: drill-down per akun |
+| Persediaan | 8 | Ya — Material Requisition 2 tab (Informasi, Detail Item); Serial/Batch single form | `product_serials`, `product_batches`, `material_requisitions(+items)` | Serial: produk, nomor seri, status, gudang. Batch: produk, nomor batch, expiry. Requisition: cabang, BOM/assembly, item (produk, qty) | GR → assign serial/batch. Penjualan → pilih serial → sold. Batch → FEFO picking. Requisition → approve → fulfil → stock movement dengan batch/serial trace |
+| Daftar Laporan | 9 | Tidak — report-only dengan filter | `report_insights` | Filter: tipe laporan, periode, tipe insight (trend/anomaly/summary) | Scheduled/manual → baca laporan → analisa tren/anomali → simpan insight → tampilkan di dashboard |
+
+Detail lengkap (migration plan, field-by-field, tab layout dengan alasan,
+dan business flow step-by-step) ada di
+`modules/accurate/trello-gap-cards.md` bagian card 1-9.

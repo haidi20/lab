@@ -102,6 +102,56 @@ Tabel `fixed_asset_disposals`:
 - [ ] Laporan daftar aset dan depresiasi per periode
 - [ ] PHPUnit untuk setiap alur di atas
 
+**Form Input:**
+
+Form Akuisisi Aset (`fixed_assets`):
+
+Tab Informasi Aset:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Kode Aset | text (auto/manual) | Ya | unique per tenant |
+| Nama Aset | text | Ya | |
+| Kategori Aset | lookup `asset_categories` | Ya | menentukan akun COA otomatis |
+| Lokasi Aset | lookup `asset_locations` | Tidak | |
+| Cabang | lookup `branches` | Ya | |
+| Tanggal Perolehan | date | Ya | |
+| Harga Perolehan | number | Ya | |
+| Nilai Sisa (Salvage) | number, default 0 | Tidak | |
+| Masa Manfaat (bulan) | integer | Ya | |
+| Metode Depresiasi | select: straight_line / declining_balance | Ya | default straight_line |
+| Akun Kas/AP | lookup `gl_accounts` | Ya | kredit saat akuisisi |
+
+Tab Depresiasi (read-only setelah posting):
+
+| Field | Input | Keterangan |
+| --- | --- | --- |
+| Periode | char(7) YYYY-MM | unique per aset |
+| Beban Periode | number | dihitung otomatis |
+| Akumulasi | number | running total |
+
+Tab Penghapusan/Penjualan:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Tipe | select: sale / disposal | Ya | |
+| Tanggal | date | Ya | |
+| Harga Jual | number | Jika sale | |
+| Gain/Loss | number (auto) | - | dihitung sistem |
+
+**Tab Layout:** Ya — 3 tab: Informasi Aset, Depresiasi, Penghapusan. Tab Depresiasi dan Penghapusan muncul setelah aset di-post. Terkait tabel `asset_categories` (COA mapping), `fixed_asset_depreciations`, dan `fixed_asset_disposals`.
+
+**Business Flow:**
+
+1. Admin membuat kategori aset → pilih akun akumulasi depresiasi, beban depresiasi, gain, dan loss di COA.
+2. Admin membuat lokasi aset per cabang (opsional).
+3. User input akuisisi aset → isi form Informasi Aset → submit → jurnal otomatis: Debit Fixed Asset, Kredit Kas/AP.
+4. Setiap akhir bulan (period-end), sistem menghitung depresiasi: straight_line = (cost - salvage) / useful_life_months; declining_balance = net_book_value × rate.
+5. Posting depresiasi → jurnal otomatis: Debit Beban Depresiasi, Kredit Akumulasi Depresiasi. Cegah duplikat per periode per aset.
+6. Saat aset dijual: input harga jual + tanggal → sistem hitung gain/loss = harga_jual - (cost - accumulated_depreciation) → jurnal: Debit Kas + Akumulasi Depresiasi (+ Loss), Kredit Fixed Asset + PPN (+ Gain).
+7. Saat aset dihapus (disposal): jurnal: Debit Akumulasi Depresiasi + Loss, Kredit Fixed Asset. Nilai buji bersih jadi nol.
+8. Laporan daftar aset dan depresiasi per periode dapat dicetak.
+
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Aset Tetap.
 
@@ -171,6 +221,58 @@ Tabel `spt_ppn_filings`:
 - [ ] Rekap PPN keluaran dan masukan per masa
 - [ ] Generate SPT PPN masa (CSV/format DJP) dari rekap
 - [ ] PHPUnit untuk generate, rekap, dan SPT
+
+**Form Input:**
+
+Form Faktur Pajak (`tax_invoices`):
+
+Tab Informasi Faktur:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Tipe | select: output / input | Ya | output=keluaran, input=masukan |
+| NSFP | text (auto dari DJP) | Ya (output) | nomor seri faktur pajak |
+| Masa Pajak | char(2) MM | Ya | |
+| Tahun Pajak | char(4) YYYY | Ya | |
+| Dokumen Sumber | lookup sales/purchase invoice | Ya | morph relation |
+| Nama Lawan Transaksi | text (snapshot dari invoice) | Ya | |
+| NPWP | text (snapshot) | Tidak | |
+| Alamat | textarea (snapshot) | Tidak | |
+| DPP | number (snapshot dari invoice) | Ya | dasar pengenaan pajak |
+| PPN | number (snapshot = 11% dari DPP) | Ya | |
+
+Tab Email Faktur:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Email Tujuan | text/email | Ya | default dari pelanggan |
+| Status Kirim | auto: pending/sent/failed | - | log di `tax_invoice_emails` |
+| Retry | button | - | manual jika gagal |
+
+Form SPT PPN (`spt_ppn_filings`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Masa | char(2) MM | Ya | unique per tahun |
+| Tahun | char(4) YYYY | Ya | |
+| Total PPN Keluaran | number (auto rekap) | - | dari tax_invoices type=output |
+| Total PPN Masukan | number (auto rekap) | - | dari tax_invoices type=input |
+| Kurang/Lebih Bayar | number (auto) | - | output - input |
+| File CSV DJP | file download | - | format DJP |
+| Status | select: draft / filed | - | filed = sudah dilaporkan |
+
+**Tab Layout:** Ya — untuk faktur pajak: tab Informasi Faktur dan tab Email. Untuk SPT: single form tanpa tab. Terkait tabel `sales_invoices`, `purchase_invoices`, dan `tax_invoice_emails`.
+
+**Business Flow:**
+
+1. Sales invoice di-post → sistem otomatis membuat faktur pajak keluaran (type=output) dengan snapshot DPP dan PPN.
+2. Purchase invoice di-post → user dapat mencatat faktur pajak masukan (type=input) dari faktur pemasok.
+3. NSFP (Nomor Seri Faktur Pajak) di-generate dari DJP atau diinput manual.
+4. User dapat mengirim faktur pajak via email ke pelanggan → log status di `tax_invoice_emails` → retry manual jika gagal.
+5. Setiap akhir masa pajak: sistem rekap semua faktur output dan input per masa/tahun.
+6. Hitung kurang/lebih bayar: PPN Keluaran - PPN Masukan.
+7. Generate file CSV format DJP untuk pelaporan SPT Masa PPN.
+8. User laporkan ke DJP → ubah status menjadi `filed`.
 
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian SmartLink Tax.
@@ -249,6 +351,62 @@ Tabel `bank_reconciliations`:
 - [ ] Rekonsiliasi: match statement ke transaksi GL, hitung selisih
 - [ ] Laporan histori bank (bank book) per rekening per periode
 - [ ] PHPUnit untuk transfer, import, dan rekonsiliasi
+
+**Form Input:**
+
+Form Transfer Bank (`bank_transfers`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Rekening Asal | lookup bank accounts / GL | Ya | kredit |
+| Rekening Tujuan | lookup bank accounts / GL | Ya | debit |
+| Tanggal | date | Ya | |
+| Jumlah | number | Ya | |
+| Biaya Admin | number, default 0 | Tidak | masuk beban bank |
+| Catatan | textarea | Tidak | |
+
+Form Import Rekening Koran (`bank_statements` + `bank_statement_lines`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Rekening Bank | lookup | Ya | statement untuk rekening ini |
+| Periode | date range | Ya | |
+| File CSV/MT940 | file upload | Ya | parse otomatis |
+| Saldo Awal | number | Ya | validasi |
+| Saldo Akhir | number | Ya | validasi |
+
+Form Rekonsiliasi (`bank_reconciliations`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Rekening Bank | lookup | Ya | |
+| Periode | char(7) YYYY-MM | Ya | |
+| Saldo GL | number (auto dari GL) | - | |
+| Saldo Bank | number (auto dari statement) | - | |
+| Selisih | number (auto) | - | harus nol sebelum posted |
+| Match | auto/manual per line | - | |
+| Jurnal Penyesuaian | auto-generate untuk selisih | - | |
+
+**Tab Layout:** Ya — modul bank punya 3 sub-fitur dengan tab: Transfer, Import Statement, Rekonsiliasi. Setiap tab adalah fitur terpisah dengan tabel sendiri. Terkait tabel `bank_transfers`, `bank_statements`, `bank_statement_lines`, `bank_reconciliations`, dan `general_journals`.
+
+**Business Flow:**
+
+Transfer Bank:
+1. User buka form transfer → pilih rekening asal dan tujuan → isi jumlah dan biaya admin.
+2. Submit → jurnal otomatis: Debit Bank Tujuan, Kredit Bank Asal (+ Debit Beban Bank jika ada fee).
+
+Import Rekening Koran:
+3. User upload file CSV/MT940 → sistem parse → tampilkan preview lines.
+4. Sistem validasi saldo awal dan akhir → jika cocok, simpan sebagai draft.
+5. Lines siap di-match ke transaksi GL pada tahap rekonsiliasi.
+
+Rekonsiliasi:
+6. User pilih rekening dan periode → sistem tampilkan saldo GL vs saldo bank.
+7. Auto-match: cocokkan statement lines ke transaksi GL berdasarkan tanggal + jumlah + referensi.
+8. Manual match: user drag-and-drop atau pilih pasangan line↔GL.
+9. Selisih yang tidak match → user buat jurnal penyesuaian.
+10. Ketika selisih = nol → posting rekonsiliasi → tandai periode reconciled.
+11. Laporan Bank Book: mutasi per rekening per periode dengan running balance.
 
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Kas & Bank.
@@ -345,6 +503,84 @@ ALTER tabel yang sudah ada:
 - [ ] CRUD karyawan, gaji/tunjangan, dan komponen payroll dasar
 - [ ] Penomoran otomatis per dokumen per cabang (SO, invoice, PO, jurnal)
 - [ ] PHPUnit untuk setiap master di atas
+
+**Form Input:**
+
+Form Payment Term (`payment_terms`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | mis. "Net 30", "EOM" |
+| Tipe | select: net_days / end_of_month | Ya | |
+| Jumlah Hari | integer (jika net_days) | Tidak | |
+| Diskon (%) | decimal, default 0 | Tidak | early payment discount |
+| Hari Diskon | integer | Tidak | batas hari untuk diskon |
+
+Form Shipment:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | |
+| Alamat Pickup | textarea | Tidak | |
+
+Form FOB:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | mis. "FOB Origin", "FOB Destination" |
+
+Form Karyawan (`employees`):
+
+Tab Informasi Karyawan:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | |
+| NIK/ID | text | Ya | |
+| Jabatan | text | Tidak | |
+| Cabang | lookup | Ya | |
+| Email | text/email | Tidak | |
+| Telepon | text | Tidak | |
+| Non Aktif | checkbox | Tidak | |
+
+Tab Komponen Gaji (`employee_fees`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Tipe | select: salary / allowance / deduction | Ya | |
+| Nama | text | Ya | mis. "Gaji Pokok", "Tunjangan Transport" |
+| Jumlah | number | Ya | |
+| Tanggal Efektif | date | Ya | |
+
+Form Penomoran (`document_sequences`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Tipe Dokumen | select: sales_order / sales_invoice / purchase_order / purchase_invoice / journal / payment | Ya | |
+| Cabang | lookup | Ya | |
+| Prefix | text | Ya | mis. "INV", "SO" |
+| Padding | integer, default 5 | Tidak | panjang digit |
+| Nomor Berikutnya | bigInteger, auto-increment | - | |
+
+**Tab Layout:** Ya — form Karyawan punya tab Informasi dan tab Komponen Gaji. Master lain (payment term, shipment, FOB, penomoran) cukup single form karena tidak berelasi ke detail item. Terkait tabel `payment_terms`, `shipments`, `free_on_boards`, `employees`, `employee_fees`, `document_sequences`, dan `sales_invoices`/`purchase_invoices` (via payment_term_id).
+
+**Business Flow:**
+
+Payment Term:
+1. Admin buat payment term (mis. Net 30).
+2. Saat membuat sales/purchase invoice → pilih payment term → due_date otomatis = invoice_date + 30 hari (atau akhir bulan jika EOM).
+3. Laporan AR/AP aging menggunakan due_date untuk kategorikan umur piutang.
+
+Shipment/FOB:
+4. Admin buat master shipment dan FOB → terpakai di sales order dan delivery order sebagai dropdown.
+
+Karyawan & Payroll:
+5. HR input data karyawan → set komponen gaji (salary, allowance, deduction).
+6. Komponen gaji terpakai saat proses payroll bulanan.
+
+Penomoran:
+7. Admin set prefix per tipe dokumen per cabang.
+8. Saat user membuat dokumen baru → nomor otomatis dari sequence → increment atomik (SELECT FOR UPDATE) → format: PREFIX/CABANG/YYYYMM/SEQ.
 
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Perusahaan dan Pengaturan.
@@ -448,6 +684,90 @@ ALTER tabel yang sudah ada:
 - [ ] Target penjualan: set target per periode dan laporan capaian
 - [ ] PHPUnit untuk setiap alur di atas
 
+**Form Input:**
+
+Form Quotation (`sales_quotations` + `sales_quotation_items`):
+
+Tab Informasi:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Pelanggan | lookup `customers` | Ya | |
+| Tanggal Quotation | date | Ya | |
+| Berlaku Sampai | date | Tidak | |
+| Cabang | lookup | Ya | |
+| Status | auto: draft/sent/won/lost/expired | - | |
+
+Tab Detail Item:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Produk | lookup `products` | Ya | |
+| Qty | number | Ya | |
+| Harga | number (default dari price category) | Ya | |
+| Diskon | number/persen | Tidak | |
+| Total | number (auto: qty × harga - diskon) | - | |
+
+Form Down Payment (`sales_down_payments`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Pelanggan | lookup | Ya | |
+| Tanggal | date | Ya | |
+| Jumlah | number | Ya | |
+| Rekening Kas/Bank | lookup | Ya | |
+| Teralokasi | number (auto) | - | ke invoice |
+
+Form Kategori Pelanggan/Harga:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | unique per tenant |
+
+Form Komisi (`sales_commissions`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Karyawan (Salesman) | lookup | Ya | |
+| Invoice | lookup | Ya | dasar perhitungan |
+| Rate (%) | decimal | Ya | |
+| Jumlah | number (auto: rate × invoice total) | - | |
+| Status | auto: accrued/paid | - | |
+
+Form Target (`sales_targets`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Karyawan/Cabang | lookup (salah satu wajib) | Ya | |
+| Periode | char(7) YYYY-MM | Ya | |
+| Target | number | Ya | |
+
+**Tab Layout:** Ya — Quotation punya tab Informasi dan tab Detail Item (sama dengan pattern Sales Order yang sudah ada). Down Payment cukup single form. Komisi dan Target juga single form. Terkait tabel `sales_quotations`, `sales_quotation_items`, `sales_down_payments`, `customer_categories`, `price_categories`, `sales_commissions`, `sales_targets`, dan `sales_orders` (konversi quotation).
+
+**Business Flow:**
+
+Quotation:
+1. Sales buat quotation → pilih pelanggan → isi detail item (produk, qty, harga).
+2. Kirim quotation ke pelanggan → status berubah dari draft ke sent.
+3. Pelanggan setuju → status won → klik "Konversi ke SO" → sistem buat sales order dari data quotation.
+4. Pelanggan menolak → status lost. Melewati valid_until tanpa konversi → status expired (scheduled job).
+
+Down Payment:
+5. Terima DP dari pelanggan → pilih rekening kas/bank → submit → jurnal: Debit Kas/Bank, Kredit Uang Muka Penjualan.
+6. Saat invoice terbentuk → alokasi DP → jurnal: Debit Uang Muka Penjualan, Kredit AR.
+7. Sisa DP bisa di-refund.
+
+Kategori:
+8. Admin buat kategori pelanggan dan kategori harga → assign ke customer dan invoice → harga default mengikuti kategori.
+
+Komisi:
+9. Sales invoice di-post → sistem hitung komisi = rate × invoice_total → simpan status accrued.
+10. Payroll/proses pembayaran komisi → status paid → jurnal: Debit Beban Komisi, Kredit Kas/Utang Komisi.
+
+Target:
+11. Manager set target penjualan per karyawan atau cabang per bulan.
+12. Laporan capaian: actual sales vs target per periode → indikator tercapai/melebihi/below.
+
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Penjualan.
 
@@ -532,6 +852,74 @@ ALTER tabel yang sudah ada:
 - [ ] Perintah pembayaran dan transfer pemasok: alur multi-vendor transfer
 - [ ] PHPUnit untuk setiap alur di atas
 
+**Form Input:**
+
+Form Down Payment Pembelian (`purchase_down_payments`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Pemasok | lookup `vendors` | Ya | |
+| Tanggal | date | Ya | |
+| Jumlah | number | Ya | |
+| Rekening Kas/Bank | lookup | Ya | kredit |
+| Teralokasi | number (auto) | - | ke faktur |
+
+Form Harga Pemasok (`vendor_prices`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Pemasok | lookup | Ya | |
+| Produk | lookup | Ya | |
+| Harga | number | Ya | |
+| Qty Minimum | number, default 1 | Tidak | |
+| Tanggal Efektif | date | Ya | unique per vendor+product |
+
+Form Kategori Pemasok:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nama | text | Ya | unique per tenant |
+
+Form Perintah Pembayaran (`transfer_orders`):
+
+Tab Informasi:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nomor Dokumen | auto | - | |
+| Tanggal | date | Ya | |
+| Status | auto: draft/approved/paid/cancelled | - | |
+
+Tab Detail Pembayaran (`transfer_order_payments`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Pemasok | lookup | Ya | |
+| Invoice Hutang | lookup (opsional) | Tidak | jika membayar invoice spesifik |
+| Jumlah | number | Ya | |
+
+**Tab Layout:** Ya — Perintah Pembayaran punya tab Informasi dan tab Detail Pembayaran (multi-vendor). Down Payment dan master (harga pemasok, kategori) single form. Terkait tabel `purchase_down_payments`, `vendor_prices`, `vendor_categories`, `transfer_orders`, `transfer_order_payments`, dan `purchase_invoices`.
+
+**Business Flow:**
+
+Down Payment Pembelian:
+1. Perusahaan bayar DP ke pemasok sebelum barang datang → jurnal: Debit Uang Muka Pembelian, Kredit Kas/Bank.
+2. Saat faktur pembelian di-post → alokasi DP → jurnal: Debit AP, Kredit Uang Muka Pembelian.
+3. Sisa DP bisa di-refund.
+
+Harga Pemasok:
+4. Admin input harga per produk per pemasok dengan tanggal efektif.
+5. Saat buat PO → sistem suggest harga dari `vendor_prices` berdasarkan pemasok + produk + tanggal.
+
+Kategori Pemasok:
+6. Admin buat kategori → assign ke vendor → filter di list pemasok.
+
+Perintah Pembayaran:
+7. Finance buat perintah pembayaran → pilih multiple pemasok + invoice hutang yang mau dibayar.
+8. Approve → status approved.
+9. Transfer ke bank masing-masing pemasok → status paid → jurnal: Debit AP, Kredit Kas/Bank.
+10. Jika ada invoice spesifik → link ke `payable_invoice_id` untuk tracking.
+
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Pembelian.
 
@@ -595,6 +983,67 @@ yang sudah ada; tambah composite index `(gl_account_id, date)` jika belum.
 - [ ] Transfer anggaran antar akun
 - [ ] Histori akun: riwayat mutasi per akun dengan drill-down transaksi
 - [ ] PHPUnit untuk anggaran, monitor, dan histori
+
+**Form Input:**
+
+Form Anggaran (`account_budgets`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Cabang | lookup | Ya | |
+| Akun | lookup `gl_accounts` | Ya | |
+| Periode | char(7) YYYY-MM | Ya | unique per cabang+akun+periode |
+| Target Anggaran | number | Ya | |
+| Realisasi | number (auto) | - | dari posting jurnal |
+
+Form Transfer Anggaran (`account_budget_transfers`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Dari Anggaran | lookup `account_budgets` | Ya | budget sumber |
+| Ke Anggaran | lookup `account_budgets` | Ya | budget tujuan |
+| Jumlah | number | Ya | tidak boleh > sisa budget asal |
+| Tanggal | date | Ya | |
+
+Form Pencatatan Beban (`expense_accruals`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Akun Beban | lookup `gl_accounts` | Ya | |
+| Jumlah | number | Ya | |
+| Tanggal Akrual | date | Ya | |
+| Jurnal Akrual | auto | - | Debit Beban, Kredit Utang Beban |
+| Jurnal Pembalikan | auto (periode berikutnya) | - | Debit Utang Beban, Kredit Beban |
+
+Histori Akun (report-only, tidak ada form):
+
+| Filter | Input | Keterangan |
+| --- | --- | --- |
+| Akun | lookup | pilih akun |
+| Periode | date range | |
+| Cabang | lookup (opsional) | |
+
+**Tab Layout:** Ya — modul Buku Besar punya 4 sub-fitur dengan tab terpisah: Anggaran, Transfer Anggaran, Pencatatan Beban, Histori Akun. Anggaran dan Transfer punya tabel sendiri. Histori Akun adalah report-only. Terkait tabel `account_budgets`, `account_budget_transfers`, `expense_accruals`, dan `general_journals`.
+
+**Business Flow:**
+
+Anggaran:
+1. Manager set anggaran per akun per cabang per bulan.
+2. Setiap jurnal di-post → jika akun ada di anggaran → update `actual_amount`.
+3. Monitor Anggaran: tampilkan target vs realisasi → indikator warning jika melebihi budget.
+
+Transfer Anggaran:
+4. Jika budget akun A kurang tapi akun B surplus → transfer anggaran dari B ke A.
+5. Validasi: jumlah transfer tidak boleh melebihi sisa budget asal.
+
+Pencatatan Beban (Expense Accrual):
+6. Akhir bulan: catat beban yang sudah terjadi tapi belum ada invoice → jurnal akrual.
+7. Periode berikutnya: jurnal pembalikan otomatis (reversing entry) agar tidak double-count.
+
+Histori Akun:
+8. User pilih akun + periode → sistem tampilkan semua jurnal yang menyentuh akun tsb.
+9. Running balance: saldo awal + debit - kredit per transaksi.
+10. Drill-down: klik transaksi → buka detail jurnal.
 
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Buku Besar.
@@ -674,6 +1123,68 @@ ALTER tabel yang sudah ada:
 - [ ] Laporan umur stok per batch/seri
 - [ ] PHPUnit untuk setiap alur di atas
 
+**Form Input:**
+
+Form Nomor Seri (`product_serials`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Produk | lookup | Ya | |
+| Nomor Seri | text | Ya | unique per tenant+produk |
+| Status | auto: in_stock/sold/returned | - | |
+| Gudang | lookup | Tidak | lokasi saat ini |
+| GR Item | auto (saat penerimaan) | - | track sumber |
+| Sales Item | auto (saat penjualan) | - | track keluar |
+
+Form Batch/Lot (`product_batches`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Produk | lookup | Ya | |
+| Nomor Batch | text | Ya | unique per tenant+produk |
+| Tanggal Kedaluwarsa | date | Tidak | untuk FEFO |
+| GR Item | auto (saat penerimaan) | - | |
+
+Form Permintaan Material (`material_requisitions` + `material_requisition_items`):
+
+Tab Informasi:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Nomor Dokumen | auto | - | |
+| Cabang | lookup | Ya | |
+| BOM/Assembly | lookup (opsional) | Tidak | jika permintaan dari produksi |
+| Status | auto: draft/approved/fulfilled/cancelled | - | |
+
+Tab Detail Item:
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Produk | lookup | Ya | |
+| Qty Diminta | number | Ya | |
+| Qty Terpenuhi | number (auto) | - | saat fulfilment |
+
+**Tab Layout:** Ya — Material Requisition punya tab Informasi dan tab Detail Item. Serial dan Batch adalah master sederhana (single form). Terkait tabel `product_serials`, `product_batches`, `material_requisitions`, `material_requisition_items`, `stock_movements` (ALTER dengan batch_id dan serial_id), dan `products`.
+
+**Business Flow:**
+
+Nomor Seri:
+1. Produk ditandai "track serial" → saat penerimaan barang (GR), user assign nomor seri per unit.
+2. Serial status = in_stock, tercatat di gudang.
+3. Saat penjualan (sales invoice/delivery order), user pilih nomor seri → status berubah ke sold.
+4. Retur penjualan → status kembali ke returned.
+
+Batch/Lot:
+5. Produk ditandai "track batch" → saat GR, user input nomor batch + expiry date.
+6. Saat picking (DO/sales), sistem pakai FEFO (First Expired First Out) → batch dengan expiry terdekat dipilih dulu.
+7. Laporan umur stok: batch yang mendekati expiry ditandai warning.
+
+Permintaan Material:
+8. Produksi butuh material → buat material requisition → pilih BOM/assembly (opsional, untuk auto-fill item).
+9. Approve requisition → status approved.
+10. Gudang keluarkan material → update fulfilled_quantity → status fulfilled saat semua terpenuhi.
+11. Stock movement tercatat dengan batch_id/serial_id untuk traceability.
+
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Persediaan.
 
@@ -712,6 +1223,31 @@ ada sehingga migration tetap ringan.
 - [ ] Anomali: deteksi fluktuasi tidak wajar di akun utama
 - [ ] Ringkasan naratif dari laporan keuangan
 - [ ] PHPUnit untuk generator insight
+
+**Form Input:**
+
+Form/Laporan Insight AI (`report_insights`):
+
+| Field | Input | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| Tipe Laporan | select: financial / sales / inventory | Ya | sumber data |
+| Periode Awal | date | Ya | |
+| Periode Akhir | date | Ya | |
+| Tipe Insight | select: trend / anomaly / summary | Ya | |
+| Payload | JSON (auto-generate) | - | hasil analisa AI |
+| Generated By | auto: system / user-triggered | - | |
+
+**Tab Layout:** Tidak — single report page dengan filter, bukan form input dengan tab. Tidak ada relasi FK ke tabel transaksi; insight dibaca dari laporan yang sudah ada.
+
+**Business Flow:**
+
+1. Sistem menjalankan analisa otomatis (scheduled) atau user trigger manual.
+2. Baca data laporan keuangan (profit & loss, balance sheet) atau laporan penjualan/inventory untuk rentang periode.
+3. Trend: bandingkan revenue, expense, margin antar periode → identifikasi naik/turun dan persentase perubahan.
+4. Anomaly: deteksi fluktuasi tidak wajar di akun utama (mis. expense naik > 50% tanpa penjelasan).
+5. Summary: generate ringkasan naratif (template-based atau AI/LLM) dari laporan.
+6. Simpan hasil ke `report_insights` → tampilkan di dashboard laporan.
+7. User dapat melihat insight per periode dan per tipe laporan.
 
 Definition of Done: PHPUnit lulus, Pint + PHPStan clean, `_progress.md` update.
 Ref: `modules/accurate/accurate-sidebar-menu.md` bagian Daftar Laporan.
