@@ -3,7 +3,7 @@ import unittest
 from modules.vps.config import VPSConfig
 from modules.vps.fakes import FakeSSHRunner
 from modules.vps.setup import VPSSetupper
-from modules.vps.templates import BE_SERVICE, NGINX_DEFAULT
+from modules.vps.templates import BE_SERVICE, NGINX_DEFAULT, NGINX_SITES
 
 
 class VPSSetupperTest(unittest.TestCase):
@@ -42,6 +42,41 @@ class VPSSetupperTest(unittest.TestCase):
     def test_default_site_points_to_hello_and_api_proxy(self):
         self.assertIn('/var/www/hello', NGINX_DEFAULT)
         self.assertIn('proxy_pass http://127.0.0.1:3000', NGINX_DEFAULT)
+
+    def test_default_site_api_location_not_nested_inside_root_location(self):
+        lines = NGINX_DEFAULT.splitlines()
+        depth = 0
+        api_depth = None
+        root_depth = None
+        for line in lines:
+            stripped = line.strip()
+            if stripped == 'location / {':
+                root_depth = depth
+            elif stripped == 'location /api {':
+                api_depth = depth
+            depth += line.count('{') - line.count('}')
+        self.assertIsNotNone(root_depth)
+        self.assertIsNotNone(api_depth)
+        self.assertEqual(api_depth, root_depth,
+            'location /api must be at the same nesting level as location /')
+
+    def test_be_site_has_ssl_listen_443(self):
+        be_template = NGINX_SITES['be-haidi20']
+        self.assertIn('listen 443 ssl', be_template)
+        self.assertIn('ssl_certificate', be_template)
+        self.assertIn('ssl_certificate_key', be_template)
+
+    def test_issue_certs_covers_all_subdomains(self):
+        self.setupper.issue_certs()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        for domain in (
+            'haidinata.my.id',
+            'be.haidinata.my.id',
+            'ci.haidinata.my.id',
+            'karta.haidinata.my.id',
+            'inventory.haidinata.my.id',
+        ):
+            self.assertIn(domain, joined)
 
     def test_setup_be_service_enables_and_starts(self):
         self.setupper.setup_be_service()

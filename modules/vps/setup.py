@@ -61,6 +61,13 @@ class VPSSetupper:
             % (self.config.domain, self.config.domain),
             timeout=600,
         )
+        for subdomain in ('be', 'ci', 'karta', 'inventory'):
+            fqdn = '%s.%s' % (subdomain, self.config.domain)
+            self._run(
+                'certbot -n --nginx -d %s --agree-tos --register-unsafely-without-email'
+                % fqdn,
+                timeout=600,
+            )
 
     def configure_ufw(self):
         self._run('ufw allow OpenSSH')

@@ -11,7 +11,6 @@ NGINX_DEFAULT = '''server {
     root /var/www/hello;
     index index.html;
 
-    location / {
     location /api {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
@@ -19,14 +18,20 @@ NGINX_DEFAULT = '''server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 
+    location / {
         try_files $uri $uri/ /index.html;
     }
 }
 '''
 
 NGINX_BE = '''server {
-    listen 80;
+    listen 443 ssl;
     server_name be.haidinata.my.id;
+
+    ssl_certificate /etc/letsencrypt/live/be.haidinata.my.id/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/be.haidinata.my.id/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -36,6 +41,15 @@ NGINX_BE = '''server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+}
+server {
+    if ($host = be.haidinata.my.id) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80;
+    server_name be.haidinata.my.id;
+    return 404;
 }
 '''
 
