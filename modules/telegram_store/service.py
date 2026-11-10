@@ -207,6 +207,17 @@ class TelegramStoreService:
         self.apply_status(invoice, payload)
         return True
 
+    def verify_signature(self, signature: str, ref_id: str) -> bool:
+        return verify_digiflazz_signature(
+            self.digiflazz_username,
+            self.digiflazz_api_key,
+            ref_id,
+            signature,
+        )
+
+    def verify_signature_key(self) -> str:
+        return self.digiflazz_api_key
+
     def _record_ledger(
         self,
         invoice: str,
