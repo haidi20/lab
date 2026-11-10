@@ -62,6 +62,7 @@ di aplikasi Telegram.
 - `/produk [kata kunci]`: cari produk.
 - `/beli <SKU> <nomor/id tujuan>`: buat transaksi.
 - `/cekstatus <invoice>` atau `/status <invoice>`: cek status transaksi.
+- `/saldo`: buat tiket deposit Digiflazz dengan pilihan nominal dan bank.
 - `/hermes`, `/starthermes`, atau `/statushermes`: lihat kartu Trello di
   progress, checklist-nya, dan status cron Hermes.
 - `/hermeslive` atau `/livehermes`: mulai monitoring realtime. Bot mengirim
@@ -80,9 +81,6 @@ Penyedia fallback tambahan bisa diisi lewat `LIMO_ROUTER_*`, `NILOVR_*`,
 `NOCTA_*`, `MAHI_CENTER_*`, `TIP_ROUTER_*`, atau `MAZOV_*`. Bot memakai
 provider pertama yang aktif jika provider utama gagal.
 - `/akhirihermes` atau `/tutuphermes`: akhiri mode komunikasi Hermes.
-
-`/saldo` dinonaktifkan sampai payment gateway aktif. Perintah itu hanya
-menampilkan pesan bahwa fitur belum tersedia.
 
 Tombol menu di pesan `/start` memicu perintah yang sama melalui
 callback query, jadi pengguna bisa memilih fitur tanpa mengetik.
