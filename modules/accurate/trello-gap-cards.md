@@ -922,4 +922,105 @@ mengikuti kapasitas.
 - Checklist: tren revenue/expense/margin; deteksi anomali; ringkasan
   naratif; PHPUnit.
 - Migration: `report_insights`.
+
+---
+
+## Business Flow dan Aturan Implementasi
+
+Bagian ini adalah aturan lintas kartu. Semua kartu pecahan WAJIB mengikuti
+alur, mapping jurnal, dan aturan di bawah agar dokumen antar modul konsisten.
+
+### Lifecycle Dokumen Penjualan
+
+```text
+Quotation (draft -> sent -> won/lost/expired)
+  -> Sales Order (draft -> confirmed -> partial -> fulfilled -> closed)
+    -> Delivery Order (draft -> posted; stok berkurang saat posting)
+      -> Sales Invoice (draft -> posted; AR terbentuk saat posting)
+        -> Sales Receipt (posted; piutang berkurang)
+  -> Sales Down Payment (posted; alokasi ke invoice)
+Retur Penjualan (posted; stok bertambah, AR berkurang / refund)
+```
+
+- Transisi status hanya maju; pembatalan memakai status `cancelled`, bukan
+  menghapus dokumen (insert-only audit).
+- DO hanya boleh dibuat dari SO yang `confirmed`; invoice boleh sebagian
+  (partial invoicing) dengan sisa qty tetap terbuka.
+- DP wajib teralokasi penuh; sisa DP bisa direfund.
+
+### Lifecycle Dokumen Pembelian
+
+```text
+Purchase Requisition (draft -> approved -> converted)
+  -> Purchase Order (draft -> approved -> partial -> received -> closed)
+    -> Receive Item / GR (draft -> posted; stok bertambah, GRIR terbentuk)
+      -> Purchase Invoice (draft -> posted; 3-way matching, hutang terbentuk)
+        -> Purchase Payment (posted; hutang berkurang)
+  -> Purchase Down Payment (posted; alokasi ke faktur)
+Retur Pembelian (posted; stok berkurang, hutang berkurang / refund)
+```
+
+- 3-way matching wajib lulus (PO vs GR vs invoice) sebelum invoice posted;
+  selisih harga/qty menolak posting kecuali di-overwrite dengan otorisasi.
+- PO approval dinamis per company/branch mengikuti kartu Trello yang sudah
+  ada (Dynamic PO Approval).
+
+### Mapping Jurnal Per Dokumen
+
+| Dokumen | Debit | Kredit |
+| --- | --- | --- |
+| Sales Invoice | AR (piutang) | Revenue + PPN Keluaran |
+| Sales Receipt | Kas/Bank | AR |
+| Sales Down Payment | Kas/Bank | Uang Muka Penjualan (liability) |
+| Alokasi DP ke Invoice | Uang Muka Penjualan | AR |
+| Delivery Order (posting) | COGS / HPP | Inventory |
+| Retur Penjualan | Sales Return + PPN Keluaran (koreksi) | AR / Kas |
+| Purchase Invoice | Inventory + PPN Masukan | AP (hutang) + GRIR |
+| GR (posting) | Inventory | GRIR |
+| Purchase Payment | AP | Kas/Bank |
+| Purchase Down Payment | Uang Muka Pembelian (asset) | Kas/Bank |
+| Retur Pembelian | AP / Kas | Inventory + PPN Masukan (koreksi) |
+| Bank Transfer | Bank tujuan | Bank asal (+ fee ke beban bank) |
+| Akuisisi Aset | Fixed Asset | Kas/AP |
+| Depresiasi | Beban Depresiasi | Akumulasi Depresiasi |
+| Penjualan Aset | Kas + Akumulasi Depresiasi (+ loss bila ada) | Fixed Asset + PPN (jika) (+ gain bila ada) |
+| Pembebanan (expense accrual) | Beban | Utang Beban |
+
+- Semua jurnal insert-only; pembalikan memakai reversal entry, bukan update.
+- COA mapping tidak boleh hardcode di kode; simpan di tabel mapping per
+  company/branch (mengikuti kartu MVP COA: Mapping jurnal level branch).
+
+### Alur Period-End Close
+
+Urutan wajib tutup periode (menghubungkan kartu 1B, 3C, 7A):
+
+1. Posting semua dokumen draft yang tanggalnya masuk periode.
+2. Depresiasi aset tetap (kartu 1B).
+3. Pembebanan/akrual dan prabayar (kartu 7A, tabel `expense_accruals`).
+4. Rekonsiliasi bank dan penyesuaian selisih (kartu 3C).
+5. Validasi anggaran vs realisasi (kartu 7B).
+6. Jurnal penutup periode; kunci periode (kartu existing Jurnal penutup).
+
+Setelah periode dikunci, transaksi ber-tanggal periode tersebut DITOLAK.
+
+### Aturan Penomoran Dokumen
+
+- Format: `{PREFIX}/{CABANG}/{YYYYMM}/{SEQ}` - contoh `INV/BDG/202611/00042`.
+- Sequence per `tenant + branch + document_type` di tabel
+  `document_sequences`; increment atomik (SELECT FOR UPDATE) supaya tidak
+  duplicate saat concurrent.
+- Sumber prefix mengikuti field `typeAutoNumber` di `<menu>.md` Accurate
+  (mis. Penawaran Penjualan punya auto number sendiri).
+- Nomor final terbentuk saat dokumen posted; draft memakai nomor sementara.
+
+### Aturan Akses dan Approval
+
+- Pemetaan Akses Grup Accurate ke permission matrix klinik: setiap menu
+  Accurate = satu permission key (mis. `sales.quotation.view`,
+  `sales.quotation.create`).
+- Approval berjenjang untuk dokumen material: PR/PO butuh approver sesuai
+  threshold nilai (configurable per company/branch).
+- Semua endpoint WAJIB cek permission di middleware; UI hanya menyembunyikan
+  menu tanpa akses, bukan pengganti otorisasi server.
+- Audit log wajib untuk create/update/delete/approve semua dokumen.
 - Ref folder: `modules/accurate/rea-accurate-analysis.md` (pola analisa).

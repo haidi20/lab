@@ -243,6 +243,37 @@ capture Accurate. Skill eksternal akuntansi/audit yang tersedia saat pencarian
 semuanya di bawah 2K installs dan generik, sehingga tidak direkomendasikan;
 skill lokal di atas sudah lebih spesifik terhadap proses pembuatan fitur.
 
+## Status Capture Per Menu
+
+Per scan 10 November 2026: dari 46 folder menu, hanya 2 yang `data.json`-nya
+terisi record hasil capture REA. Sisanya masih kosong (`record_count: 0`
+atau belum ada `data.json`). Sesuai `AGENTS.md`, implementasi fitur Accurate
+TIDAK BOLEH berdasar asumsi: kartu/fitur yang menunjuk menu belum-capture
+WAJIB menjalankan capture REA dulu (`capture-browser-scenario`) sebelum
+menulis migration/implementasi.
+
+| Status | Menu | Kewajiban Sebelum Implementasi |
+| --- | --- | --- |
+| Tercapture | `audit`, `glaccount` | Langsung boleh implementasi; field mengikuti `data.json` + `<menu>.md`. |
+| Belum capture | 44 folder lainnya | Capture REA dulu per menu, isi `data.json` (record asli) dan `<menu>.md`/`<menu>.json` (struktur form), baru implementasi. |
+
+Daftar menu belum capture: `accountbudget_monitor`, `accountbudget_target`,
+`accountbudget_transfer`, `account_history`, `application_epayment`,
+`application_virtual_account`, `audit_journal`, `bank_book`,
+`bank_reconcile`, `bank_statement`, `bank_transfer`, `branch`, `calendar`,
+`contact`, `customer`, `customer_category`, `delivery_order`,
+`ecommerce_setting`, `employee`, `employee_fee`, `employee_payment`,
+`expense_accrual`, `freeonboard`, `internet_banking`, `journal_voucher`,
+`memorize_transaction`, `other_deposit`, `other_payment`, `payment_term`,
+`period_end`, `price_category`, `recurring`, `salesman_commission`,
+`sales_check_in`, `sales_downpayment`, `sales_invoice`, `sales_order`,
+`sales_quotation`, `sales_receipt`, `sales_return`, `sales_target`,
+`sellingprice_adjustment`, `shipment`, `tax`.
+
+Prioritas capture mengikuti prioritas kartu Trello: `sales_quotation`,
+`sales_downpayment`, `payment_term`, `customer_category`, `price_category`,
+`salesman_commission`, `sales_target`, lalu menu pembelian dan kas bank.
+
 ## Gap Menu vs Trello Klinik
 
 Analisa board Trello `Inventory` (`vB4uz4Qb`) per 10 November 2026
