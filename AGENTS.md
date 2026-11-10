@@ -48,6 +48,41 @@
   Never fill `data.json` with structural documentation as a substitute
   for missing data.
 
+## Skill Routing (Wajib)
+
+- Setiap task WAJIB TDD: test gagal dulu, baru implementasi (lihat bagian
+  Testing di atas). Skill yang dipakai tidak mengubah aturan TDD ini.
+- Sebelum mengerjakan task, cocokkan konteks task dengan tabel routing di
+  bawah, lalu BACA `SKILL.md` skill yang dipetakan sebelum menulis kode.
+- Task yang menyentuh `modules/accurate/` dalam bentuk apa pun WAJIB baca
+  `skills/accurate-human-automation/SKILL.md` terlebih dahulu.
+- Pemetaan menu Accurate sumber rujukan:
+  `modules/accurate/accurate-sidebar-menu.md` bagian Skill Untuk
+  Pengerjaan Fitur.
+
+### Pemetaan Konteks Task ke Skill
+
+| Kata kunci / konteks task | Skill | Menu Accurate terkait |
+| --- | --- | --- |
+| jurnal, posting, GL, buku besar | `journal-entries` | Buku Besar |
+| klasifikasi transaksi, coding ke akun | `classify-transactions` | Buku Besar, Kas & Bank |
+| COA, daftar akun, chart of accounts | `chart-of-accounts` | Buku Besar |
+| neraca saldo, trial balance, ATB | `adjusted-trial-balance` | Buku Besar |
+| depresiasi, akrual, prabayar, AJE, akhir tahun | `year-end-adjustments` | Buku Besar, Perusahaan (Proses Akhir Bulan) |
+| bank, rekening koran, statement, saldo bank | `extract-bank-statement`, `bank-reconciliation` | Kas & Bank |
+| rekonsiliasi AR/AP, subledger, umur piutang | `subledger-reconciliations` | Penjualan, Pembelian |
+| pembukuan multi-stream, register transaksi | `record-transactions` | Kas & Bank, Penjualan, Pembelian |
+| pendapatan, cut-off penjualan, principal/agent | `revenue-recognition` | Penjualan |
+| kapitalisasi, PPE, renovasi, perbaikan aset | `capitalise-or-expense`, `capex` | Aset Tetap, Pembelian |
+| pajak, PPN, Form C, SPT, e-Faktur | `tax-computation` | SmartLink Tax |
+| pembukuan penuh end-to-end | `do-books` | Semua menu |
+| ragu memilih skill akuntansi | `ask-accounting` | Semua menu |
+
+- Jika satu task menyentuh beberapa konteks, pakai semua skill yang
+  dipetakan; urutan kerja ikuti alur `do-books` bila end-to-end.
+- Skill UI (`emotion-ui-ux`, `web-design-guidelines`) tetap wajib untuk
+  task UI/UX sesuai bagian UI/UX Animation Standard: Emotion.
+
 ## UI/UX Animation Standard: Emotion
 
 - **Emotion adalah standar WAJIB untuk semua styling dan animasi UI/UX**

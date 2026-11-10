@@ -194,3 +194,51 @@ memakai `id` saja. Analisa ini memakai `uid` perusahaan aktif dan product
 
 Jumlah menu dapat berubah tergantung lisensi, fitur aktif, jenis produk,
 dan hak akses pengguna.
+
+## Skill Untuk Pengerjaan Fitur
+
+Skill berikut relevan untuk otomasi capture dan pengembangan fitur
+berdasarkan daftar menu di atas.
+
+### Wajib (Lokal)
+
+| Skill | Fungsi |
+| --- | --- |
+| `skills/accurate-human-automation` | Wajib untuk semua otomasi Accurate: REA MCP / `capture-browser-scenario`, pace manusia, kredensial hanya dari `.env`. |
+
+### Akuntansi dan Audit (Lokal)
+
+Skill lokal berikut memahami proses akuntansi dan memetakan langsung ke
+menu sidebar Accurate. Gunakan sesuai fitur yang dibangun.
+
+| Skill | Menu Terkait | Fungsi |
+| --- | --- | --- |
+| `ask-accounting` | Semua | Router jika bingung memilih skill akuntansi mana. |
+| `chart-of-accounts` | Buku Besar | Pemilihan COA dan overlay industri. |
+| `classify-transactions` | Buku Besar, Kas & Bank | Klasifikasi transaksi ke COA, substanti MPERS/MFRS. |
+| `journal-entries` | Buku Besar | Posting jurnal double-entry balancing, lalu roll TB. |
+| `record-transactions` | Kas & Bank, Pembelian, Penjualan | Register multi-stream (bank, sales, purchases, payroll) dengan provenance. |
+| `extract-bank-statement` | Kas & Bank | Ekstrak rekening koran PDF/CSV ke transaksi dengan bukti saldo. |
+| `bank-reconciliation` | Kas & Bank | Rekonsiliasi bank GL ke statement. |
+| `subledger-reconciliations` | Penjualan, Pembelian | Rekonsiliasi AR/AP dan subledger ke kontrol. |
+| `adjusted-trial-balance` | Buku Besar | Neraca saldo setelah penyesuaian via roll_tb. |
+| `year-end-adjustments` | Buku Besar, Proses Akhir Bulan | Katalog dan posting AJE akhir tahun (depresiasi, akrual, prabayar). |
+| `revenue-recognition` | Penjualan | Pengakuan pendapatan MPERS/MFRS, cut-off, principal vs agent. |
+| `capitalise-or-expense` | Aset Tetap, Pembelian | Analisis kapitalisasi vs beban untuk pengeluaran material. |
+| `capex` | Aset Tetap | Cabang analisis kapitalisasi (PPE, renovasi, perbaikan). |
+| `tax-computation` | SmartLink Tax | Perhitungan pajak dari akun (Form C, pajak penghasilan). |
+| `do-books` | Semua | Entry point pengerjaan pembukuan penuh end-to-end. |
+
+### Pelengkap (Eksternal)
+
+| Skill | Installs | Fungsi | Install |
+| --- | ---: | --- | --- |
+| `vercel-labs/agent-skills@agent-browser` | 1.4M | Otomasi browser agent-grade untuk navigasi dan verifikasi DOM. | `npx skills add vercel-labs/agent-skills@agent-browser` |
+| `microsoft/playwright-cli@playwright-cli` | 212.5K | Kontrol Playwright langsung untuk scraping tabel per menu. | `npx skills add microsoft/playwright-cli@playwright-cli` |
+| `browser-use/browser-use@browser-use` | 99.4K | Otomasi browser berbasis AI sebagai alternatif. | `npx skills add browser-use/browser-use@browser-use` |
+
+Catatan: skill eksternal tidak boleh menggantikan alur REA yang diwajibkan
+`AGENTS.md` untuk Accurate; hanya pelengkap untuk kebutuhan umum di luar
+capture Accurate. Skill eksternal akuntansi/audit yang tersedia saat pencarian
+semuanya di bawah 2K installs dan generik, sehingga tidak direkomendasikan;
+skill lokal di atas sudah lebih spesifik terhadap proses pembuatan fitur.
