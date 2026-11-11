@@ -61,6 +61,8 @@ class TelegramStoreRealDigiflazzTests(unittest.TestCase):
                 key: os.environ.get(key, "")
                 for key in ("DIGIFLAZZ_USERNAME", "DIGIFLAZZ_API_KEY", "DIGIFLAZZ_DEVELOPMENT_KEY")
             }
+            if not all(values.values()):
+                self.skipTest("Kredensial Digiflazz belum lengkap untuk fetch product list")
             client = DigiflazzClient(
                 values["DIGIFLAZZ_USERNAME"],
                 values["DIGIFLAZZ_API_KEY"],

@@ -15,6 +15,9 @@ class SQLiteOrderStore:
         self.connection.execute("PRAGMA synchronous = NORMAL")
         self._initialize()
 
+    def close(self) -> None:
+        self.connection.close()
+
     def _initialize(self) -> None:
         with self.connection:
             self.connection.execute(

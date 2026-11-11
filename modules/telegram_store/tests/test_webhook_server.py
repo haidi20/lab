@@ -36,8 +36,9 @@ class WebhookServerTests(unittest.TestCase):
         self.thread = threading.Thread(target=self.server.serve_forever)
         self.thread.daemon = True
         self.thread.start()
-        self.addCleanup(self.server.shutdown)
+        self.addCleanup(self.store.close)
         self.addCleanup(self.server.server_close)
+        self.addCleanup(self.server.shutdown)
 
     def post(self, payload: dict[str, object], signature: str | None) -> tuple[int, dict[str, object]]:
         request = urllib.request.Request(
