@@ -149,12 +149,14 @@ class LoadEnvTest(unittest.TestCase):
             path = f.name
         try:
             os.environ.pop('VPS_HOST', None)
+            os.environ.pop('VPS_PORT', None)
             config = VPSConfig.from_env(env_file=path)
             self.assertEqual(config.host, '10.0.0.1')
             self.assertEqual(config.port, 2222)
         finally:
             os.unlink(path)
             os.environ.pop('VPS_HOST', None)
+            os.environ.pop('VPS_PORT', None)
 
 
 if __name__ == '__main__':
