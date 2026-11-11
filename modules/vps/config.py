@@ -13,7 +13,7 @@ class VPSConfig:
     repo_dir: str = '/var/www/hello-repo'
     repo_url: str = 'https://github.com/haidi20/haidi20.git'
     karta_repo_dir: str = '/var/www/karta'
-    karta_repo_url: str = 'https://github.com/haidi20/karta.git'
+    karta_repo_url: str = 'https://github.com/utamaweb/karta_spa.git'
     klinik_repo_dir: str = '/var/www/klinik'
     klinik_repo_url: str = 'https://github.com/haidi20/klinik.git'
     domain: str = 'haidinata.my.id'

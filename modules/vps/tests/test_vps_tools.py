@@ -81,7 +81,8 @@ class DeployTest(unittest.TestCase):
         self.assertIn('git pull', joined)
         self.assertIn('composer install', joined)
         self.assertIn('php artisan', joined)
-        self.assertIn('/var/www/klinik', joined)
+        self.assertIn('/var/www/klinik/src', joined,
+            'klinik Laravel app is inside src/ subdirectory')
 
     def test_deploy_portfolio_always_uses_git_pull_not_local_upload(self):
         runner = FakeSSHRunner()

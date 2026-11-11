@@ -7,7 +7,8 @@ from modules.vps.templates import (
 
 APT_PACKAGES = (
     'nginx certbot python3-certbot-nginx supervisor ufw git curl '
-    'php8.3-fpm redis-server'
+    'php8.3-fpm php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip '
+    'redis-server composer'
 )
 
 BUN_INSTALL_CMD = (
@@ -37,11 +38,19 @@ class VPSSetupper:
         if code != 0:
             self._run(BUN_INSTALL_CMD, timeout=600)
 
+    def clone_repos(self):
+        for repo_dir, repo_url in (
+            (self.config.repo_dir, self.config.repo_url),
+            (self.config.karta_repo_dir, self.config.karta_repo_url),
+            (self.config.klinik_repo_dir, self.config.klinik_repo_url),
+        ):
+            self._run(
+                'if [ -d %s/.git ]; then cd %s && git pull; else git clone %s %s; fi'
+                % (repo_dir, repo_dir, repo_url, repo_dir)
+            )
+
     def clone_repo(self):
-        self._run(
-            'if [ -d %s/.git ]; then cd %s && git pull; else git clone %s %s; fi'
-            % (self.config.repo_dir, self.config.repo_dir, self.config.repo_url, self.config.repo_dir)
-        )
+        self.clone_repos()
 
     def build_and_deploy_portfolio(self):
         self._run('cd %s/fe && bun install && bun run build' % self.config.repo_dir, timeout=1200)
@@ -56,9 +65,34 @@ class VPSSetupper:
         self._run('systemctl reload nginx')
 
     def setup_be_service(self):
+        self._run('cd %s/be && bun install' % self.config.repo_dir, timeout=600)
         self.runner.write_file('/etc/systemd/system/haidi20-be.service', BE_SERVICE, mode='644')
         self._run('systemctl daemon-reload')
         self._run('systemctl enable --now haidi20-be')
+
+    def enable_services(self):
+        self._run('systemctl enable --now php8.3-fpm')
+        self._run('systemctl enable --now redis-server')
+
+    def deploy_ci_monitor(self):
+        self._run('mkdir -p /var/www/ci-monitor')
+        ci_index = __import__('os').path.join(
+            __import__('os').path.dirname(__file__), 'ci_monitor', 'index.php'
+        )
+        with open(ci_index, 'r', encoding='utf-8') as f:
+            content = f.read()
+        self.runner.write_file('/var/www/ci-monitor/index.php', content)
+
+    def setup_laravel_env(self):
+        for repo_dir, env_example in (
+            (self.config.karta_repo_dir, None),
+            ('%s/src' % self.config.klinik_repo_dir, None),
+        ):
+            self._run(
+                'if [ ! -f %s/.env ] && [ -f %s/.env.example ]; then cp %s/.env.example %s/.env; fi'
+                % (repo_dir, repo_dir, repo_dir, repo_dir)
+            )
+            self._run('cd %s && php artisan key:generate --force' % repo_dir)
 
     def issue_certs(self):
         self._run(
@@ -98,9 +132,12 @@ class VPSSetupper:
         self.install_packages()
         self.install_bun()
         if not skip_clone:
-            self.clone_repo()
+            self.clone_repos()
             self.build_and_deploy_portfolio()
+            self.deploy_ci_monitor()
+            self.setup_laravel_env()
         self.configure_nginx()
+        self.enable_services()
         self.setup_be_service()
         self.configure_ufw()
         self.configure_cicd()

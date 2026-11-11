@@ -78,6 +78,60 @@ class VPSSetupperTest(unittest.TestCase):
         ):
             self.assertIn(domain, joined)
 
+    def test_install_packages_includes_composer(self):
+        self.setupper.install_packages()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('composer', joined)
+
+    def test_clone_repos_clones_all_three_projects(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.clone_repos()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('github.com/haidi20/haidi20.git', joined)
+        self.assertIn('github.com/utamaweb/karta_spa.git', joined)
+        self.assertIn('github.com/haidi20/klinik.git', joined)
+
+    def test_clone_repos_uses_git_pull_when_repo_exists(self):
+        self.runner.outputs['if [ -d /var/www/hello-repo/.git ]'] = ('', '', 0)
+        self.runner.outputs['if [ -d /var/www/karta/.git ]'] = ('', '', 0)
+        self.runner.outputs['if [ -d /var/www/klinik/.git ]'] = ('', '', 0)
+        self.setupper.clone_repos()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('git pull', joined)
+
+    def test_setup_be_installs_bun_dependencies_in_be_folder(self):
+        self.setupper.setup_be_service()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('bun install', joined)
+        self.assertIn('/var/www/hello-repo/be', joined)
+
+    def test_enable_php_fpm_and_redis(self):
+        self.setupper.enable_services()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('systemctl enable --now php8.3-fpm', joined)
+        self.assertIn('systemctl enable --now redis-server', joined)
+
+    def test_enable_services_called_in_full_setup(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.run(skip_certs=True, skip_clone=True)
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('systemctl enable --now php8.3-fpm', joined)
+        self.assertIn('systemctl enable --now redis-server', joined)
+
+    def test_deploy_ci_monitor_uploads_index_php(self):
+        self.setupper.deploy_ci_monitor()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('/var/www/ci-monitor', joined)
+        self.assertIn('mkdir -p /var/www/ci-monitor', joined)
+
+    def test_laravel_env_setup_for_karta_and_klinik(self):
+        self.setupper.setup_laravel_env()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('.env', joined)
+        self.assertIn('key:generate', joined)
+        self.assertIn('/var/www/karta', joined)
+        self.assertIn('/var/www/klinik/src', joined)
+
     def test_setup_be_service_enables_and_starts(self):
         self.setupper.setup_be_service()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)

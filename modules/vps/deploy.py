@@ -48,7 +48,9 @@ def deploy_from_git(runner, config, site):
     elif site == 'karta':
         _deploy_laravel_from_git(runner, config.karta_repo_dir, SITE_ROOTS['karta'], 'main')
     elif site == 'klinik':
-        _deploy_laravel_from_git(runner, config.klinik_repo_dir, SITE_ROOTS['klinik'], 'haidi')
+        _deploy_laravel_from_git(
+            runner, '%s/src' % config.klinik_repo_dir, SITE_ROOTS['klinik'], 'haidi'
+        )
     else:
         raise ValueError('site tidak dikenal: %s' % site)
 
