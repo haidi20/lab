@@ -1,7 +1,9 @@
-import unittest
+﻿import unittest
+import os
+import tempfile
 
 from modules.vps.audit import collect_audit
-from modules.vps.config import VPSConfig
+from modules.vps.config import VPSConfig, load_env
 from modules.vps.deploy import deploy_all_sites, deploy_dist, deploy_from_git, deploy_site
 from modules.vps.fakes import FakeSSHRunner
 from modules.vps.health import check_health
@@ -105,6 +107,54 @@ class DeployTest(unittest.TestCase):
             wf_path = '%s/.github/workflows/deploy.yml' % repo_dir
             self.assertIn(wf_path, written_files)
             self.assertIn('git pull', runner.files[wf_path])
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+
+
+class LoadEnvTest(unittest.TestCase):
+    def test_load_env_reads_file_and_sets_environ(self):
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.env', delete=False) as f:
+            f.write('VPS_HOST=172.232.112.39\nVPS_PORT=22\n')
+            path = f.name
+        try:
+            os.environ.pop('VPS_HOST', None)
+            os.environ.pop('VPS_PORT', None)
+            load_env(path)
+            self.assertEqual(os.environ['VPS_HOST'], '172.232.112.39')
+            self.assertEqual(os.environ['VPS_PORT'], '22')
+        finally:
+            os.unlink(path)
+            os.environ.pop('VPS_HOST', None)
+            os.environ.pop('VPS_PORT', None)
+
+    def test_load_env_does_not_overwrite_existing(self):
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.env', delete=False) as f:
+            f.write('VPS_HOST=1.2.3.4\n')
+            path = f.name
+        try:
+            os.environ['VPS_HOST'] = '9.9.9.9'
+            load_env(path)
+            self.assertEqual(os.environ['VPS_HOST'], '9.9.9.9')
+        finally:
+            os.unlink(path)
+            os.environ.pop('VPS_HOST', None)
+
+    def test_from_env_reads_dotenv(self):
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.env', delete=False) as f:
+            f.write('VPS_HOST=10.0.0.1\nVPS_PORT=2222\n')
+            path = f.name
+        try:
+            os.environ.pop('VPS_HOST', None)
+            config = VPSConfig.from_env(env_file=path)
+            self.assertEqual(config.host, '10.0.0.1')
+            self.assertEqual(config.port, 2222)
+        finally:
+            os.unlink(path)
+            os.environ.pop('VPS_HOST', None)
 
 
 if __name__ == '__main__':

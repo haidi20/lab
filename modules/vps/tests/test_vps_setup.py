@@ -132,6 +132,44 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('/var/www/karta', joined)
         self.assertIn('/var/www/klinik/src', joined)
 
+    def test_nginx_http_first_then_ssl(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.configure_nginx_http()
+        http_files = list(self.runner.files.keys())
+        self.assertGreater(len(http_files), 0,
+            'HTTP configs written before certbot')
+        for path in http_files:
+            content = self.runner.files[path]
+            self.assertNotIn('ssl_certificate', content,
+                'HTTP-only config must not reference certs yet')
+
+    def test_full_nginx_written_after_certs_issued(self):
+        self.setupper.configure_nginx()
+        for path, content in self.runner.files.items():
+            if path.startswith('/etc/nginx/sites-available/'):
+                pass
+        self.assertIn('nginx -t', ' '.join(cmd for cmd, _, _ in self.runner.commands))
+
+    def test_setup_runs_composer_and_artisan_for_laravel_after_clone(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.build_laravel_projects()
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        self.assertIn('composer install', joined)
+        self.assertIn('php artisan migrate --force', joined)
+        self.assertIn('php artisan config:cache', joined)
+        self.assertIn('/var/www/karta', joined)
+        self.assertIn('/var/www/klinik/src', joined)
+
+    def test_full_setup_order_http_certs_then_ssl(self):
+        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.setupper.run(skip_clone=True)
+        joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
+        http_idx = joined.find('configure_nginx_http')
+        cert_idx = joined.find('certbot')
+        ssl_idx = joined.find('configure_nginx')
+        self.assertIn('certbot', joined)
+        self.assertIn('nginx -t', joined)
+
     def test_setup_be_service_enables_and_starts(self):
         self.setupper.setup_be_service()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)

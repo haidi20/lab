@@ -20,6 +20,8 @@ class SSHRunner:
             )
             if self.config.key_path:
                 kwargs['key_filename'] = self.config.key_path
+                if self.config.password:
+                    kwargs['password'] = self.config.password
             elif self.config.password:
                 kwargs['password'] = self.config.password
             client.connect(**kwargs)
