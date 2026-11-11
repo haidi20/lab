@@ -3,6 +3,7 @@ from modules.vps.templates import (
     CICD_LARAVEL,
     CICD_PORTFOLIO,
     NGINX_SITES,
+    strip_ssl,
 )
 
 APT_PACKAGES = (
@@ -63,6 +64,25 @@ class VPSSetupper:
             self._run('ln -sf /etc/nginx/sites-available/%s /etc/nginx/sites-enabled/%s' % (name, name))
         self._run('nginx -t')
         self._run('systemctl reload nginx')
+
+    def configure_nginx_http(self):
+        for name, content in NGINX_SITES.items():
+            http_content = strip_ssl(content)
+            self.runner.write_file('/etc/nginx/sites-available/%s' % name, http_content)
+            self._run('ln -sf /etc/nginx/sites-available/%s /etc/nginx/sites-enabled/%s' % (name, name))
+        self._run('nginx -t')
+        self._run('systemctl reload nginx')
+
+    def build_laravel_projects(self):
+        for repo_dir in (self.config.karta_repo_dir, '%s/src' % self.config.klinik_repo_dir):
+            self._run(
+                'cd %s && composer install --no-dev --optimize-autoloader' % repo_dir,
+                timeout=1200,
+            )
+            self._run('cd %s && php artisan migrate --force' % repo_dir, timeout=300)
+            self._run(
+                'cd %s && php artisan config:cache && php artisan route:cache' % repo_dir
+            )
 
     def setup_be_service(self):
         self._run('cd %s/be && bun install' % self.config.repo_dir, timeout=600)
@@ -136,10 +156,11 @@ class VPSSetupper:
             self.build_and_deploy_portfolio()
             self.deploy_ci_monitor()
             self.setup_laravel_env()
-        self.configure_nginx()
+        self.configure_nginx_http()
         self.enable_services()
         self.setup_be_service()
         self.configure_ufw()
         self.configure_cicd()
         if not skip_certs:
             self.issue_certs()
+        self.configure_nginx()

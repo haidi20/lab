@@ -207,6 +207,33 @@ NGINX_SITES = {
     'klinik': NGINX_KLINIK,
 }
 
+
+def strip_ssl(nginx_block):
+    """Remove SSL directives from an nginx server block for HTTP-only bootstrap."""
+    lines = []
+    skip_until_empty = False
+    for line in nginx_block.splitlines():
+        stripped = line.strip()
+        if stripped.startswith('ssl_') or stripped.startswith('include /etc/letsencrypt'):
+            if stripped.endswith(';'):
+                continue
+            skip_until_empty = True
+            continue
+        if skip_until_empty:
+            if stripped.endswith(';'):
+                skip_until_empty = False
+                continue
+            continue
+        if 'listen 443 ssl' in stripped and 'default_server' in stripped:
+            lines.append(line.replace('443 ssl', '443'))
+        elif 'listen 443 ssl;' in stripped:
+            lines.append(line.replace('443 ssl;', '443;'))
+        elif stripped.startswith('# managed by Certbot'):
+            continue
+        else:
+            lines.append(line)
+    return '\n'.join(lines)
+
 CICD_PORTFOLIO = '''name: Deploy Portfolio
 on:
   push:
