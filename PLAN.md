@@ -12,3 +12,4 @@
 - [x] 10. Run `python -m unittest` full suite
 - [x] 11. Commit + push
 - [x] 12. Buat 9 gap card Trello klinik dari trello-gap-cards.md (dengan labels, checklist AC, detail lengkap)
+- [x] 13. Buat 22 pecahan card Trello klinik (parse dari trello-gap-cards.md) + AGENTS.md rule loading animation
