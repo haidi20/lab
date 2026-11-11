@@ -1,4 +1,9 @@
-from modules.vps.templates import BE_SERVICE, NGINX_SITES
+from modules.vps.templates import (
+    BE_SERVICE,
+    CICD_LARAVEL,
+    CICD_PORTFOLIO,
+    NGINX_SITES,
+)
 
 APT_PACKAGES = (
     'nginx certbot python3-certbot-nginx supervisor ufw git curl '
@@ -75,6 +80,20 @@ class VPSSetupper:
         self._run('ufw allow 443/tcp')
         self._run('ufw --force enable')
 
+    def configure_cicd(self):
+        portfolio_wf = '/var/www/hello-repo/.github/workflows/deploy.yml'
+        self.runner.write_file(portfolio_wf, CICD_PORTFOLIO)
+        karta_wf = '%s/.github/workflows/deploy.yml' % self.config.karta_repo_dir
+        self.runner.write_file(
+            karta_wf,
+            CICD_LARAVEL.format(name='karta', branch='main', repo_dir=self.config.karta_repo_dir),
+        )
+        klinik_wf = '%s/.github/workflows/deploy.yml' % self.config.klinik_repo_dir
+        self.runner.write_file(
+            klinik_wf,
+            CICD_LARAVEL.format(name='klinik', branch='haidi', repo_dir=self.config.klinik_repo_dir),
+        )
+
     def run(self, skip_certs=False, skip_clone=False):
         self.install_packages()
         self.install_bun()
@@ -84,5 +103,6 @@ class VPSSetupper:
         self.configure_nginx()
         self.setup_be_service()
         self.configure_ufw()
+        self.configure_cicd()
         if not skip_certs:
             self.issue_certs()

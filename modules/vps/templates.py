@@ -206,3 +206,51 @@ NGINX_SITES = {
     'karta': NGINX_KARTA,
     'klinik': NGINX_KLINIK,
 }
+
+CICD_PORTFOLIO = '''name: Deploy Portfolio
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: cd fe && bun install && bun run build
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/hello-repo && git pull
+            cd fe && bun install && bun run build
+            rm -rf /var/www/hello && mkdir -p /var/www/hello
+            cp -r fe/dist/. /var/www/hello/
+            systemctl reload nginx
+'''
+
+CICD_LARAVEL = '''name: Deploy {name}
+on:
+  push:
+    branches: [{branch}]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd {repo_dir} && git pull origin {branch}
+            composer install --no-dev --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache && php artisan route:cache
+            systemctl reload nginx
+'''

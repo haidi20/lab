@@ -6,10 +6,16 @@ Provisioning & deployment toolkit untuk replika VPS haidinata.my.id
 ## CLI
 
     python -m modules.vps audit    # snapshot kondisi VPS
-    python -m modules.vps setup    # bootstrap penuh: packages, bun, repo, nginx, systemd, ufw, certbot
+    python -m modules.vps setup    # bootstrap penuh: packages, bun, repo, nginx, systemd, ufw, certbot, cicd
     python -m modules.vps setup --skip-certs --skip-clone
     python -m modules.vps deploy --local-dist D:/learns/haidi20/dist
+    python -m modules.vps deploy --sites portfolio karta klinik
     python -m modules.vps health   # cek nginx, haidi20-be, HTTP 200
+
+Deploy multi-site memakai git pull di VPS (bukan upload dari lokal).
+Portfolio (bun build), karta dan klinik (composer + artisan) otomatis
+sesuai tipe project. CI/CD workflow deploy.yml di-generate untuk semua
+project: haidi20 (main), karta (main), klinik (haidi).
 
 Kredensial dibaca dari .env: VPS_HOST, VPS_PORT, VPS_USER,
 VPS_PASSWORD, VPS_SSH_KEY, VPS_DEPLOY_ROOT.

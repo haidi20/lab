@@ -12,6 +12,10 @@ class VPSConfig:
     deploy_root: str = '/var/www/hello'
     repo_dir: str = '/var/www/hello-repo'
     repo_url: str = 'https://github.com/haidi20/haidi20.git'
+    karta_repo_dir: str = '/var/www/karta'
+    karta_repo_url: str = 'https://github.com/haidi20/karta.git'
+    klinik_repo_dir: str = '/var/www/klinik'
+    klinik_repo_url: str = 'https://github.com/haidi20/klinik.git'
     domain: str = 'haidinata.my.id'
     be_port: int = 3000
 

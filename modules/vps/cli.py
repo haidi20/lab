@@ -4,7 +4,7 @@ import sys
 
 from modules.vps.audit import collect_audit
 from modules.vps.config import VPSConfig
-from modules.vps.deploy import SITE_ROOTS, deploy_all_sites, deploy_dist
+from modules.vps.deploy import deploy_all_sites, deploy_dist, deploy_from_git
 from modules.vps.health import check_health
 from modules.vps.setup import VPSSetupper
 from modules.vps.ssh import SSHRunner
@@ -34,17 +34,8 @@ def main(argv=None):
             print('setup selesai')
         elif args.command == 'deploy':
             if args.sites:
-                local_roots = {}
-                for site in args.sites:
-                    if site not in SITE_ROOTS:
-                        parser.error(
-                            'site tidak dikenal: %s (pilihan: %s)'
-                            % (site, ', '.join(SITE_ROOTS))
-                        )
-                    local_roots[site] = args.local_dist or site
-                results = deploy_all_sites(runner, local_roots)
-                for site, count in results.items():
-                    print('deploy %s: %d file' % (site, count))
+                deploy_all_sites(runner, config, args.sites)
+                print('deploy %s selesai' % ', '.join(args.sites))
             else:
                 if not args.local_dist:
                     parser.error('deploy butuh --local-dist atau --sites')
