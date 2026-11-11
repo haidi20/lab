@@ -11,3 +11,4 @@
 - [x] 9. Jalankan integration test ke VPS real (nginx, services, certs, subdomains)
 - [x] 10. Run `python -m unittest` full suite
 - [x] 11. Commit + push
+- [x] 12. Buat 9 gap card Trello klinik dari trello-gap-cards.md (dengan labels, checklist AC, detail lengkap)
