@@ -69,7 +69,7 @@ def main():
     existing = api('GET', '/lists/%s/cards' % TODO_LIST)
     existing_names = {c['name'] for c in existing}
 
-    cards = build_cards()
+    cards = build_cards() + build_pecahan_cards()
     for card_def in cards:
         if card_def['name'] in existing_names:
             print('SKIP (exists):', card_def['name'])
@@ -200,7 +200,7 @@ def build_cards():
             'Context: SO, DO, invoice, retur, dan piutang sudah ada di board, tetapi '
             'penawaran (quotation), uang muka penjualan, kategori pelanggan, kategori '
             'harga, komisi penjual, target penjualan, dan check-in belum ada kartunya.\n\n'
-            'Insight: Quotation adalah entry point funnel penjualan — status maju dari '
+            'Insight: Quotation adalah entry point funnel penjualan â€” status maju dari '
             'draft -> sent -> won/lost/expired. DP menghasilkan liability (Uang Muka '
             'Penjualan) yang dialokasi ke invoice saat terbentuk. Komisi dihitung '
             'otomatis per posted invoice.\n\n'
@@ -325,6 +325,49 @@ def build_cards():
     })
 
     return cards
+def build_pecahan_cards():
+    import re
+    md_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        '..', '..', '..', 'modules', 'accurate', 'trello-gap-cards.md'
+    )
+    with open(md_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    start = content.find('### 1A.')
+    end = content.find('## Business Flow')
+    pecahan = content[start:end]
+    cards = []
+    sections = re.split(r'(?=### )', pecahan)
+    for section in sections:
+        if not section.strip():
+            continue
+        title_match = re.search(r'\*\*Card:\*\* `\[([^\]]+)\] ([^`]+)`', section)
+        if not title_match:
+            continue
+        scope = title_match.group(1)
+        card_name = '[' + scope + '] ' + title_match.group(2)
+        mig_match = re.search(r'Migration: (.+?)(?:\n- |\n\n)', section, re.DOTALL)
+        migration = mig_match.group(1).strip() if mig_match else ''
+        ac_matches = re.findall(r'(?:- Checklist|(?:^|\n)\s*-)\s*:?\s*(.+?)(?:\n|$)', section)
+        deduped = list(dict.fromkeys(x.strip().rstrip(';') for x in ac_matches if len(x.strip()) > 5 and not x.strip().startswith(('_', '(', 'Ref', 'Tunda'))))
+        priority = 'P0' if scope == 'MVP' and any(k in card_name.lower() for k in ('aset tetap', 'e-faktur', 'pajak', 'bank', 'quotation', 'uang muka')) else ('P1' if scope == 'MVP' else 'P2')
+        area = 'journal'
+        lower = card_name.lower()
+        if any(k in lower for k in ('penjualan', 'e-faktur', 'pajak', 'quotation', 'komisi', 'target', 'kategori pelanggan')):
+            area = 'sales'
+        elif any(k in lower for k in ('pembelian', 'pemasok', 'payment term', 'shipment', 'fob', 'karyawan', 'perusahaan', 'transfer multi')):
+            area = 'purchasing'
+        elif any(k in lower for k in ('persediaan', 'serial', 'batch', 'material', 'permintaan')):
+            area = 'inventory'
+        cards.append({
+            'name': card_name,
+            'labels': [scope, priority, area],
+            'desc': 'Context: pecahan kartu Trello (1-3 hari kerja).\n\nMigration: ' + (migration or 'lihat card induk') + '\n\nDefinition of Done: PHPUnit lulus, Pint + PHPStan clean, _progress.md update.',
+            'ac': deduped[:10] or ['PHPUnit untuk setiap alur di atas'],
+        })
+    return cards
+
+
 
 
 if __name__ == '__main__':

@@ -94,6 +94,11 @@
 - Agent TIDAK BOLEH memakai blok `<style>` lama, file CSS global manual,
   inline `style`, atau framework styling lain untuk UI tanpa keputusan
   baru dari user.
+- Setiap tombol yang mengirim data ke server (form submit, POST/PUT/DELETE
+  via fetch/axios) WAJIB menggunakan disabled loading animation: button
+  dinonaktifkan selama request berjalan, dibarengi indikator visual
+  spinner atau progress feedback. Tombol kembali aktif setelah response
+  diterima atau gagal. Wajib memakai Emotion `css` dan `keyframes`.
 - UI animation MUST use Emotion's `css`, `keyframes`, and/or
   `injectGlobal`, remain readable, and respect `prefers-reduced-motion`.
 - For UI/UX, animation, motion smoothness, and interactivity, you MUST
