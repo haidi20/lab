@@ -7,7 +7,7 @@
 - [x] 5. Load .env file di config.py (`load_env` + `from_env(env_file=)`)
 - [x] 6. Update .env.example dengan VPS placeholder
 - [x] 7. Buat integration test file (`test_integration.py`)
-- [ ] 8. Fix ssh.py: pass password untuk decrypt encrypted SSH key
-- [ ] 9. Jalankan integration test ke VPS real (nginx, services, certs, subdomains)
-- [ ] 10. Run `python -m unittest` full suite
-- [ ] 11. Commit + push
+- [x] 8. Fix ssh.py: pass password untuk decrypt encrypted SSH key
+- [x] 9. Jalankan integration test ke VPS real (nginx, services, certs, subdomains)
+- [x] 10. Run `python -m unittest` full suite
+- [x] 11. Commit + push
