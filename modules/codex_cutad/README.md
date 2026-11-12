@@ -106,3 +106,73 @@ python3 -m modules.codex_cutad.fix_wire_api          # perbaiki + backup
 - Pemantauan: 3 monitor keyword "hallo" (satu per model) via
   `/v1/chat/completions` sudah UP di Uptime Kuma
   (`modules/uptime_kuma/setup_ai_model_monitors.py`).
+
+- **Update 12 Nov 2026 (default Codex → Tencent Hy4 preview):** model default
+  `~/.codex/config.toml` di-switch dari `z-ai/glm-5.2` + `cutad-direct` ke
+  `tencent/hy4-preview` + `cutad`. Bukan sekadar ganti nama model: Hy4 preview
+  ditolak gateway CutadAI bila payload memuat `role:"developer"` (HTTP 400 /
+  kode 11128), padahal Codex 0.167.1 (responses-only) selalu mengirimnya, jadi
+  **wajib** lewat shim `~/.codex/hy4_proxy.py` di `http://127.0.0.1:8787/v1`
+  yang menulis ulang `developer → system` dan membuang `previous_response_id`.
+  Tabel `[model_providers.cutad-direct]` sengaja dipertahankan sebagai
+  fallback, dan `glm.config.toml` tersedia via `codex --profile glm` bila shim
+  mati / kuota Hy4 habis.
+
+  Modul: `modules/codex_cutad/switch_model.py` (TDD, 14 test di
+  `tests/test_switch_model.py`), idempoten + backup otomatis:
+
+  ```bash
+  python -m modules.codex_cutad.switch_model --cek   # inspeksi
+  python -m modules.codex_cutad.switch_model          # terapkan + backup
+  ```
+
+  Verifikasi live: `codex exec 'balas persis ...: hallo'` → `hallo`, log shim
+  `POST /v1/responses model=tencent/hy4-preview developer->system=2 -> 200`.
+  Restart panel Codex/Cursor agar config baru terbaca. Rollback: salin isi
+  `config.toml.bak-<stamp>` (atau jalankan `--profile glm`).
+
+- **Update 12 Nov 2026 (default Codex → `deepseek-v4-pro`):** default
+  `~/.codex/config.toml` sekarang `model = "deepseek-v4-pro"` +
+  `model_provider = "cutad"` (tetap lewat shim). Hy4 preview tetap tersedia:
+  `python -m modules.codex_cutad.switch_model tencent/hy4-preview`.
+
+  Bukti probe `/v1/responses` (2026-11-12, `probe_model.py`):
+
+  | payload | hasil |
+  | --- | --- |
+  | minimal (user saja) | 200 `PONG` |
+  | `role:"developer"` | 200 `PONG` |
+  | developer + reasoning effort | 200 `PONG` |
+  | payload Codex penuh (103 KB, 18 tools, `developer`, `prompt_cache_key`) | 200 `hallo` |
+  | lewat shim + `previous_response_id` (dibuang shim) | 200 `HALO` |
+  | `codex exec 'jawab persis: hallo'` (CLI 0.167.1) | `hallo`, log shim `model=deepseek-v4-pro ... -> 200` |
+
+  **Kenapa masih wajib shim walau `deepseek-v4-pro` menerima `developer`:**
+  Codex mengirim `previous_response_id` pada turn lanjutan, dan gateway
+  membalas 400 kode `11128` ("Upstream error. Contact support if this
+  persists.") untuk parameter itu. Shim membuangnya, jadi sesi multi-turn
+  aman. `gpt-6-luna` tidak bisa dipakai: `/v1/responses` membalas 404 di
+  gateway ini.
+
+  **Aturan anti upstream error (dipasang di `switch_model.py`):** nama model
+  TIDAK PERNAH ditulis ke config sebelum probe 200. Kalau probe gagal, file
+  dibiarkan apa adanya dan perintah keluar dengan kode 3:
+
+  ```bash
+  python -m modules.codex_cutad.probe_model deepseek-v4-pro --semua-varian  # cek gateway dulu
+  python -m modules.codex_cutad.switch_model deepseek-v4-pro                # switch (probe-gated)
+  python -m modules.codex_cutad.switch_model --cek                          # inspeksi
+  python -m modules.codex_cutad.switch_model                                # kembali ke default Hy4
+  ```
+
+  **Dua bug lama yang ikut diperbaiki di `~/.codex/hy4_proxy.py`**
+  (backup `hy4_proxy.py.bak-20261112`):
+
+  1. Root CA Windows di mesin ini kedaluwarsa → Python 3.10 membalas
+     `CERTIFICATE_VERIFY_FAILED ... certificate has expired` walau leaf
+     gateway valid s/d 2027 (curl: `ssl_verify=0`). Shim (dan `probe_model`)
+     sekarang memakai certifi lebih dulu.
+  2. Body upstream kadang dilabeli `Content-Encoding: gzip` padahal plain →
+     teks rusak di sisi Codex. Shim sekarang mendekode sendiri dan mengirim
+     body polos (label gzip tidak diteruskan).
+
