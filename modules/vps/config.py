@@ -20,6 +20,15 @@ class VPSConfig:
     klinik_repo_url: str = 'https://github.com/haidi20/klinik.git'
     domain: str = 'haidinata.my.id'
     be_port: int = 3000
+    lab_repo_dir: str = '/var/www/ci-monitor-repo'
+    lab_repo_url: str = 'https://github.com/haidi20/lab.git'
+    ci_monitor_root: str = '/var/www/ci-monitor-repo/modules/vps/ci_monitor'
+    portfolio_branch: str = 'main'
+    karta_branch: str = 'main'
+    klinik_branch: str = 'haidi'
+    karta_db: str = 'karta'
+    klinik_db: str = 'klinik'
+    github_token: str = ''
 
     @classmethod
     def from_env(cls, env_file=None):
@@ -39,6 +48,7 @@ class VPSConfig:
             password=os.environ.get('VPS_PASSWORD', ''),
             key_path=os.environ.get('VPS_SSH_KEY', ''),
             deploy_root=os.environ.get('VPS_DEPLOY_ROOT', cls.deploy_root),
+            github_token=os.environ.get('GITHUB_TOKEN', ''),
         )
 
 

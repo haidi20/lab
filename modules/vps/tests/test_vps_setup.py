@@ -21,12 +21,13 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('python3-certbot-nginx', joined)
 
     def test_install_bun_skips_when_present(self):
-        self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
+        self.runner.outputs['test -x /root/.bun/bin/bun'] = ('', '', 0)
         self.setupper.install_bun()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
         self.assertNotIn('bun.sh/install', joined)
 
     def test_install_bun_runs_official_installer_when_missing(self):
+        self.runner.outputs['test -x /root/.bun/bin/bun'] = ('', '', 1)
         self.setupper.install_bun()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
         self.assertIn('bun.sh/install', joined)
@@ -83,7 +84,7 @@ class VPSSetupperTest(unittest.TestCase):
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
         self.assertIn('composer', joined)
 
-    def test_clone_repos_clones_all_three_projects(self):
+    def test_clone_repos_clones_all_projects(self):
         self.runner.outputs['command -v bun'] = ('/root/.bun/bin/bun', '', 0)
         self.setupper.clone_repos()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
@@ -91,13 +92,14 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('github.com/utamaweb/karta_spa.git', joined)
         self.assertIn('github.com/haidi20/klinik.git', joined)
 
-    def test_clone_repos_uses_git_pull_when_repo_exists(self):
+    def test_clone_repos_uses_fetch_reset_when_repo_exists(self):
         self.runner.outputs['if [ -d /var/www/hello-repo/.git ]'] = ('', '', 0)
         self.runner.outputs['if [ -d /var/www/karta/.git ]'] = ('', '', 0)
         self.runner.outputs['if [ -d /var/www/klinik/.git ]'] = ('', '', 0)
         self.setupper.clone_repos()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
-        self.assertIn('git pull', joined)
+        self.assertIn('git -C /var/www/karta fetch --prune origin', joined)
+        self.assertIn('git -C /var/www/karta reset --hard origin/main', joined)
 
     def test_setup_be_installs_bun_dependencies_in_be_folder(self):
         self.setupper.setup_be_service()

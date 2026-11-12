@@ -17,7 +17,13 @@ class FakeSSHRunner:
         return ('', '', 0)
 
     def read_file(self, path):
-        return self.files.get(path, '')
+        if path in self.files:
+            return self.files[path]
+        key = 'cat %s' % path
+        if key in self.outputs:
+            stdout, _stderr, code = self.outputs[key]
+            return stdout if code == 0 else ''
+        return ''
 
     def write_file(self, path, content, mode=None):
         self.files[path] = content
