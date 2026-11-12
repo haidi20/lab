@@ -14,3 +14,6 @@ modules/rea/
 modules/rea_tmp/
 config/
 $null
+
+# artefak log skrip VPS/skripsi
+skripsi_setup.log
