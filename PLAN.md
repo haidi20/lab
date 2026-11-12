@@ -10,7 +10,7 @@
 - [x] 6. .gitignore untuk artifact `skripsi_setup.log`
 - [x] 7. Update README modules/vps + catatan skripsi (env-only kredensial)
 - [x] 8. Jalankan `python -m unittest` penuh sampai hijau
-- [ ] 9. Commit granular + push ke origin
+- [x] 9. Commit granular + push ke origin
 
 ## Arsip: task sebelumnya (selesai)
 
