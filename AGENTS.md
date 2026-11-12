@@ -3,6 +3,17 @@
 ## payload
 - jangan sampai Payload too large (3555060 chars). Max 3000000. Kurangi history.
 
+## Git: Jangan Auto Commit / Push
+
+- JANGAN `git commit` atau `git push` atas inisiatif sendiri, termasuk setelah
+  task selesai, test hijau, atau PLAN tercentang.
+- Selesaikan pekerjaan sampai file di disk, lalu LAPORKAN perubahan
+  (daftar file + ringkasan) dan TANYAKAN apakah boleh di-commit.
+- Hanya commit/push setelah user memberi izin eksplisit pada giliran itu.
+  Izin sekali tidak berlaku untuk task berikutnya.
+- Jika user meminta commit, tetap commit granular per topik dengan pesan
+  `[Tipe] deskripsi` dan jangan mencampur file yang tidak terkait.
+
 ## Testing
 
 - Use Test-Driven Development (TDD) for every feature, bug fix, and task in this repository.
