@@ -8,7 +8,7 @@ NGINX_DEFAULT = '''server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/hello;
+    root /var/www/portfolio/fe/dist;
     index index.html;
 
     location /api {
@@ -198,7 +198,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/www/hello-repo/be
+WorkingDirectory=/var/www/portfolio/be
 ExecStart=/root/.bun/bin/bun run src/index.ts
 Environment=PORT=3000
 Restart=always
@@ -265,10 +265,8 @@ jobs:
           username: root
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /var/www/hello-repo && git pull
-            cd fe && bun install && bun run build
-            rm -rf /var/www/hello && mkdir -p /var/www/hello
-            cp -r fe/dist/. /var/www/hello/
+            cd /var/www/portfolio && git pull
+            cd /var/www/portfolio/fe && bun install && bun run build
             systemctl reload nginx
 '''
 

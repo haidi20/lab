@@ -40,8 +40,8 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('nginx -t', joined)
         self.assertIn('systemctl reload nginx', joined)
 
-    def test_default_site_points_to_hello_and_api_proxy(self):
-        self.assertIn('/var/www/hello', NGINX_DEFAULT)
+    def test_default_site_points_to_portfolio_dist_and_api_proxy(self):
+        self.assertIn('/var/www/portfolio/fe/dist', NGINX_DEFAULT)
         self.assertIn('proxy_pass http://127.0.0.1:3000', NGINX_DEFAULT)
 
     def test_default_site_api_location_not_nested_inside_root_location(self):
@@ -93,7 +93,7 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('github.com/haidi20/klinik.git', joined)
 
     def test_clone_repos_uses_fetch_reset_when_repo_exists(self):
-        self.runner.outputs['if [ -d /var/www/hello-repo/.git ]'] = ('', '', 0)
+        self.runner.outputs['if [ -d /var/www/portfolio/.git ]'] = ('', '', 0)
         self.runner.outputs['if [ -d /var/www/karta/.git ]'] = ('', '', 0)
         self.runner.outputs['if [ -d /var/www/klinik/.git ]'] = ('', '', 0)
         self.setupper.clone_repos()
@@ -105,7 +105,7 @@ class VPSSetupperTest(unittest.TestCase):
         self.setupper.setup_be_service()
         joined = ' '.join(cmd for cmd, _, _ in self.runner.commands)
         self.assertIn('bun install', joined)
-        self.assertIn('/var/www/hello-repo/be', joined)
+        self.assertIn('/var/www/portfolio/be', joined)
 
     def test_enable_php_fpm_and_redis(self):
         self.setupper.enable_services()
@@ -180,7 +180,7 @@ class VPSSetupperTest(unittest.TestCase):
         self.assertIn('enable --now haidi20-be', joined)
 
     def test_be_service_unit_matches_running_server(self):
-        self.assertIn('WorkingDirectory=/var/www/hello-repo/be', BE_SERVICE)
+        self.assertIn('WorkingDirectory=/var/www/portfolio/be', BE_SERVICE)
         self.assertIn('ExecStart=/root/.bun/bin/bun run src/index.ts', BE_SERVICE)
         self.assertIn('Environment=PORT=3000', BE_SERVICE)
 

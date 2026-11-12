@@ -1,5 +1,5 @@
 SITE_ROOTS = {
-    'portfolio': '/var/www/hello',
+    'portfolio': '/var/www/portfolio/fe/dist',
     'karta': '/var/www/karta/public',
     'klinik': '/var/www/klinik/src/public',
 }
@@ -25,10 +25,6 @@ def _deploy_portfolio_from_git(runner, config):
     runner.run('cd %s && git pull' % config.repo_dir)
     runner.run(
         'cd %s/fe && bun install && bun run build' % config.repo_dir, timeout=1200
-    )
-    runner.run('rm -rf %s && mkdir -p %s' % (config.deploy_root, config.deploy_root))
-    runner.run(
-        'cp -r %s/fe/dist/. %s/' % (config.repo_dir, config.deploy_root)
     )
     _reload_nginx(runner)
 

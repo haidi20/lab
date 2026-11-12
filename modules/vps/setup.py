@@ -89,8 +89,7 @@ class VPSSetupper:
 
     def build_and_deploy_portfolio(self):
         self._run('cd %s/fe && %s install && %s run build' % (self.config.repo_dir, BUN, BUN), timeout=1200)
-        self._run('rm -rf %s && mkdir -p %s' % (self.config.deploy_root, self.config.deploy_root))
-        self._run('cp -r %s/fe/dist/. %s/' % (self.config.repo_dir, self.config.deploy_root))
+        self._run('test -f %s/index.html' % self.config.deploy_root)
 
     def deploy_ci_monitor(self):
         self._run('mkdir -p %s' % self.config.ci_monitor_root)
