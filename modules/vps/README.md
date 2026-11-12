@@ -17,7 +17,7 @@ Deploy multi-site memakai git clone/pull langsung dari GitHub di VPS
 
 Repo yang di-pull saat `setup`:
 
-- `haidi20/haidi20` -> `/var/www/hello-repo` (portfolio, build bun ke `/var/www/hello`)
+- `haidi20/haidi20` -> `/var/www/portfolio` (portfolio, `fe/dist` langsung jadi webroot)
 - `utamaweb/karta_spa` -> `/var/www/karta` (branch `main`)
 - `haidi20/klinik` -> `/var/www/klinik` (branch `haidi`, app di `src/`)
 - `haidi20/lab` -> `/var/www/ci-monitor-repo` (halaman `ci.haidinata.my.id`)
