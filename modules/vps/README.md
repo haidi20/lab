@@ -18,7 +18,18 @@ sesuai tipe project. CI/CD workflow deploy.yml di-generate untuk semua
 project: haidi20 (main), karta (main), klinik (haidi).
 
 Kredensial dibaca dari .env: VPS_HOST, VPS_PORT, VPS_USER,
-VPS_PASSWORD, VPS_SSH_KEY, VPS_DEPLOY_ROOT.
+VPS_PASSWORD, VPS_SSH_KEY, VPS_DEPLOY_ROOT. Tidak ada password default di
+source: VPS_PASSWORD wajib diisi, kalau kosong skrip gagal cepat
+(`RuntimeError`) sebelum membuka koneksi.
+
+`modules/vps/vps_run.py` adalah helper SSH manual dan aturan yang sama
+berlaku (env-only).
+
+Integration test `tests/test_integration.py::test_04_repo_dirs_exist`
+memakai `expected_repo_dirs()` dari `config.py`. Default-nya
+`DEFAULT_REPO_DIRS` (`monitoring-ph-air`, sesuai isi `/var/www` saat ini);
+override lewat `VPS_EXPECTED_REPO_DIRS=haidi,karta,skripsi` bila server
+dipulihkan ke layout lama.
 
 ## Struktur
 

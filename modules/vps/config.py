@@ -1,10 +1,12 @@
 import os
 from dataclasses import dataclass
 
+DEFAULT_REPO_DIRS = ("monitoring-ph-air",)
+
 
 @dataclass
 class VPSConfig:
-    host: str = '172.232.112.39'
+    host: str = '172.232.96.174'
     port: int = 22
     user: str = 'root'
     password: str = ''
@@ -41,10 +43,20 @@ class VPSConfig:
 
 
 def load_env(path):
-    key = 'VPS_'
     with open(path, 'r') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#') and '=' in line:
                 k, v = line.split('=', 1)
                 os.environ.setdefault(k.strip(), v.strip())
+
+
+def expected_repo_dirs():
+    """Daftar direktori repo di /var/www yang diharapkan ada.
+
+    Default mengikuti VPS haidinata saat ini (`monitoring-ph-air`); bisa
+    dioverride lewat `VPS_EXPECTED_REPO_DIRS` (dipisah koma).
+    """
+    raw = os.environ.get('VPS_EXPECTED_REPO_DIRS', '')
+    items = [item.strip() for item in raw.split(',') if item.strip()]
+    return items or list(DEFAULT_REPO_DIRS)

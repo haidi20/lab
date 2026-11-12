@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from modules.vps.config import VPSConfig, load_env
+from modules.vps.config import VPSConfig, expected_repo_dirs, load_env
 
 load_env(os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
 
@@ -42,7 +42,7 @@ class IntegrationSSHTest(unittest.TestCase):
 
     def test_04_repo_dirs_exist(self):
         out = self._run('ls /var/www/')
-        for d in ('haidi', 'karta', 'skripsi'):
+        for d in expected_repo_dirs():
             self.assertIn(d, out)
 
     def test_05_all_subdomains_respond_200(self):
