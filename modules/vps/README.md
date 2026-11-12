@@ -12,7 +12,29 @@ Provisioning & deployment toolkit untuk replika VPS haidinata.my.id
     python -m modules.vps deploy --sites portfolio karta klinik
     python -m modules.vps health   # cek nginx, haidi20-be, HTTP 200
 
-Deploy multi-site memakai git pull di VPS (bukan upload dari lokal).
+Deploy multi-site memakai git clone/pull langsung dari GitHub di VPS
+(bukan upload dari lokal). Tidak ada file aplikasi yang dikirim dari laptop.
+
+Repo yang di-pull saat `setup`:
+
+- `haidi20/haidi20` -> `/var/www/hello-repo` (portfolio, build bun ke `/var/www/hello`)
+- `utamaweb/karta_spa` -> `/var/www/karta` (branch `main`)
+- `haidi20/klinik` -> `/var/www/klinik` (branch `haidi`, app di `src/`)
+- `haidi20/lab` -> `/var/www/ci-monitor-repo` (halaman `ci.haidinata.my.id`)
+
+Repo karta dan klinik private, jadi butuh `GITHUB_TOKEN` (PAT dengan scope
+`repo`). Setup menulis `/root/.git-credentials` (mode 600) dan
+`KARTA_GIT_TOKEN` di `/etc/environment` (dipakai halaman ci-monitor). Tanpa
+token, repo public tetap bisa di-pull tapi karta/klinik akan gagal.
+
+`setup` juga menyiapkan Laravel otomatis: database + user MySQL, `.env`
+production (APP_URL, DB, redis, reverb/JWT untuk klinik), `key:generate`,
+`composer install`, `npm ci` + build asset, `migrate --force`, permission
+`www-data`, supervisor (worker/reverb/pulse), cron scheduler, lalu certbot
+untuk semua subdomain.
+
+`python -m modules.vps setup` memerlukan `GITHUB_TOKEN` di environment
+(atau `.env`) untuk private repo.
 Portfolio (bun build), karta dan klinik (composer + artisan) otomatis
 sesuai tipe project. CI/CD workflow deploy.yml di-generate untuk semua
 project: haidi20 (main), karta (main), klinik (haidi).
