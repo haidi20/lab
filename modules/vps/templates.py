@@ -1,7 +1,7 @@
 NGINX_DEFAULT = '''server {
     listen 80 default_server;
     listen 443 ssl default_server;
-    server_name _;
+    server_name haidinata.my.id www.haidinata.my.id _;
 
     ssl_certificate /etc/letsencrypt/live/haidinata.my.id/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/haidinata.my.id/privkey.pem;
@@ -33,6 +33,15 @@ NGINX_BE = '''server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+    location = / {
+        proxy_pass http://127.0.0.1:3000/api/health;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
@@ -56,7 +65,7 @@ server {
 NGINX_CI_MONITOR = '''server {
     server_name ci.haidinata.my.id;
 
-    root /var/www/ci-monitor;
+    root /var/www/ci-monitor-repo/modules/vps/ci_monitor;
     index index.php;
 
     location / {
@@ -209,30 +218,34 @@ NGINX_SITES = {
 
 
 def strip_ssl(nginx_block):
-    """Remove SSL directives from an nginx server block for HTTP-only bootstrap."""
+    """Buang direktif SSL/redirect agar nginx bisa jalan HTTP-only saat bootstrap.
+
+    Blok ``if ($host = ...)`` yang redirect ke https ikut dibuang karena pada
+    fase bootstrap sertifikat belum ada dan redirect tersebut memutus
+    validasi ACME http-01.
+    """
     lines = []
-    skip_until_empty = False
+    skip_if_block = False
     for line in nginx_block.splitlines():
         stripped = line.strip()
+        if '# managed by Certbot' in line:
+            line = line.split('# managed by Certbot')[0].rstrip()
+            stripped = line.strip()
+        if stripped.startswith('if ($host ='):
+            skip_if_block = True
+            continue
+        if skip_if_block:
+            if '}' in stripped:
+                skip_if_block = False
+            continue
         if stripped.startswith('ssl_') or stripped.startswith('include /etc/letsencrypt'):
-            if stripped.endswith(';'):
-                continue
-            skip_until_empty = True
             continue
-        if skip_until_empty:
-            if stripped.endswith(';'):
-                skip_until_empty = False
-                continue
+        if stripped.startswith('listen') and '443' in stripped:
             continue
-        if 'listen 443 ssl' in stripped and 'default_server' in stripped:
-            lines.append(line.replace('443 ssl', '443'))
-        elif 'listen 443 ssl;' in stripped:
-            lines.append(line.replace('443 ssl;', '443;'))
-        elif stripped.startswith('# managed by Certbot'):
-            continue
-        else:
-            lines.append(line)
-    return '\n'.join(lines)
+        lines.append(line)
+    while lines and not lines[-1].strip():
+        lines.pop()
+    return '\n'.join(lines) + '\n'
 
 CICD_PORTFOLIO = '''name: Deploy Portfolio
 on:
