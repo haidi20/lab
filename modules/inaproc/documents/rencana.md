@@ -163,12 +163,11 @@ Scope API internal disesuaikan dengan scope token yang disetujui. Rencana awal:
 | Endpoint | Metode | Kegunaan |
 | --- | --- | --- |
 | `/api/gateway/status` | GET | Token ada/tidak, enabled/disabled, ringkasan run terakhir |
-| `/api/gateway/sync/penyedia` | POST | Sync detail/daftar penyedia |
-| `/api/gateway/sync/produk` | POST | Sync produk e-katalog |
-| `/api/gateway/sync/kategori` | POST | Sync master kategori |
-| `/api/gateway/sync/epurchasing` | POST | Sync paket/transaksi e-purchasing |
+| `/api/gateway/sync/{scope}` | POST | Mulai job sync untuk `penyedia`, `produk`, `kategori`, `paket`, `transaksi`, atau `program`; balas `202 {"job": ...}` |
+| `/api/gateway/sync/{scope}/status` | GET | Status job sync terakhir untuk scope tersebut |
 | `/api/gateway/produk` | GET | Cari/filter/sort/paginate produk dari MySQL |
 | `/api/gateway/epurchasing` | GET | Cari/filter/sort/paginate data e-purchasing dari MySQL |
+| `/api/gateway/export` | GET | Ekspor CSV/JSON untuk `kind=produk|paket|transaksi` dengan filter yang sama seperti pencarian |
 
 `GET /api/gateway/produk` mengembalikan `source_url` yang bisa diklik untuk
 produk/e-katalog. Backend hanya menyimpan/mengembalikan URL resmi dari data API;
@@ -178,6 +177,16 @@ Semua route sync berbentuk job berjalan di background, punya status, dan hanya
 menjalankan satu job per scope. FE memakai tombol sync dengan disabled loading
 state, bukan polling endpoint eksternal. Di sini "sync" berarti **menarik data
 INAPROC ke cache MySQL**, bukan mengirim perubahan dari MySQL ke INAPROC.
+
+Perilaku yang sudah berlaku:
+
+- Request sync mengembalikan `202 Accepted` beserta objek `job`.
+- Scope yang sama saat job masih berjalan menghasilkan `409 job_aktif`.
+- Scope berbeda boleh berjalan paralel; masing-masing punya status sendiri.
+- Scope tidak dikenal menghasilkan `422`.
+- `GET /api/gateway/status` mengembalikan `produk_count`, `paket_count`,
+  `transaksi_count`, daftar `scopes`, dan `last_run`. Token tidak pernah
+  dikembalikan ke FE.
 
 ### Skema MySQL API Gateway
 
@@ -236,10 +245,15 @@ mengirim INSERT/UPDATE/DELETE ke INAPROC.
 | Sync selesai | UPDATE run status `success`, cursor akhir, waktu selesai |
 | Sync gagal | UPDATE run status `failed`, error code/message |
 | Token expired | UPDATE run status `failed` dengan `TOKEN_EXPIRED`; tidak retry tanpa token baru |
-| Rate limit | UPDATE run dengan status tetap `running`/`retrying`, simpan reset time |
+| Rate limit | UPDATE run dengan `retry_status`, `retry_after`, `retry_attempt`; status `retrying` sebelum backoff lalu `running` |
 | API 4xx/5xx | UPDATE run gagal untuk non-retryable; backoff untuk 429/5xx |
 | Token belum tersedia | Tidak memanggil API dan tidak membuat baris data; status API Gateway `disabled` |
 | Data duplikat diterima | Upsert baris yang sama, jumlah fisik tabel tidak bertambah |
+
+Catatan implementasi: `paket` dan `transaksi` adalah dua scope terpisah. Sync
+`paket` menulis ke `inaproc_paket_epurchasing`; sync `transaksi` menulis ke
+`inaproc_transaksi_epurchasing`. Status `GET /api/gateway/status` melaporkan
+`paket_count` dan `transaksi_count` secara terpisah.
 
 ### Aturan DB-first untuk API Gateway
 
@@ -252,6 +266,11 @@ Data belum ada/sync diminta -> panggil API Gateway, lalu simpan ke MySQL.
 GET /api/search TKDN -> tetap hanya MySQL dan Playwright tidak dipanggil.
 Hasil produk -> tampilkan source_url untuk dibuka user di INAPROC.
 ```
+
+Untuk data Gateway, aplikasi memakai strategi **cache-first**: pencarian dan
+filter selalu dilayani MySQL. Sync hanya dijalankan saat user memintanya atau
+saat data scope tersebut belum pernah masuk. Setelah sync selesai, halaman
+produk dan e-purchasing otomatis memuat ulang dari DB.
 
 "Pencarian read-only" di sini berarti **membaca data**, bukan memanggil Gateway
 setiap kali user mengetik atau klik hasil. API Gateway hanya dipanggil oleh
@@ -426,18 +445,18 @@ beban ke INAPROC.
 
 | File | Fungsi |
 | --- | --- |
-| `modules/inaproc/api.py` | Aplikasi FastAPI: `/api/login`, `/api/logout`, `/api/session`, `/api/search`, `/api/lookup`, `/api/collect`, `/api/collect/preview`, `/api/collect/cancel`, `/api/status`, `/api/export`, `/api/refresh` |
-| `modules/inaproc/auth.py` | Koneksi INAPROC headless (`email`/`password`) + validasi `storageState.json`; bukan autentikasi aplikasi |
-| `modules/inaproc/login.py` | Fallback interaktif Playwright untuk koneksi INAPROC (OTP/captcha); koneksi normal lewat `POST /api/login` |
-| `modules/inaproc/scraper.py` | Buka halaman TKDN dengan Playwright + `storageState.json`, tunggu tabel render, kembalikan HTML/baris |
-| `modules/inaproc/parser.py` | Parse tabel HTML hasil render menjadi baris TKDN (jalur utama, bukan fallback) |
-| `modules/inaproc/config.py` | `InaprocDbConfig` dari env `INAPROC_MYSQL_*` (+ fallback host/user), memakai loader `.env` yang sudah ada di repo |
-| `modules/inaproc/db.py` | `connect_mysql(config)`: `pymysql` + `DictCursor` + `charset=utf8mb4`, dipanggil saat startup API |
-| `modules/inaproc/cache.py` | `TkdnMysqlStore`: simpan/ambil hasil ke MySQL, query by merek/produk |
-| `modules/inaproc/gateway.py` | `InaprocGatewayClient`: GET JSON API Gateway resmi, Bearer token, cursor pagination, rate limit, retry 429/5xx, redaksi token |
-| `modules/inaproc/gateway_store.py` | Upsert dan query MySQL untuk penyedia/produk/kategori/e-purchasing/program + audit sync run |
-| `modules/inaproc/gateway_sync.py` | Orkestrasi sync per scope: jalan di background, cek DB-first, simpan cursor/progress |
-| `modules/inaproc/schemas.py` | Model Pydantic untuk request/response API |
+| `modules/inaproc/api/app.py` | Aplikasi FastAPI: `/api/login`, `/api/logout`, `/api/session`, `/api/search`, `/api/lookup`, `/api/collect`, `/api/collect/preview`, `/api/collect/cancel`, `/api/status`, `/api/export`, `/api/refresh` |
+| `modules/inaproc/api/auth.py` | Koneksi INAPROC headless (`email`/`password`) + validasi `storageState.json`; bukan autentikasi aplikasi |
+| `modules/inaproc/api/login.py` | Fallback interaktif Playwright untuk koneksi INAPROC (OTP/captcha); koneksi normal lewat `POST /api/login` |
+| `modules/inaproc/api/scraper.py` | Buka halaman TKDN dengan Playwright + `storageState.json`, tunggu tabel render, kembalikan HTML/baris |
+| `modules/inaproc/api/parser.py` | Parse tabel HTML hasil render menjadi baris TKDN (jalur utama, bukan fallback) |
+| `modules/inaproc/api/config.py` | `InaprocDbConfig` dari env `INAPROC_MYSQL_*` (+ fallback host/user), memakai loader `.env` yang sudah ada di repo |
+| `modules/inaproc/api/db.py` | `connect_mysql(config)`: `pymysql` + `DictCursor` + `charset=utf8mb4`, dipanggil saat startup API |
+| `modules/inaproc/api/cache.py` | `TkdnMysqlStore`: simpan/ambil hasil ke MySQL, query by merek/produk |
+| `modules/inaproc/api/gateway.py` | `InaprocGatewayClient`: GET JSON API Gateway resmi, Bearer token, cursor pagination, rate limit, retry 429/5xx, redaksi token |
+| `modules/inaproc/api/gateway_store.py` | Upsert dan query MySQL untuk penyedia/produk/kategori/e-purchasing/program + audit sync run |
+| `modules/inaproc/api/gateway_sync.py` | Orkestrasi sync per scope: jalan di background, cek DB-first, simpan cursor/progress |
+| `modules/inaproc/api/schemas.py` | Model Pydantic untuk request/response API |
 | `modules/inaproc/web/index.html` | Entry point Vite untuk aplikasi Vue 3 |
 | `modules/inaproc/web/package.json` | Dependency FE: Vue 3, TypeScript, Bootstrap 5, Vite, Pinia, Vitest |
 | `modules/inaproc/web/vite.config.ts` | Config Vite + proxy `/api` ke FastAPI saat development |
@@ -456,21 +475,21 @@ beban ke INAPROC.
 | `modules/inaproc/web/src/components/SessionBadge.vue` | Status sesi INAPROC dari `/api/session` |
 | `modules/inaproc/web/src/components/CollectProgress.vue` | Indikator progres collect dari `/api/status` |
 | `modules/inaproc/web/tests/tkdn.spec.ts` | Vitest: store search/collect sukses & gagal, render komponen |
-| `modules/inaproc/tests/test_auth.py` | Test validasi state sesi dan koneksi INAPROC headless dari state dummy |
-| `modules/inaproc/tests/test_exporter.py` | Test CSV & JSON |
-| `modules/inaproc/tests/test_scraper.py` | Test navigasi Playwright, deteksi redirect login, timeout, dan retry dengan fake page |
-| `modules/inaproc/tests/test_collector.py` | Test loop rentang, skip cache, cancel, progres |
-| `modules/inaproc/tests/test_api.py` | Test endpoint FastAPI dengan dependency/stub, termasuk lookup DB-first |
-| `modules/inaproc/tests/test_spt.py` | Test parse dan rentang nomor SPT |
-| `modules/inaproc/tests/test_schemas.py` | Test validasi request/response API |
-| `modules/inaproc/tests/test_cache.py` | Test MySQL store dengan fake connection factory, filter, sort, pagination |
-| `modules/inaproc/tests/test_db.py` | Test config env, koneksi MySQL, dan pemetaan error koneksi |
-| `modules/inaproc/tests/test_cli.py` | Test argumen dan dispatch CLI dengan mock |
-| `modules/inaproc/tests/test_login.py` | Test fallback koneksi INAPROC interaktif dengan Playwright fake |
-| `modules/inaproc/tests/test_parser.py` | Test parser tabel HTML (tabel kosong, beberapa baris, nilai desimal) |
-| `modules/inaproc/tests/test_gateway.py` | Test client API Gateway: Bearer token, cursor, retry 429/5xx, no-retry 4xx, token tidak bocor di log |
-| `modules/inaproc/tests/test_gateway_store.py` | Test upsert idempotent dan audit `inaproc_api_sync_runs` dengan fake connection factory |
-| `modules/inaproc/tests/test_gateway_sync.py` | Test sync per scope, DB-first, resume cursor, dan status job |
+| `modules/inaproc/api/tests/test_auth.py` | Test validasi state sesi dan koneksi INAPROC headless dari state dummy |
+| `modules/inaproc/api/tests/test_exporter.py` | Test CSV & JSON |
+| `modules/inaproc/api/tests/test_scraper.py` | Test navigasi Playwright, deteksi redirect login, timeout, dan retry dengan fake page |
+| `modules/inaproc/api/tests/test_collector.py` | Test loop rentang, skip cache, cancel, progres |
+| `modules/inaproc/api/tests/test_api.py` | Test endpoint FastAPI dengan dependency/stub, termasuk lookup DB-first |
+| `modules/inaproc/api/tests/test_spt.py` | Test parse dan rentang nomor SPT |
+| `modules/inaproc/api/tests/test_schemas.py` | Test validasi request/response API |
+| `modules/inaproc/api/tests/test_cache.py` | Test MySQL store dengan fake connection factory, filter, sort, pagination |
+| `modules/inaproc/api/tests/test_db.py` | Test config env, koneksi MySQL, dan pemetaan error koneksi |
+| `modules/inaproc/api/tests/test_cli.py` | Test argumen dan dispatch CLI dengan mock |
+| `modules/inaproc/api/tests/test_login.py` | Test fallback koneksi INAPROC interaktif dengan Playwright fake |
+| `modules/inaproc/api/tests/test_parser.py` | Test parser tabel HTML (tabel kosong, beberapa baris, nilai desimal) |
+| `modules/inaproc/api/tests/test_gateway.py` | Test client API Gateway: Bearer token, cursor, retry 429/5xx, no-retry 4xx, token tidak bocor di log |
+| `modules/inaproc/api/tests/test_gateway_store.py` | Test upsert idempotent dan audit `inaproc_api_sync_runs` dengan fake connection factory |
+| `modules/inaproc/api/tests/test_gateway_sync.py` | Test sync per scope, DB-first, resume cursor, dan status job |
 | `modules/inaproc/pyproject.toml` | Metadata modul + dependency (`fastapi`, `playwright`, `uvicorn`, `pymysql`) untuk `pip install -e modules/inaproc` |
 | `.env.example` (root, update) | Tambah `INAPROC_MYSQL_DATABASE=inaproc` dan `INAPROC_API_*`; jangan mengubah `MYSQL_DATABASE` milik modul lain |
 | `modules/inaproc/README.md` | Cara menjalankan BE + FE, koneksi sesi INAPROC, collect, dan catatan sesi |
@@ -489,24 +508,31 @@ beban ke INAPROC.
 
 ### Konvensi path test
 
-Semua test modul ini berada di `modules/inaproc/tests/` dan diberi prefix
-`modules.inaproc.tests`. Tabel di dokumen ini kadang menulis nama file saja
-(`test_api.py`); artinya tetap `modules/inaproc/tests/test_api.py`. Ini mengikuti
+Semua test modul ini berada di `modules/inaproc/api/tests/` dan diberi prefix
+`modules.inaproc.api.tests`. Tabel di dokumen ini kadang menulis nama file saja
+(`test_api.py`); artinya tetap `modules/inaproc/api/tests/test_api.py`. Ini mengikuti
 aturan AGENTS.md: test modul disimpan di dalam modul, bukan di `tests/` root.
+
+### Konvensi bahasa
+
+Semua teks teknis, identifier, nama file, kontrak API, dan dokumentasi internal
+ditulis dalam Bahasa Inggris. Pengecualian: teks yang terlihat oleh pengguna akhir
+di UI/CLI ditulis dalam Bahasa Indonesia, dan komentar penjelasan boleh memakai
+Bahasa Indonesia bila membantu menjelaskan intent.
 
 ### Urutan TDD ringkas
 
 1. `config.py` + `db.py` + test (env MySQL, timeout, error koneksi)
-2. `auth.py` + test (koneksi INAPROC headless, fake Playwright)
-3. `spt.py` + test
-4. `parser.py` + `scraper.py` + test (HTML tabel, fake Playwright page)
-5. `cache.py` + test (fake connection factory)
-6. `collector.py` + test
-7. `schemas.py` + test
-8. `api.py` + test (TestClient, stub collector)
-9. `exporter.py` + test (CSV + JSON)
-10. `gateway.py` + `gateway_store.py` + `gateway_sync.py` + test (fake HTTP dan fake DB)
-11. FE (`web/`) + Vitest store/komponen (termasuk form koneksi INAPROC dan panel sync Gateway) + smoke test browser
+2. `spt.py` + test (parsing nomor SPT)
+3. `parser.py` + test (fixture HTML TKDN asli yang disanitasi)
+4. `auth.py` + `login.py` + test (koneksi INAPROC headless, fake Playwright)
+5. `scraper.py` + test + probe satu halaman TKDN asli
+6. `cache.py` + test (fake connection factory) dan `exporter.py` + test
+7. `collector.py` + test (loop, progres, cancel, retry)
+8. `schemas.py` + `api.py` + test (TestClient, stub collector)
+9. `gateway.py` + `gateway_store.py` + `gateway_sync.py` + test (fake HTTP dan fake DB, fixture respons API asli)
+10. FE (`web/`) + Vitest store/komponen (form sesi, pencarian, tabel, ekspor, progress, link INAPROC)
+11. Verifikasi real case end-to-end (MySQL, sesi INAPROC, token Gateway) + smoke test browser
 
 ### Stack keputusan (update)
 
@@ -700,7 +726,7 @@ yang akan meminta login secara normal.
   di MySQL walau belum dipakai FE.
 - **Database tunggal**: MySQL, tanpa SQLite dan tanpa file cache lokal. Sesi
   INAPROC tetap berupa `storageState.json` karena itu bukan data aplikasi.
-- Modul berada di `modules/inaproc/`, test di `modules/inaproc/tests/`.
+- Backend berada di `modules/inaproc/api/`, frontend di `modules/inaproc/web/`, dan test backend di `modules/inaproc/api/tests/`.
 - Modul ini **tidak memakai Emotion**; styling FE pakai Bootstrap 5 (keputusan user).
 
 ## Ringkasan Eksekusi (urutan kerja nyata)
@@ -709,19 +735,39 @@ Supaya tidak bingung saat mulai, ini urutan yang akan dijalankan:
 
 | Tahap | Pekerjaan | Hasil |
 | --- | --- | --- |
-| 0 | `config.py`, `db.py` + test | koneksi MySQL terkonfigurasi & tabel siap |
-| 1 | `auth.py` koneksi INAPROC headless + test | koneksi INAPROC dari BE jalan |
-| 2 | `spt.py` + test | parsing nomor terkunci |
-| 3 | `parser.py` + `scraper.py` + test | baca tabel HTML dari halaman yang dirender |
-| 4 | `cache.py`, `exporter.py` + test | simpan ke MySQL & ekspor data |
-| 5 | `collector.py` + test | loop rentang, progres, cancel |
-| 6 | `api.py`, `schemas.py` + test | `/api/login` s/d `/api/refresh` |
-| 7 | FE Vue + Pinia + Vitest | form koneksi INAPROC, pencarian, tabel, ekspor, chunk rentang |
-| 8 | Verifikasi live | sesi valid, bentuk `empty`, selector tabel, rate limit |
-| 9 | Smoke test | koneksi INAPROC via FE, collect 10 nomor, cari, ekspor |
+| 0 | `config.py`, `db.py`, schema MySQL + test | koneksi MySQL terkonfigurasi & tabel siap |
+| 1 | `spt.py` + test | parsing nomor SPT terkunci |
+| 2 | `parser.py` + test dengan fixture HTML asli | tabel TKDN terbaca dari markup nyata |
+| 3 | `auth.py`, `login.py` + test | sesi INAPROC headless & fallback interaktif jalan |
+| 4 | `scraper.py` + test + probe halaman asli | halaman TKDN dibuka dan dirender benar |
+| 5 | `cache.py`, `exporter.py` + test | upsert MySQL, query DB-first, ekspor CSV/JSON |
+| 6 | `collector.py` + test | loop rentang, progres, cancel, retry |
+| 7 | `schemas.py`, `api.py` + test | `/api/login` s/d `/api/refresh` |
+| 8 | `gateway.py`, `gateway_store.py`, `gateway_sync.py` + test | API Gateway read-only masuk cache MySQL |
+| 9 | FE Vue + Pinia + Vitest | form sesi, pencarian, tabel, ekspor, progress, link INAPROC |
+| 10 | Verifikasi real case + smoke test | data nyata, MySQL nyata, sesi nyata, token nyata |
 
-Tahap 0-6 murni `python -m unittest` tanpa jaringan (Playwright di-fake).
-Tahap 8 baru menyentuh INAPROC sungguhan, setelah FE dan BE siap.
+Tahap 0-8 memakai `python -m unittest` dengan fake untuk unit test, tetapi
+fixture-nya diambil dari **data nyata** (HTML TKDN asli dan respons API asli yang
+sudah disanitasi). Tahap 9 memakai Vitest dengan fixture respons BE asli. Tahap
+10 adalah verifikasi end-to-end dengan INAPROC, MySQL, dan token sungguhan.
+
+### Siklus TDD per tahap (real case, real data)
+
+Setiap tahap dijalankan dengan urutan yang sama:
+
+1. **Ambil bukti nyata**: satu halaman TKDN asli atau satu respons API asli.
+   Simpan sebagai fixture setelah cookie, token, dan data pribadi dibuang.
+2. **Tulis test gagal** yang mereproduksi kasus nyata itu, lalu jalankan dan
+   pastikan gagal karena alasan yang benar.
+3. **Implementasi minimal** sampai test hijau.
+4. **Verifikasi real case**: jalankan satu kali terhadap INAPROC/MySQL nyata
+   (bukan fake) untuk tahap yang memang butuh jaringan.
+5. **Refactor** selama test tetap hijau, lalu lanjut tahap berikutnya.
+
+Fixture nyata tidak boleh berisi `storageState.json`, token API, password, atau
+data pribadi. Untuk Gateway, tahap 8 baru bisa diverifikasi penuh setelah token
+disetujui; sebelum itu test memakai respons rekaman yang sudah disanitasi.
 
 ## Daftar File Inti yang Akan Dibuat
 
@@ -733,7 +779,7 @@ File pendukung (FE, test, README, `pyproject.toml`) sudah dirinci di tabel
 Menjadikan `inaproc` sebagai paket Python. Diekspos API publik:
 `SptNumber`, `build_keyword`, `TkdnScraper`, `parse_rows`, `collect`.
 
-### 2. `modules/inaproc/tests/__init__.py`
+### 2. `modules/inaproc/api/tests/__init__.py`
 
 Menandai folder test sebagai paket (polanya mengikuti modul lain di repo).
 
@@ -747,7 +793,7 @@ Logika pembentuk nomor & keyword, murni tanpa jaringan:
   Playwright, encode dengan `urllib.parse.quote`.
 - `sequence_range(start, end)` - generator angka rentang pilihan user (inklusif).
 
-Test: `modules/inaproc/tests/test_spt.py` (url encoding, rentang, format nomor).
+Test: `modules/inaproc/api/tests/test_spt.py` (url encoding, rentang, format nomor).
 
 ### 4. `modules/inaproc/parser.py`
 
@@ -760,7 +806,7 @@ Ekstraksi tabel dari HTML yang sudah dirender. Ini jalur utama pengambilan data.
 - Selector tabel disimpan sebagai konstanta yang mudah diperbarui bila markup
   INAPROC berubah.
 
-Test: `modules/inaproc/tests/test_parser.py` (HTML contoh dari tugas.md, tabel kosong,
+Test: `modules/inaproc/api/tests/test_parser.py` (HTML contoh dari tugas.md, tabel kosong,
 baris ganda, nilai desimal).
 
 ### 5. `modules/inaproc/scraper.py`
@@ -777,7 +823,7 @@ Navigasi browser + ekstraksi:
   membalas 429/5xx.
 - Timeout navigasi dan selector menghasilkan error yang bisa ditampilkan ke FE.
 
-Test: `modules/inaproc/tests/test_scraper.py` dengan **fake Playwright page**
+Test: `modules/inaproc/api/tests/test_scraper.py` dengan **fake Playwright page**
 (test double), tanpa browser atau jaringan nyata.
 
 ### 6. `modules/inaproc/collector.py`
@@ -795,7 +841,7 @@ Orkestrasi:
 - Update progres ke status job (`done`, `found`, `empty`, `error`).
 - Hormati `cancel_event` agar `/api/collect/cancel` bisa menghentikan loop.
 
-Test: `modules/inaproc/tests/test_collector.py` dengan scraper & parser palsu.
+Test: `modules/inaproc/api/tests/test_collector.py` dengan scraper & parser palsu.
 
 ### 7. `modules/inaproc/config.py` dan `modules/inaproc/db.py`
 
@@ -824,7 +870,7 @@ di kode:
 - Saat MySQL mati, collector menghentikan job dengan status `error` dan
   `error: "db_unavailable"`; nomor yang belum selesai tidak ditandai `found`.
 
-Test: `modules/inaproc/tests/test_db.py` (config env, prefix database,
+Test: `modules/inaproc/api/tests/test_db.py` (config env, prefix database,
 timeout, error koneksi) dan `test_cache.py` memakai fake connection factory.
 
 ### 8. `modules/inaproc/exporter.py`
@@ -835,7 +881,7 @@ timeout, error koneksi) dan `test_cache.py` memakai fake connection factory.
 - Dipakai endpoint `GET /api/export?format=csv|json` sehingga hasil ekspor
   mengikuti filter yang sedang aktif di FE.
 
-Test: `modules/inaproc/tests/test_exporter.py` (headers, urutan kolom, nilai `null`, escaping koma).
+Test: `modules/inaproc/api/tests/test_exporter.py` (headers, urutan kolom, nilai `null`, escaping koma).
 
 ### 9. `modules/inaproc/__main__.py`
 
@@ -857,7 +903,7 @@ python -m modules.inaproc collect --nomor 11469/SJ-IND.8/E-TKDN/7/2025 --start 1
 - Hasil collect disimpan ke MySQL. `--out` hanya untuk ekspor tambahan
   (`modules/inaproc/output/hasil.csv` + `hasil.json`), bukan sumber data utama.
 
-Test: `modules/inaproc/tests/test_cli.py` (parse argumen + dispatch dengan mock).
+Test: `modules/inaproc/api/tests/test_cli.py` (parse argumen + dispatch dengan mock).
 
 ### 10. `modules/inaproc/login.py`
 
@@ -872,7 +918,7 @@ tanpa display. Untuk sekarang aplikasi ditargetkan lokal, jadi ini aman.
 
 Koneksi INAPROC normal dilakukan dari Vue lewat `POST /api/login`, tidak lewat file ini.
 
-Test: `modules/inaproc/tests/test_login.py` dengan Playwright fake (tanpa browser sungguhan).
+Test: `modules/inaproc/api/tests/test_login.py` dengan Playwright fake (tanpa browser sungguhan).
 
 ### 11. `modules/inaproc/auth.py`  (inti koneksi INAPROC headless)
 
@@ -888,7 +934,7 @@ atau sesi aplikasi.
   bisa dipakai Playwright; tidak membaca nilai sesi.
 - `AuthError` untuk state hilang/state tidak valid/kredensial salah.
 
-Test: `modules/inaproc/tests/test_auth.py` memakai state dummy tanpa nilai sesi asli.
+Test: `modules/inaproc/api/tests/test_auth.py` memakai state dummy tanpa nilai sesi asli.
 
 ### 12. `modules/inaproc/documents/contoh_session.json.example`
 
@@ -1020,9 +1066,9 @@ INAPROC. Ini tidak menghapus akun apa pun, hanya memutus sesi INAPROC di backend
 
 | File | Isi |
 | --- | --- |
-| `modules/inaproc/auth.py` | `connect_inaproc(email, password, session_path)` -> dict state |
-| `modules/inaproc/auth.py` | `muat_storage_state(path)`, `validasi_sesi(state)` |
-| `modules/inaproc/login.py` | Hanya fallback koneksi INAPROC interaktif (OTP/captcha), headless=False |
+| `modules/inaproc/api/auth.py` | `connect_inaproc(email, password, session_path)` -> dict state |
+| `modules/inaproc/api/auth.py` | `muat_storage_state(path)`, `validasi_sesi(state)` |
+| `modules/inaproc/api/login.py` | Hanya fallback koneksi INAPROC interaktif (OTP/captcha), headless=False |
 | `modules/inaproc/web/src/stores/inaprocSession.ts` | Pinia: `status`, `connect()`, `disconnect()`, `checkSession()` |
 
 ### Aturan
@@ -1051,6 +1097,13 @@ INAPROC. Ini tidak menghapus akun apa pun, hanya memutus sesi INAPROC di backend
 
 Semua endpoint di bawah prefix `/api`. Error selalu berbentuk
 `{"error": "<kode>", "message": "<penjelasan>"}`.
+Kode yang dipakai: `belum_login` (401), `kredensial_salah` (401),
+`butuh_interaksi` (409), `job_aktif` (409), `request_tidak_valid` (422),
+`nomor_tidak_valid` (422), `rentang_terlalu_besar` (422), `db_unavailable` (503),
+`upstream_timeout` (504), dan `upstream_error` (502).
+Status collect memakai `done = found + empty + errors`; `skipped` dihitung
+terpisah. Job state juga membawa `job_id`, `processed`, `current_number`,
+`started_at`, dan `finished_at`.
 
 ### Ringkasan endpoint
 
@@ -1061,7 +1114,7 @@ Semua endpoint di bawah prefix `/api`. Error selalu berbentuk
 | `GET` | `/api/session` | Status sesi INAPROC tanpa membocorkan isi state |
 | `GET` | `/api/search` | Cari di database MySQL (filter, sort, pagination), tanpa scraping |
 | `POST` | `/api/lookup` | Cari **satu nomor SPT**: DB dulu, scraping hanya bila belum ada/`error` |
-| `GET` | `/api/collect/preview` | Hitung dampak rentang sebelum dijalankan |
+| `POST` | `/api/collect/preview` | Hitung dampak rentang sebelum dijalankan |
 | `POST` | `/api/collect` | Mulai job collect untuk satu rentang (maks 1000 nomor) |
 | `GET` | `/api/status` | Progres job aktif/terakhir |
 | `POST` | `/api/collect/cancel` | Minta job aktif berhenti |
@@ -1187,22 +1240,27 @@ men-scrape. FE harus memakai `POST /api/lookup` (satu nomor) atau
 `POST /api/collect` (rentang). Dengan begitu, pencarian teks selalu murah dan
 scraping selalu eksplisit.
 
-### `GET /api/collect/preview`
+### `POST /api/collect/preview`
 
 Menghitung dampak rentang sebelum dijalankan, supaya user tahu berapa nomor yang
 akan diproses dan berapa yang dilewati karena sudah ada di cache.
 
 Contoh panggilan:
 
-```
-GET /api/collect/preview?nomor=11469%2FSJ-IND.8%2FE-TKDN%2F7%2F2025&start=1000&end=2000
+```json
+{
+  template: 11469/SJ-IND.8/E-TKDN/7/2025,
+  start: 1000,
+  end: 2000
+}
 ```
 
 Endpoint ini **tidak** memanggil INAPROC dan tidak memerlukan sesi INAPROC; ia
 hanya membaca `tkdn_checks` untuk menghitung `sudah_ada`.
 
-Query params: `nomor` (nomor contoh lengkap), `start`, `end`, `delay_min`
-(opsional, default `1.0`), `delay_max` (opsional, default `3.0`).
+Body memakai `template` (nomor contoh lengkap), `start`, dan `end`.
+`delay_min` dan `delay_max` bisa dikirim di body juga; bila dikosongkan,
+server memakai default `1.0` dan `3.0`.
 
 Aturan:
 
@@ -1397,6 +1455,8 @@ Memaksa ambil ulang **satu nomor** yang sudah ada di cache (tombol refresh per
 baris). Body `{"nomor": "11469/SJ-IND.8/E-TKDN/7/2025"}`.
 
 - Menghapus baris nomor itu dari `tkdn_rows` dan `tkdn_checks`.
+- Data lama hanya dihapus setelah fetch INAPROC sukses; bila sesi kedaluwarsa,
+  cache tetap dipertahankan dan API mengembalikan `401`.
 - Mengambil ulang dengan membuka halaman TKDN memakai sesi INAPROC aktif (bukan
   job collect).
 - Sukses `200`: `{"number": "...", "status": "found|empty", "items": 3}`.
@@ -1708,6 +1768,9 @@ ON DUPLICATE KEY UPDATE
     detail di INAPROC setelah login di portal.
 13. **Bahasa**: artefak teknis berbahasa Inggris. Pengecualian hanya untuk teks
     yang terlihat oleh user (Bahasa Indonesia) dan komentar penjelasan.
+14. **Pesan error FE**: kode error dari API dipetakan menjadi pesan Indonesia di
+    `web/src/api.ts`. Detail teknis tidak diteruskan langsung ke layar; pesan
+    job dan sinkronisasi Gateway memakai mapping khusus agar tetap aman dibaca.
 14. **Mulai implementasi TDD**: menyusul setelah rencana ini final.
 
 ## Sisa yang perlu diverifikasi (bukan keputusan desain)
@@ -1856,14 +1919,15 @@ Setiap baris adalah satu test yang harus **gagal dulu** sebelum implementasi.
 
 | Bagian | Perkiraan |
 | --- | --- |
-| Koneksi INAPROC headless (`auth.py`) | 1 jam (termasuk handling error) |
-| Database (`config`, `db`, `cache`) + test | 30-45 menit |
-| Backend inti (`spt`, `auth`, `scraper`, `parser`, `exporter`) | 1 sesi |
-| Backend orkestrasi (`collector`, `api`, `schemas`) | 1 sesi |
-| API Gateway (`gateway`, `gateway_store`, `gateway_sync`) + test | 1 sesi (setelah token disetujui) |
-| Frontend (Vue + Pinia + Vitest) | 1 sesi |
-| Smoke test + perbaikan | 30-60 menit |
-| **Total** | **3-4 sesi kerja** |
+| Tahap 0: Database (`config`, `db`) + test | 45-60 menit |
+| Tahap 1-2: `spt`, `parser` + fixture HTML asli | 1-1.5 jam |
+| Tahap 3-4: `auth`, `login`, `scraper` + probe asli | 2-3 jam (tergantung OTP/captcha) |
+| Tahap 5: `cache`, `exporter` + test | 1-1.5 jam |
+| Tahap 6-7: `collector`, `schemas`, `api` + test | 2-3 jam |
+| Tahap 8: API Gateway + test | 2-3 jam (setelah token disetujui) |
+| Tahap 9: Frontend + Vitest | 3-4 jam |
+| Tahap 10: Verifikasi real case + smoke test | 1-2 jam |
+| **Total** | **2-3 hari kerja** (12-18 jam efektif) |
 
 Biaya waktu collect: 1000 nomor dengan delay 1-3 detik = 25-50 menit per job.
 Nomor yang sudah pernah dicek tidak diulang, jadi job berikutnya jauh lebih cepat.

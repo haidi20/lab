@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "session",
+      "value": "DUMMY_DO_NOT_USE",
+      "domain": ".inaproc.id",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://penyedia.inaproc.id",
+      "localStorage": [
+        {
+          "name": "dummy",
+          "value": "DUMMY_DO_NOT_USE"
+        }
+      ]
+    }
+  ]
+}
