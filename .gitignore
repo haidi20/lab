@@ -23,3 +23,8 @@ modules/inaproc/storageState.json
 modules/inaproc/*.session.json
 modules/inaproc/data/
 modules/inaproc/output/
+
+# artefak lokal tooling
+.npm-cache/
+modules/inaproc/web/node_modules/
+modules/inaproc/web/dist/
