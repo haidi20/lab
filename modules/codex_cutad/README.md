@@ -131,6 +131,59 @@ python3 -m modules.codex_cutad.fix_wire_api          # perbaiki + backup
   Restart panel Codex/Cursor agar config baru terbaca. Rollback: salin isi
   `config.toml.bak-<stamp>` (atau jalankan `--profile glm`).
 
+- **Update 14 Nov 2026 (Windows: Codex 0.167.1 + `deepseek-v4-pro` tanpa
+  9Router):** default `~/.codex/config.toml` kini lewat **shim lokal**
+  `modules/codex_cutad/shim.py` di `http://127.0.0.1:8787/v1`, bukan gateway
+  langsung dan bukan 9Router.
+
+  ```bash
+  python -m modules.codex_cutad.shim            # jalankan (127.0.0.1:8787)
+  powershell -File modules/codex_cutad/start_shim.ps1   # autostart latar belakang
+  ```
+
+  **Akar masalah yang sebenarnya (beda dari diagnosis awal):** gateway
+  `ai.cutad.web.id` **sudah** mendukung `/v1/responses` termasuk `stream:true`
+  untuk `deepseek-v4-pro`. Semua probe awal gagal karena memakai
+  `CUTAD_API_KEY` yang **sudah revoked**; env `CODEX_CUTAD_API_KEY` (yang dipakai
+  Codex) masih 200. Bukti probe 2026-11-14 dengan key aktif:
+
+  | payload `/v1/responses` | hasil |
+  | --- | --- |
+  | minimal / `stream:true` / `store:false` | 200 |
+  | `reasoning.effort` (`none`/`low`/`high`) + `summary` | 200 |
+  | `tools` + `tool_choice` + `parallel_tool_calls` | 200 |
+  | `instructions` + pesan `role:"system"` | 200 |
+  | `prompt_cache_key`, `include`, `max_output_tokens` | 200 |
+  | **`role:"developer"`** | **400 `request_rejected`** |
+  | **`previous_response_id`** | **400 `unsupported_parameter`** |
+
+  Jadi tidak perlu terjemahan Responses→Chat sama sekali; cukup dua rewrite.
+  Itulah yang dilakukan `shim.py` (TDD, 21 test di `tests/test_shim.py`):
+  `developer → system`, lalu buang `previous_response_id`; field lain
+  diteruskan utuh termasuk stream SSE per baris.
+
+  Verifikasi live di mesin ini:
+
+  | uji | hasil |
+  | --- | --- |
+  | `codex exec 'Reply with exactly: OK'` | `OK` (11.589 tokens) |
+  | `codex exec 'sebutkan satu file markdown ... tulis DONE'` | tool call `rg --files` + `modules/codex_cutad/README.md DONE` |
+  | probe shim turn-2 (`developer` + `prev_id` + `tools`) | 200, `response.completed` |
+
+  Catatan operasional:
+
+  - Shim **harus jalan** sebelum Codex dipakai; kalau mati, Codex gagal
+    connect ke `127.0.0.1:8787` (bukan error gateway).
+  - Token dibaca dari environment oleh shim (`CODEX_CUTAD_API_KEY`, fallback
+    `CUTAD_API_KEY`) dan **tidak pernah** masuk log. Header auth dari klien
+    dibuang, jadi nilai `env_key` Codex tidak bocor ke upstream salah.
+  - 9Router tidak dipakai lagi untuk jalur ini (masih terpasang; node `cutad`
+    di dalamnya menyimpan key `cag_...` yang sudah revoked, jadi `cd/*` akan
+    401 sampai key di DB-nya diperbarui).
+  - `model_max_output_tokens` dihapus dari config karena Codex 0.167.1
+    mengabaikannya dan mencetak warning deprecation.
+  - Rollback: `~/.codex/config.toml.bak.20261114-shim-before`.
+
 - **Update 12 Nov 2026 (default Codex → `deepseek-v4-pro`):** default
   `~/.codex/config.toml` sekarang `model = "deepseek-v4-pro"` +
   `model_provider = "cutad"` (tetap lewat shim). Hy4 preview tetap tersedia:
