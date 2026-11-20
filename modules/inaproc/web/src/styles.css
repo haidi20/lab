@@ -1,0 +1,92 @@
+:root {
+  --ink: #15202b;
+  --muted: #5b6773;
+  --line: #d9e1e8;
+  --accent: #0b6e5b;
+}
+
+body {
+  background: #f4f6f8;
+  color: var(--ink);
+}
+
+.app-shell {
+  max-width: 1320px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.progress {
+  height: 8px;
+}
+
+.loading-dot::after {
+  content: "";
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-left: 0.45rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-dot::after {
+    animation: none;
+  }
+  .spinner-border,
+  .progress-bar {
+    animation: none !important;
+    transition: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+  }
+}
