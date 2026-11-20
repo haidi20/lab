@@ -17,3 +17,9 @@ $null
 
 # artefak log skrip VPS/skripsi
 skripsi_setup.log
+
+# sesi dan artefak modul inaproc
+modules/inaproc/storageState.json
+modules/inaproc/*.session.json
+modules/inaproc/data/
+modules/inaproc/output/
