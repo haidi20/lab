@@ -5,8 +5,43 @@
 Mengumpulkan data TKDN (Jenis Produk, Merek, Tipe, Uraian Produk, Standard, Nilai)
 untuk sekumpulan nomor SPT yang berurutan, tanpa mengetik nomor satu per satu di
 browser. Hasil akhir bisa dilihat dan dicari di FE (filter, sorting, pagination)
-serta diekspor ke CSV atau JSON. Data disimpan di cache SQLite lokal supaya
+serta diekspor ke CSV atau JSON. Data disimpan di database MySQL supaya
 pencarian berikutnya tidak perlu request ulang ke INAPROC.
+
+Selain TKDN, modul ini direncanakan mengintegrasikan **INAPROC API Gateway**
+resmi untuk data katalog/pengadaan. Kedua jalur dipisahkan: API Gateway untuk
+data katalog, dan portal penyedia untuk TKDN.
+
+## Batas Operasi: Read-Only ke INAPROC
+
+Aplikasi ini adalah **tool pencarian**, bukan sistem manajemen penyedia. Semua
+interaksi ke INAPROC bersifat **read-only**:
+
+| Operasi | Ke INAPROC | Keterangan |
+| --- | --- | --- |
+| Baca/cari data katalog | Boleh | Lewat API Gateway resmi, GET saja |
+| Baca/cari nomor SPT TKDN | Boleh | Lewat halaman portal penyedia dengan Playwright |
+| Membuka link detail produk | Boleh (oleh user) | Link dibuka di browser user yang sudah login |
+| Insert/update/delete produk | **Tidak boleh** | Bukan Seller API; tidak ada push produk/stok/harga |
+| Upload file/template | **Tidak boleh** | Di luar scope aplikasi |
+| Mengubah status/verifikasi TKDN | **Tidak boleh** | Aplikasi hanya membaca hasil pencarian |
+
+Yang boleh menulis adalah **MySQL lokal** (`tkdn_rows`, `tkdn_checks`, dan tabel
+Gateway) sebagai cache hasil baca. Upsert lokal itu bukan operasi tulis ke
+INAPROC dan tidak mengubah data di sana. Fokus fitur tetap sesuai `tugas.md`:
+mencari produk/merek dari nomor SPT TKDN dan mencari barang di katalog.
+
+Tujuan satu-satunya penulisan ke DB aplikasi adalah **mempercepat pencarian
+berikutnya**:
+
+```text
+Pencarian pertama  -> data belum ada di DB -> baca dari INAPROC -> upsert ke DB app
+Pencarian kedua    -> data sudah ada di DB -> jawab dari DB app -> INAPROC tidak disentuh
+```
+
+Upsert ke DB app **bukan** sinkronisasi dua arah dan **bukan** cara mengubah
+data INAPROC. Kalau data di INAPROC berubah, DB app hanya ikut berubah saat user
+menjalankan refresh/sync ulang; tidak ada push dari DB app ke INAPROC.
 
 ## Klarifikasi Istilah: Login INAPROC, Bukan Login Aplikasi
 
@@ -27,24 +62,255 @@ Catatan: `POST /api/login`, `POST /api/logout`, dan `GET /api/session` adalah na
 teknis endpoint untuk siklus sesi INAPROC. Ketiganya tidak membuat, menyimpan, atau
 mengelola akun pengguna aplikasi.
 
+## Integrasi INAPROC API Gateway Resmi
+
+INAPROC punya **dua jalur data yang tidak boleh dicampur**. API Gateway hanya
+dipakai untuk **pencarian data read-only**; portal penyedia tetap dipakai untuk
+TKDN dan sebagai target tautan hasil pencarian.
+
+| Jalur | Sumber | Kegunaan di modul ini | Autentikasi |
+| --- | --- | --- | --- |
+| **INAPROC API Gateway** | `https://data.inaproc.id` | Data katalog/pengadaan resmi: penyedia, produk e-katalog, kategori, e-purchasing, program | `Authorization: Bearer <token>` dari Developer Portal |
+| **Portal Penyedia TKDN** | `https://penyedia.inaproc.id/products/tkdn` | Pencarian nomor SPT TKDN | Cookie/localStorage sesi penyedia di `storageState.json` |
+
+API Gateway resmi bersifat **read-only** untuk data pengadaan. Dokumentasi resmi
+tidak membuka endpoint TKDN dari `penyedia.inaproc.id`, jadi pencarian TKDN tetap
+memakai Playwright sesuai keputusan sebelumnya. API Gateway juga bukan Seller API:
+tidak dipakai untuk push/update produk atau stok.
+
+Hasil audit dokumentasi resmi `https://data.inaproc.id/docs/spesifikasi-api`
+(2026-11-20): halaman itu memuat 76 path `/api/v1/...` untuk E-Katalog, RUP,
+tender/non-tender, dan dashboard, tetapi **tidak ada satu pun kemunculan kata
+`TKDN`**. Karena itu Playwright tetap diperlukan khusus untuk membaca halaman
+`penyedia.inaproc.id/products/tkdn?keyword=...`.
+
+Hasil pencarian produk dapat menyimpan `source_url` ke halaman INAPROC. User
+bisa klik URL itu untuk membuka detail di portal INAPROC. Aplikasi **tidak**
+melakukan login ulang, menyisipkan cookie, atau membuka halaman tersebut dengan
+sesi backend; user harus sudah login ke INAPROC di browser masing-masing.
+
+### Syarat akses API Gateway
+
+1. Registrasi dan verifikasi akun di `https://akun.inaproc.id`.
+2. Ajukan role akses melalui **Manajemen Peran**. Ikuti nama role yang benar-benar
+   muncul di portal (`API Integrator` atau `Data Integrator`).
+3. Siapkan surat permohonan akses ke LKPP, data instansi/perusahaan, NPWP,
+   PIC teknis, dan penjelasan use case integrasi.
+4. Saat membuat token di `https://data.inaproc.id/portal`, isi deskripsi token,
+   spesifikasi teknis, estimasi volume request per hari, public egress IP server,
+   dan pilih API yang benar-benar dipakai.
+5. Tunggu persetujuan token. Dokumentasi menyebut review sekitar 1-3 hari kerja;
+   verifikasi role bisa lebih lama karena bergantung LKPP.
+6. Simpan token hanya sebagai environment variable backend. Token tidak pernah
+   dikirim ke FE, tidak masuk log, dan tidak masuk git.
+
+Catatan login portal: `storageState.json` tetap dipakai hanya oleh Playwright
+TKDN. Ia tidak dipakai untuk mengaktifkan link yang diklik user di FE. Link
+produk INAPROC dibuka langsung oleh browser user; kalau sesi portal user tidak
+aktif, INAPROC akan meminta login secara normal.
+
+### Konfigurasi API Gateway
+
+```env
+INAPROC_API_BASE_URL=https://data.inaproc.id
+INAPROC_API_TOKEN=
+INAPROC_API_TIMEOUT=30
+INAPROC_API_MAX_RETRIES=3
+INAPROC_API_ENABLED=false
+```
+
+`INAPROC_API_ENABLED=true` hanya berlaku kalau token sudah tersedia. Staging
+`https://data.eproc.dev` cukup dipakai kalau token staging diberikan; production
+tetap menjadi default rencana.
+
+### Modul client baru
+
+Tambahkan satu adapter terpisah, misalnya `modules/inaproc/gateway.py`:
+
+- `InaprocGatewayClient` untuk GET JSON dengan `Authorization: Bearer ...`.
+- Pagination cursor: baca `data`, `meta.has_more`, dan `meta.cursor`; berhenti
+  saat `has_more=false` atau cursor hilang.
+- Rate limit handling: baca `X-Ratelimit-Limit`, `X-Ratelimit-Remaining`, dan
+  `X-Ratelimit-Reset`.
+- Retry exponential backoff + jitter hanya untuk `429` dan `5xx`.
+- `400`, `401`, `403`, dan `404` tidak di-retry; diterjemahkan menjadi error
+  yang jelas.
+- Redaksi token pada log dan exception message.
+- Mapping respons standar ke model internal supaya service tidak bergantung pada
+  bentuk JSON mentah.
+
+Contoh endpoint resmi yang dipetakan:
+
+| Endpoint Gateway | Data |
+| --- | --- |
+| `GET /api/v1/ekatalog/penyedia-detail` | Detail penyedia berdasarkan `kode_penyedia` |
+| `GET /api/v1/ekatalog/list-produk-penyedia` | Produk penyedia; `limit` maksimum 1000 dan cursor |
+| `GET /api/v1/ekatalog/list-kategori-produk` | Kategori drill-down level 1-3 |
+| `GET /api/v1/ekatalog/paket-e-purchasing` | Paket e-purchasing per KLPD dan tahun |
+| `GET /api/v1/ekatalog/e-purchasing-by-produk` | Transaksi/realisasi per produk |
+| `GET /api/v1/master/program` | Master program |
+
+Cakupan resmi API Gateway juga mencakup arsip E-Katalog V5, RUP/SiRUP, dan
+SPSE (tender/non-tender). Modul ini memprioritaskan E-Katalog V6 dan master
+program lebih dulu. RUP/SPSE masuk fase berikutnya setelah path dan parameter
+resminya dikonfirmasi dari dokumentasi/token yang disetujui; jangan mengarang
+path di luar dokumentasi.
+
+### Endpoint internal aplikasi
+
+Scope API internal disesuaikan dengan scope token yang disetujui. Rencana awal:
+
+| Endpoint | Metode | Kegunaan |
+| --- | --- | --- |
+| `/api/gateway/status` | GET | Token ada/tidak, enabled/disabled, ringkasan run terakhir |
+| `/api/gateway/sync/penyedia` | POST | Sync detail/daftar penyedia |
+| `/api/gateway/sync/produk` | POST | Sync produk e-katalog |
+| `/api/gateway/sync/kategori` | POST | Sync master kategori |
+| `/api/gateway/sync/epurchasing` | POST | Sync paket/transaksi e-purchasing |
+| `/api/gateway/produk` | GET | Cari/filter/sort/paginate produk dari MySQL |
+| `/api/gateway/epurchasing` | GET | Cari/filter/sort/paginate data e-purchasing dari MySQL |
+
+`GET /api/gateway/produk` mengembalikan `source_url` yang bisa diklik untuk
+produk/e-katalog. Backend hanya menyimpan/mengembalikan URL resmi dari data API;
+url tidak dibuka oleh backend dan tidak dipakai untuk scraping halaman detail.
+
+Semua route sync berbentuk job berjalan di background, punya status, dan hanya
+menjalankan satu job per scope. FE memakai tombol sync dengan disabled loading
+state, bukan polling endpoint eksternal. Di sini "sync" berarti **menarik data
+INAPROC ke cache MySQL**, bukan mengirim perubahan dari MySQL ke INAPROC.
+
+### Skema MySQL API Gateway
+
+Tabel tambahan dibuat idempotent saat startup dengan komentar tabel. Kunci unik
+dan upsert mengikuti ID resmi API, bukan nama/teks yang bisa berubah:
+
+| Tabel | Fungsi | Kunci/upsert |
+| --- | --- | --- |
+| `inaproc_api_sync_runs` | Audit job sync: scope, parameter, status, cursor terakhir, total item, pesan error, waktu mulai/selesai | `id` |
+| `inaproc_penyedia` | Master penyedia | `kode_penyedia` |
+| `inaproc_produk` | Produk e-katalog dan relasi penyedia/kategori | `kd_produk` + kode penyedia/kategori resmi |
+| `inaproc_kategori` | Kategori level 1-3 | kode kategori resmi per level |
+| `inaproc_paket_epurchasing` | Paket e-purchasing | ID/kode paket resmi + tahun/KLPD |
+| `inaproc_transaksi_epurchasing` | Realisasi/transaksi per produk | `order_id` |
+| `inaproc_master_program` | Master program | kode/ID program |
+
+Prinsip tabel:
+
+- Kolom mentah penting disimpan apa adanya; kolom turunan seperti nama normal
+  dipakai hanya untuk pencarian.
+- `source_url` disimpan hanya bila tersedia dari API. Nilai ini dipakai sebagai
+  link ke portal INAPROC, bukan sebagai input scraping.
+- Semua tabel Gateway berada di database `INAPROC_MYSQL_DATABASE` yang sama
+  dengan tabel TKDN, tetapi tidak ada foreign key lintas jalur dan tidak ada
+  proses TKDN yang menulis tabel Gateway.
+- Semua upsert `INSERT ... ON DUPLICATE KEY UPDATE` dan idempotent.
+- `updated_at` diperbarui saat upsert, `source_updated_at` menyimpan nilai resmi
+  dari API bila tersedia.
+- Index mengikuti filter utama: kode penyedia, kode produk, kategori, tahun,
+  KLPD, dan waktu update.
+- Tidak ada fallback SQLite/file. Semua data API Gateway masuk MySQL.
+
+Sebelum implementasi, siapkan database sekali (contoh):
+
+```sql
+CREATE DATABASE IF NOT EXISTS inaproc
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+`gateway_store.py` membuat tabel Gateway secara idempotent saat startup, sama
+seperti `TkdnMysqlStore.create_schema()`. Nama tabel, kunci unik final, dan tipe
+kolom mengikuti respons resmi API setelah token disetujui; yang dikunci di sini
+adalah identitas bisnis dan strategi upsert, bukan tebakan nama field.
+
+### Event upsert API resmi
+
+Semua baris di bawah adalah penulisan ke **DB aplikasi**. Tidak ada event yang
+mengirim INSERT/UPDATE/DELETE ke INAPROC.
+
+| Event | Penulisan DB |
+| --- | --- |
+| Sync manual dimulai | INSERT `inaproc_api_sync_runs` status `running` |
+| Setiap halaman cursor diterima | UPDATE run: cursor, jumlah halaman, `last_ok_at` |
+| Upsert batch halaman | Upsert tabel scope terkait secara batch/idempotent |
+| Sync halaman berhasil | UPDATE run tambah total item |
+| Sync selesai | UPDATE run status `success`, cursor akhir, waktu selesai |
+| Sync gagal | UPDATE run status `failed`, error code/message |
+| Token expired | UPDATE run status `failed` dengan `TOKEN_EXPIRED`; tidak retry tanpa token baru |
+| Rate limit | UPDATE run dengan status tetap `running`/`retrying`, simpan reset time |
+| API 4xx/5xx | UPDATE run gagal untuk non-retryable; backoff untuk 429/5xx |
+| Token belum tersedia | Tidak memanggil API dan tidak membuat baris data; status API Gateway `disabled` |
+| Data duplikat diterima | Upsert baris yang sama, jumlah fisik tabel tidak bertambah |
+
+### Aturan DB-first untuk API Gateway
+
+Aturan yang sama dipakai seperti TKDN:
+
+```text
+FE mencari produk/e-purchasing -> query MySQL dulu.
+Data sudah ada -> jawab dari DB, tanpa memanggil API Gateway.
+Data belum ada/sync diminta -> panggil API Gateway, lalu simpan ke MySQL.
+GET /api/search TKDN -> tetap hanya MySQL dan Playwright tidak dipanggil.
+Hasil produk -> tampilkan source_url untuk dibuka user di INAPROC.
+```
+
+"Pencarian read-only" di sini berarti **membaca data**, bukan memanggil Gateway
+setiap kali user mengetik atau klik hasil. API Gateway hanya dipanggil oleh
+sync/refresh terencana supaya volume API mudah dikontrol dan hasil tetap cepat
+dari DB. Link `source_url` tidak memicu request backend.
+
+### Rencana test API Gateway
+
+| Test | Perilaku |
+| --- | --- |
+| Client mengirim Bearer token | Header auth benar dan token tidak muncul di log |
+| Cursor pagination | Loop berhenti saat `has_more=false` |
+| Retry 429/5xx | Backoff + jitter, maksimum sesuai config |
+| Tidak retry 400/401/403/404 | Error langsung dipetakan |
+| Token kosong | `INAPROC_API_ENABLED` efektif false dan tidak request |
+| Upsert idempotent | Data sama dua kali tidak menambah baris |
+| Upsert hanya DB app | Test memastikan upsert menulis ke fake MySQL dan tidak ada request tulis ke INAPROC |
+| Sync run tersimpan | Status `running`, `success`, dan `failed` tercatat |
+| Duplikat halaman | Tidak menggandakan data |
+| Link hasil produk | `source_url` diambil dari data resmi dan dibuka user, bukan dibuka backend |
+| TKDN tetap Playwright | Alur TKDN tidak memanggil Gateway |
+
+### Keputusan integrasi resmi
+
+- API Gateway resmi adalah jalur untuk data katalog/pengadaan.
+- API Gateway hanya untuk pencarian/read-only; produk yang cocok cukup diberi
+  URL INAPROC agar dibuka user yang sudah login di portal.
+- Backend tidak membuka `source_url`, tidak login ke portal lewat link, dan
+  tidak memakai `storageState.json` untuk tautan FE.
+- TKDN tetap lewat portal penyedia dengan Playwright karena endpointnya tidak
+  ada di dokumentasi publik API Gateway.
+- `INAPROC_API_TOKEN` dan `storageState.json` adalah kredensial berbeda dan
+  tidak boleh saling menggantikan.
+- Implementasi Gateway menunggu token disetujui; tanpa token, fitur ini tetap
+  nonaktif dan tidak mengganggu fitur TKDN.
+
 ## Arsitektur Baru: FE -> BE -> INAPROC
 
-User mencari lewat **frontend**, backend yang mengambil data dari INAPROC,
-lalu hasilnya ditampilkan kembali ke frontend. Sumber data adalah **halaman TKDN
-INAPROC yang dirender di browser**. Backend membuka halaman itu dengan Playwright,
-menunggu tabel selesai render, lalu membaca HTML tabelnya. **Tidak memakai GraphQL
-dan tidak memanggil endpoint internal INAPROC secara langsung.**
+User mencari lewat **frontend**, backend menjawab dari **MySQL** lebih dulu.
+Scraping hanya dijalankan untuk **nomor SPT yang belum ada** (atau masih
+`error`) di database. Sumber scraping adalah **halaman TKDN INAPROC yang
+dirender di browser**: backend membuka halaman itu dengan Playwright, menunggu
+tabel selesai render, lalu membaca HTML tabelnya. **Tidak memakai GraphQL dan
+tidak memanggil endpoint internal INAPROC secara langsung.**
 
 ```
 [FE: hubungkan sesi INAPROC sekali] --POST /api/login--> [Playwright headless -> storageState.json]
         |
-[User di FE: input keyword / pilih rentang nomor]
-        |  GET /api/search?q=acer  atau  POST /api/collect {nomor, start, end}
+[User di FE: cari produk/merek] --GET /api/search?q=acer--> [MySQL saja, tanpa scraping]
+        |
+[User di FE: cari satu nomor SPT] --POST /api/lookup--> [cek tkdn_checks]
+        |                                                 |-- found/empty --> balas dari DB
+        |                                                 |-- belum ada/error --> scraping
         v
 [Backend Python (FastAPI)]
-        |  cek cache dulu (SQLite lokal)
-        |  -- cache ada --> langsung kembalikan hasil (cepat)
-        |  -- cache kosong -->
+        |  startup: connect_mysql() + TkdnMysqlStore buat tabel
+        |  lookup/collect selalu cek DB dulu
+        |  -- nomor final (found/empty) --> langsung kembalikan hasil (tanpa INAPROC)
+        |  -- nomor belum ada/error -->
         v
 [Playwright + storageState sesi INAPROC]
         |  buka https://penyedia.inaproc.id/products/tkdn?keyword=<nomor SPT>
@@ -52,31 +318,125 @@ dan tidak memanggil endpoint internal INAPROC secara langsung.**
         |  ambil HTML tabel -> parser.py
         |  delay + backoff
         v
-[Baris TKDN] -> [simpan ke cache] -> [JSON response ke FE]
+[Baris TKDN] -> [simpan ke MySQL] -> [JSON response ke FE]
 ```
 
 **Poin penting**
 
 - **Koneksi INAPROC cukup 1x dari FE**, lalu `storageState.json` dipakai ulang.
   Tidak ada koneksi ulang di dalam loop request. Ini bukan login aplikasi.
-- **Cache wajib**: hasil scraping disimpan sekali, pencarian berikutnya
-  (misal cari merek `acer`) murni query lokal. Ini mencegah request berulang ke
-  INAPROC dan menjawab keluhan "lambat kalau 1-1".
+- **DB-first untuk nomor SPT**: `POST /api/lookup` mengecek `tkdn_checks` lebih
+  dulu. Nomor yang sudah `found`/`empty` dijawab dari MySQL tanpa membuka
+  INAPROC. Scraping hanya terjadi kalau nomor belum ada atau status terakhirnya
+  `error`.
+- **Pencarian produk/merek tidak pernah scraping**: `GET /api/search?q=acer`
+  hanya query MySQL. Halaman INAPROC mencari berdasarkan nomor SPT, bukan merek,
+  jadi pencarian merek tidak bisa dijadikan alasan untuk scraping.
+- **Nomor SPT punya jalur khusus**: `POST /api/lookup` untuk satu nomor,
+  `POST /api/collect` untuk rentang. Keduanya cek DB dulu dan hanya men-scrape
+  nomor yang belum final. `GET /api/search` tidak pernah men-scrape.
+- **Collect tetap DB-first**: `POST /api/collect` melewati nomor yang sudah final
+  dan hanya men-scrape nomor yang belum ada/`error`. Ini mencegah request ulang
+  ke INAPROC untuk data yang sudah tersimpan.
+- **MySQL wajib hidup**: backend tidak punya fallback ke SQLite/file. Kalau
+  koneksi gagal saat startup, API berhenti dengan pesan konfigurasi yang jelas;
+  kalau koneksi putus saat request, endpoint mengembalikan `503 db_unavailable`.
 - Endpoint `POST /api/collect` dipakai untuk mengisi cache rentang nomor;
   `GET /api/search?q=...` dipakai user untuk mencari produk/merek (dari cache).
 - FE hanya konsumsi API BE. FE **tidak** pernah menyimpan kredensial atau state
   sesi INAPROC.
 
+### Konsep DB-first (wajib)
+
+Aturan tunggal yang mengikat seluruh alur:
+
+```
+data yang dicari sudah ada di DB?
+  ya  -> jawab dari DB, JANGAN scraping
+  tidak -> baru scraping, lalu simpan ke DB
+```
+
+Rinciannya:
+
+| Jenis pencarian | Endpoint | Cek DB dulu | Scraping |
+| --- | --- | --- | --- |
+| Produk / merek / tipe / uraian / nilai | `GET /api/search` | Selalu, langsung ke `tkdn_rows` | **Tidak pernah** |
+| Satu nomor SPT | `POST /api/lookup` | Cek `tkdn_checks` nomor itu | Hanya bila belum ada / `error` |
+| Rentang nomor SPT | `POST /api/collect` | Cek `tkdn_checks` per nomor | Hanya nomor yang belum ada / `error` |
+| Paksa ambil ulang | `POST /api/refresh` | Hapus nomor dulu, lalu ambil ulang | Selalu (memang tujuan refresh) |
+
+Definisi **"sudah ada di DB"**:
+
+- Nomor dengan status `found` **dan** punya minimal satu baris di `tkdn_rows`
+  -> data final, dibalas dari `tkdn_rows`.
+- Nomor dengan status `found` tetapi **tidak punya baris** di `tkdn_rows`
+  -> data tidak konsisten (mis. baris terhapus manual); jangan dianggap final.
+  Reset status ke `error` dengan `error_msg='data_tidak_konsisten'`, lalu
+  scraping ulang.
+- Nomor dengan status `empty` -> hasil final "tidak ada data", dibalas tanpa
+  scraping ulang. Kalau ternyata masih ada baris `tkdn_rows` untuk nomor itu,
+  hapus baris yatim tersebut, lalu tetap jawab dari DB tanpa scraping ulang.
+- Nomor dengan status `error` -> **belum final**, akan dicoba scraping lagi.
+- Nomor tanpa baris di `tkdn_checks` -> belum pernah diproses, scraping.
+
+Aturan konsistensi ini berlaku sama untuk `POST /api/lookup` dan
+`POST /api/collect`. Tanpa aturan ini, status `found` yang kehilangan barisnya
+bisa membuat nomor selamanya di-skip tanpa pernah di-scrape ulang.
+
+#### Skenario nomor yang sama dicari dua kali
+
+| Aksi | Isi `tkdn_checks` | Scraping? | Sumber respons |
+| --- | --- | --- | --- |
+| Lookup pertama | tidak ada | ya, sekali | `scrape` |
+| Lookup kedua | `found` / `empty` | tidak | `db` |
+| Lookup ketiga | `found` / `empty` | tidak | `db` |
+| Refresh manual | dihapus lalu diisi lagi | ya, sekali | `scrape` |
+| Collect `force=true` | di-UPSERT ulang | ya, sekali per nomor | `scrape` |
+
+Jadi INAPROC hanya disentuh pada lookup pertama (atau setelah refresh/force),
+bukan pada setiap pencarian.
+
+Alur `POST /api/lookup` (satu nomor):
+
+```
+POST /api/lookup {nomor}
+  |
+  +-- validasi format nomor (5 bagian)          -> 422 bila salah
+  +-- SELECT tkdn_checks WHERE number = ?
+        |
+        +-- found  -> SELECT tkdn_rows WHERE number = ?
+        |              |-- ada baris -> 200 {source: "db"}
+        |              +-- kosong -> UPSERT status error (data_tidak_konsisten) -> scraping
+        +-- empty  -> hapus baris tkdn_rows yatim (bila ada)
+        |              -> 200 {source: "db", status: "empty", items: []}
+        +-- error  -> lanjut scraping (retry)
+        +-- tidak ada -> lanjut scraping
+        |
+  +-- cek sesi INAPROC (hanya bila perlu scraping) -> 401 belum_login
+  +-- Playwright buka halaman TKDN -> parser
+  +-- UPSERT tkdn_rows + tkdn_checks (transaksi per nomor)
+  +-- 200 {source: "scrape", status, items}
+```
+
+Efek yang diharapkan: user yang mencari nomor yang sama dua kali hanya
+menyentuh INAPROC sekali. Pencarian kedua dibalas dari MySQL dan tidak menambah
+beban ke INAPROC.
+
 ### File tambahan untuk arsitektur FE/BE
 
 | File | Fungsi |
 | --- | --- |
-| `modules/inaproc/api.py` | Aplikasi FastAPI: `/api/login`, `/api/logout`, `/api/session`, `/api/search`, `/api/collect`, `/api/collect/preview`, `/api/collect/cancel`, `/api/status`, `/api/export`, `/api/refresh` |
+| `modules/inaproc/api.py` | Aplikasi FastAPI: `/api/login`, `/api/logout`, `/api/session`, `/api/search`, `/api/lookup`, `/api/collect`, `/api/collect/preview`, `/api/collect/cancel`, `/api/status`, `/api/export`, `/api/refresh` |
 | `modules/inaproc/auth.py` | Koneksi INAPROC headless (`email`/`password`) + validasi `storageState.json`; bukan autentikasi aplikasi |
 | `modules/inaproc/login.py` | Fallback interaktif Playwright untuk koneksi INAPROC (OTP/captcha); koneksi normal lewat `POST /api/login` |
 | `modules/inaproc/scraper.py` | Buka halaman TKDN dengan Playwright + `storageState.json`, tunggu tabel render, kembalikan HTML/baris |
 | `modules/inaproc/parser.py` | Parse tabel HTML hasil render menjadi baris TKDN (jalur utama, bukan fallback) |
-| `modules/inaproc/cache.py` | Simpan/ambil hasil ke SQLite lokal (`tkdn.db`), query by merek/produk |
+| `modules/inaproc/config.py` | `InaprocDbConfig` dari env `INAPROC_MYSQL_*` (+ fallback host/user), memakai loader `.env` yang sudah ada di repo |
+| `modules/inaproc/db.py` | `connect_mysql(config)`: `pymysql` + `DictCursor` + `charset=utf8mb4`, dipanggil saat startup API |
+| `modules/inaproc/cache.py` | `TkdnMysqlStore`: simpan/ambil hasil ke MySQL, query by merek/produk |
+| `modules/inaproc/gateway.py` | `InaprocGatewayClient`: GET JSON API Gateway resmi, Bearer token, cursor pagination, rate limit, retry 429/5xx, redaksi token |
+| `modules/inaproc/gateway_store.py` | Upsert dan query MySQL untuk penyedia/produk/kategori/e-purchasing/program + audit sync run |
+| `modules/inaproc/gateway_sync.py` | Orkestrasi sync per scope: jalan di background, cek DB-first, simpan cursor/progress |
 | `modules/inaproc/schemas.py` | Model Pydantic untuk request/response API |
 | `modules/inaproc/web/index.html` | Entry point Vite untuk aplikasi Vue 3 |
 | `modules/inaproc/web/package.json` | Dependency FE: Vue 3, TypeScript, Bootstrap 5, Vite, Pinia, Vitest |
@@ -85,11 +445,11 @@ dan tidak memanggil endpoint internal INAPROC secara langsung.**
 | `modules/inaproc/web/src/main.ts` | Bootstrap aplikasi Vue + Pinia + Bootstrap 5 |
 | `modules/inaproc/web/src/App.vue` | Layout utama: form pencarian, tabel hasil, panel progres |
 | `modules/inaproc/web/src/types.ts` | Tipe TS untuk request/response API dan baris TKDN |
-| `modules/inaproc/web/src/api.ts` | Wrapper `fetch` ke endpoint BE (`/api/search`, `/api/collect`, `/api/status`, `/api/refresh`) |
-| `modules/inaproc/web/src/stores/tkdn.ts` | Pinia store (VM): state filter/hasil/status/chunk, action search/collect/poll/refreshNumber |
+| `modules/inaproc/web/src/api.ts` | Wrapper `fetch` ke endpoint BE (`/api/search`, `/api/lookup`, `/api/collect`, `/api/status`, `/api/refresh`) |
+| `modules/inaproc/web/src/stores/tkdn.ts` | Pinia store (VM): state filter/hasil/status/chunk, action search/lookup/collect/poll/refreshNumber |
 | `modules/inaproc/web/src/stores/inaprocSession.ts` | Pinia store: status sesi INAPROC, action connect/disconnect |
 | `modules/inaproc/web/src/components/ConnectInaprocForm.vue` | Form email/password akun penyedia INAPROC ke `POST /api/login`, disabled + spinner saat proses |
-| `modules/inaproc/web/src/components/SearchForm.vue` | Input keyword + rentang nomor + tombol cari/collect (disabled saat loading) |
+| `modules/inaproc/web/src/components/SearchForm.vue` | Input keyword (cari di DB) + input satu nomor SPT (lookup DB-first) + tombol cari (disabled saat loading) |
 | `modules/inaproc/web/src/components/ResultTable.vue` | Tabel hasil (merek, tipe, uraian, standard, nilai, nomor SPT) + tombol refresh per baris |
 | `modules/inaproc/web/src/components/CollectForm.vue` | Nomor contoh + rentang pilihan user + Cek Rentang + Mulai/Batal |
 | `modules/inaproc/web/src/components/PaginationBar.vue` | Info jumlah, pindah halaman, tombol ekspor |
@@ -100,22 +460,32 @@ dan tidak memanggil endpoint internal INAPROC secara langsung.**
 | `modules/inaproc/tests/test_exporter.py` | Test CSV & JSON |
 | `modules/inaproc/tests/test_scraper.py` | Test navigasi Playwright, deteksi redirect login, timeout, dan retry dengan fake page |
 | `modules/inaproc/tests/test_collector.py` | Test loop rentang, skip cache, cancel, progres |
-| `modules/inaproc/tests/test_api.py` | Test endpoint FastAPI dengan dependency/stub |
+| `modules/inaproc/tests/test_api.py` | Test endpoint FastAPI dengan dependency/stub, termasuk lookup DB-first |
 | `modules/inaproc/tests/test_spt.py` | Test parse dan rentang nomor SPT |
 | `modules/inaproc/tests/test_schemas.py` | Test validasi request/response API |
-| `modules/inaproc/tests/test_cache.py` | Test SQLite cache, filter, sort, pagination |
+| `modules/inaproc/tests/test_cache.py` | Test MySQL store dengan fake connection factory, filter, sort, pagination |
+| `modules/inaproc/tests/test_db.py` | Test config env, koneksi MySQL, dan pemetaan error koneksi |
 | `modules/inaproc/tests/test_cli.py` | Test argumen dan dispatch CLI dengan mock |
 | `modules/inaproc/tests/test_login.py` | Test fallback koneksi INAPROC interaktif dengan Playwright fake |
 | `modules/inaproc/tests/test_parser.py` | Test parser tabel HTML (tabel kosong, beberapa baris, nilai desimal) |
-| `modules/inaproc/pyproject.toml` | Metadata modul + dependency (`fastapi`, `playwright`, `uvicorn`) untuk `pip install -e modules/inaproc` |
+| `modules/inaproc/tests/test_gateway.py` | Test client API Gateway: Bearer token, cursor, retry 429/5xx, no-retry 4xx, token tidak bocor di log |
+| `modules/inaproc/tests/test_gateway_store.py` | Test upsert idempotent dan audit `inaproc_api_sync_runs` dengan fake connection factory |
+| `modules/inaproc/tests/test_gateway_sync.py` | Test sync per scope, DB-first, resume cursor, dan status job |
+| `modules/inaproc/pyproject.toml` | Metadata modul + dependency (`fastapi`, `playwright`, `uvicorn`, `pymysql`) untuk `pip install -e modules/inaproc` |
+| `.env.example` (root, update) | Tambah `INAPROC_MYSQL_DATABASE=inaproc` dan `INAPROC_API_*`; jangan mengubah `MYSQL_DATABASE` milik modul lain |
 | `modules/inaproc/README.md` | Cara menjalankan BE + FE, koneksi sesi INAPROC, collect, dan catatan sesi |
 
 ### Perubahan pada file yang sudah direncanakan
 
 - `scraper.py`: dipakai oleh `api.py` dan `collector.py`, bukan langsung oleh CLI.
-- `collector.py`: hasilnya ditulis ke `cache.py`, bukan hanya CSV.
+- `collector.py`: hasilnya ditulis ke `cache.py` (MySQL) secara inkremental,
+  bukan hanya CSV.
 - `__main__.py`: bisa tetap ada untuk mode CLI (bulk awal mengisi cache), tapi
   fokus utama bergeser ke `api.py`.
+- `api.py`: membuat `TkdnMysqlStore` saat startup dan menyuntikkannya ke route;
+  tidak membuka koneksi global yang dipakai bersama antar-thread.
+- `gateway.py`: hanya memanggil API Gateway resmi dengan token backend; tidak
+  pernah dipakai oleh alur TKDN.
 
 ### Konvensi path test
 
@@ -126,22 +496,26 @@ aturan AGENTS.md: test modul disimpan di dalam modul, bukan di `tests/` root.
 
 ### Urutan TDD ringkas
 
-1. `auth.py` + test (koneksi INAPROC headless, fake Playwright)
-2. `spt.py` + test
-3. `parser.py` + `scraper.py` + test (HTML tabel, fake Playwright page)
-4. `cache.py` + test
-5. `schemas.py` + test
+1. `config.py` + `db.py` + test (env MySQL, timeout, error koneksi)
+2. `auth.py` + test (koneksi INAPROC headless, fake Playwright)
+3. `spt.py` + test
+4. `parser.py` + `scraper.py` + test (HTML tabel, fake Playwright page)
+5. `cache.py` + test (fake connection factory)
 6. `collector.py` + test
-7. `api.py` + test (TestClient, stub collector)
-8. `exporter.py` + test (CSV + JSON)
-9. FE (`web/`) + Vitest store/komponen (termasuk form koneksi INAPROC) + smoke test browser
+7. `schemas.py` + test
+8. `api.py` + test (TestClient, stub collector)
+9. `exporter.py` + test (CSV + JSON)
+10. `gateway.py` + `gateway_store.py` + `gateway_sync.py` + test (fake HTTP dan fake DB)
+11. FE (`web/`) + Vitest store/komponen (termasuk form koneksi INAPROC dan panel sync Gateway) + smoke test browser
 
 ### Stack keputusan (update)
 
-- **BE: Python + FastAPI** (satu bahasa dengan Playwright & cache; TDD `python -m unittest` lewat `TestClient`).
+- **BE: Python + FastAPI + PyMySQL** (satu bahasa dengan Playwright & cache; TDD `python -m unittest` lewat `TestClient`).
 - **FE: Vue 3 + TypeScript + Bootstrap 5 + Vite + Pinia**. Bootstrap 5 untuk layout/komponen; animasi spinner memakai CSS Bootstrap/Vue transition yang menghormati `prefers-reduced-motion`.
 - **Tidak memakai Emotion** di modul `inaproc` (keputusan user).
-- **Sumber data: halaman TKDN INAPROC** `https://penyedia.inaproc.id/products/tkdn?keyword=...` via Playwright + parser HTML. **Tanpa GraphQL.**
+- **Sumber data TKDN**: halaman `https://penyedia.inaproc.id/products/tkdn?keyword=...` via Playwright + parser HTML. **Tanpa GraphQL.**
+- **Sumber data katalog/pengadaan**: INAPROC API Gateway resmi
+  `https://data.inaproc.id` (Bearer token, read-only, cursor pagination).
 - Elysia/Bun tidak dipakai.
 
 ## Struktur FE (Vue 3 + TS + Pinia)
@@ -218,6 +592,9 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
 +--------------------------------------------------------------+
 | TKDN INAPROC   [Sesi INAPROC aktif] [Putuskan sesi INAPROC]   |
 +--------------------------------------------------------------+
+| Cari nomor SPT: [______________________________] [Cari Nomor] |
+| (DB dulu; scraping hanya bila nomor belum ada)                |
++--------------------------------------------------------------+
 | Cari: [______________]  Merek: [______]  Nilai >= [____]      |
 | Urut: [Nomor v] [Naik v]   Per hal: [50 v]   [Cari]           |
 +--------------------------------------------------------------+
@@ -241,6 +618,8 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
 | Email | `input.form-control[type=email]` | wajib, validasi format |
 | Password | `input.form-control[type=password]` | wajib, tidak di-prefill |
 | Hubungkan | `btn btn-primary w-100` | disabled + spinner saat request |
+| Nomor SPT | `input.form-control` | wajib untuk lookup, format 5 bagian divalidasi |
+| Cari Nomor | `btn btn-primary` | `POST /api/lookup`; DB dulu, scraping hanya bila belum ada |
 | Keyword | `input.form-control` | debounce 300 ms, kosong = tanpa filter teks |
 | Merek | `input.form-control` | filter opsional |
 | Nilai minimum | `input.form-control` type number | kosong = tanpa filter |
@@ -253,6 +632,11 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
 | Mulai/Batal ambil | `btn btn-primary` / `btn btn-outline-danger` | disabled saat job berjalan; Mulai menjalankan antrean chunk |
 | Ekspor | `btn btn-outline-secondary` + ikon | ikut filter aktif |
 
+Untuk hasil API Gateway, tabel produk memakai kolom tambahan `Detail INAPROC`.
+Nilai kolom itu berupa link aman ke `source_url`; aplikasi tidak membuka atau
+men-scrape link ini. Jika user belum login ke portal INAPROC, halaman target
+yang akan meminta login secara normal.
+
 ### State wajib
 
 | State | Tampilan |
@@ -260,9 +644,13 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
 | sesi INAPROC belum terhubung | hanya form koneksi INAPROC, tanpa tabel |
 | menghubungkan INAPROC | tombol disabled + spinner |
 | koneksi INAPROC gagal | `alert alert-danger` di atas tombol |
+| lookup dari DB | badge `Data dari database` (tanpa spinner scraping) |
+| lookup scraping | badge `Diambil dari INAPROC` + spinner selama request |
+| lookup cache kosong + sesi INAPROC belum ada | pesan `401 belum_login`, arahkan ke form koneksi |
 | loading cari | tombol disabled + spinner, tabel tetap tampil dengan opacity |
 | cache kosong | `alert alert-info` "Belum ada data. Jalankan Ambil Data." |
 | hasil kosong | `alert alert-warning` "Tidak ada hasil untuk filter ini." |
+| produk Gateway | baris punya link `Detail INAPROC` bila `source_url` tersedia |
 | job berjalan | progress bar + angka found/empty/error, polling 2 detik |
 | rentang >1000 | tampilkan "dijalankan dalam N chunk" dari preview |
 | chunk berjalan | label "chunk 2/3, nomor 2000-2500" di samping progress |
@@ -278,13 +666,25 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
   dinonaktifkan saat `prefers-reduced-motion: reduce`.
 - Angka nilai TKDN tampil 2 desimal (`33.39`), `null` tampil sebagai `-`.
 - Kolom nomor SPT bisa di-copy; klik nomor membuka halaman INAPROC di tab baru.
+- `source_url` hasil Gateway dirender sebagai link `Detail INAPROC` dengan
+  `target="_blank"` dan `rel="noopener noreferrer"`. FE tidak fetch URL itu;
+  user membukanya sendiri dan harus sudah login ke portal INAPROC.
 - Setiap baris punya tombol refresh (ikon) yang memanggil `POST /api/refresh`.
+- Hasil `POST /api/lookup` menampilkan sumber data: `database` atau `INAPROC`.
+  Sumber `database` berarti tidak ada request scraping pada aksi itu.
 - Tabel responsif: `table-responsive` + `table table-sm table-hover align-middle`.
 - Tanpa kartu bertumpuk, tanpa hero, tanpa ilustrasi dekoratif.
 
 ## Prinsip
 
 - **TDD**: setiap fitur diawali test yang gagal (`python -m unittest` dari root repo), lalu implementasi minimal, lalu refactor.
+- **Bahasa implementasi**: semua artefak teknis memakai Bahasa Inggris:
+  nama file, class/function/variable, nama tabel/kolom, endpoint, parameter API,
+  JSON key, log/error internal, nama test, dan pesan commit. Pengecualian:
+  teks yang **terlihat oleh user** tetap Bahasa Indonesia, dan **komentar
+  penjelasan** boleh Bahasa Indonesia supaya alasan desain mudah dibaca.
+  Kode error internal tetap Inggris (misalnya `not_found`, `job_active`);
+  pesan error yang ditampilkan di FE boleh Indonesia.
 - **Sesi INAPROC dipakai ulang**: koneksi INAPROC cukup sekali dari FE, lalu
   `storageState.json` dipakai ulang untuk setiap halaman yang dibuka Playwright.
   Ini bukan login aplikasi.
@@ -292,9 +692,14 @@ ada, lalu **halaman kerja** berisi input, aksi, dan tabel hasil.
 - **Tidak ada kredensial hardcode**. Password akun penyedia INAPROC hanya lewat
   form Vue -> `POST /api/login`, dipakai sekali, tidak disimpan. Sesi INAPROC
   disimpan lokal & di-gitignore.
-- **Cache-first**: FE selalu baca cache; INAPROC hanya disentuh saat collect/refresh.
+- **DB-first**: sebelum menyentuh INAPROC, backend selalu cek MySQL. Nomor
+  `found`/`empty` dibalas dari DB; INAPROC hanya disentuh untuk nomor yang belum
+  ada, status `error`, collect `force`, atau refresh manual.
 - **Satu job collect aktif**: mencegah dua loop paralel membebani INAPROC.
-- **Data mentah tetap disimpan**: kolom `hs` dan `specification_id` ikut di-cache walau belum dipakai FE.
+- **Data mentah tetap disimpan**: kolom `hs` dan `specification_id` ikut di-cache
+  di MySQL walau belum dipakai FE.
+- **Database tunggal**: MySQL, tanpa SQLite dan tanpa file cache lokal. Sesi
+  INAPROC tetap berupa `storageState.json` karena itu bukan data aplikasi.
 - Modul berada di `modules/inaproc/`, test di `modules/inaproc/tests/`.
 - Modul ini **tidak memakai Emotion**; styling FE pakai Bootstrap 5 (keputusan user).
 
@@ -304,18 +709,19 @@ Supaya tidak bingung saat mulai, ini urutan yang akan dijalankan:
 
 | Tahap | Pekerjaan | Hasil |
 | --- | --- | --- |
-| 0 | `auth.py` koneksi INAPROC headless + test | koneksi INAPROC dari BE jalan |
-| 1 | `spt.py` + test | parsing nomor terkunci |
-| 2 | `parser.py` + `scraper.py` + test | baca tabel HTML dari halaman yang dirender |
-| 3 | `cache.py`, `exporter.py` + test | simpan & ekspor data |
-| 4 | `collector.py` + test | loop rentang, progres, cancel |
-| 5 | `api.py`, `schemas.py` + test | `/api/login` s/d `/api/refresh` |
-| 6 | FE Vue + Pinia + Vitest | form koneksi INAPROC, pencarian, tabel, ekspor, chunk rentang |
-| 7 | Verifikasi live | sesi valid, bentuk `empty`, selector tabel, rate limit |
-| 8 | Smoke test | koneksi INAPROC via FE, collect 10 nomor, cari, ekspor |
+| 0 | `config.py`, `db.py` + test | koneksi MySQL terkonfigurasi & tabel siap |
+| 1 | `auth.py` koneksi INAPROC headless + test | koneksi INAPROC dari BE jalan |
+| 2 | `spt.py` + test | parsing nomor terkunci |
+| 3 | `parser.py` + `scraper.py` + test | baca tabel HTML dari halaman yang dirender |
+| 4 | `cache.py`, `exporter.py` + test | simpan ke MySQL & ekspor data |
+| 5 | `collector.py` + test | loop rentang, progres, cancel |
+| 6 | `api.py`, `schemas.py` + test | `/api/login` s/d `/api/refresh` |
+| 7 | FE Vue + Pinia + Vitest | form koneksi INAPROC, pencarian, tabel, ekspor, chunk rentang |
+| 8 | Verifikasi live | sesi valid, bentuk `empty`, selector tabel, rate limit |
+| 9 | Smoke test | koneksi INAPROC via FE, collect 10 nomor, cari, ekspor |
 
-Tahap 0-5 murni `python -m unittest` tanpa jaringan (Playwright di-fake).
-Tahap 7 baru menyentuh INAPROC sungguhan, setelah FE dan BE siap.
+Tahap 0-6 murni `python -m unittest` tanpa jaringan (Playwright di-fake).
+Tahap 8 baru menyentuh INAPROC sungguhan, setelah FE dan BE siap.
 
 ## Daftar File Inti yang Akan Dibuat
 
@@ -391,17 +797,47 @@ Orkestrasi:
 
 Test: `modules/inaproc/tests/test_collector.py` dengan scraper & parser palsu.
 
-### 7. `modules/inaproc/exporter.py`
+### 7. `modules/inaproc/config.py` dan `modules/inaproc/db.py`
 
-- `write_csv(rows, path)` dan `write_json(rows, path)` (+ `write_jsonl` untuk
-  arsip baris).
+Koneksi database dipisah dari store supaya mudah dites dan tidak ada kredensial
+di kode:
+
+- `InaprocDbConfig.from_env()` membaca `INAPROC_MYSQL_*`. Host/port/user/password
+  boleh fallback ke `MYSQL_*` yang sudah ada di repo, tetapi **database tidak
+  boleh** memakai `MYSQL_DATABASE` karena variabel itu sudah dipakai modul lain
+  (mis. `telegram_data`).
+- `connect_mysql(config)` membuat koneksi `pymysql` dengan `DictCursor`,
+  `charset="utf8mb4"`, dan timeout pendek (`connect_timeout=5`,
+  `read_timeout=10`, `write_timeout=10`) supaya API gagal cepat saat MySQL mati.
+- `TkdnMysqlStore.create_schema()` idempotent: `CREATE TABLE IF NOT EXISTS`
+  lalu `ALTER TABLE ... COMMENT` setiap startup, sehingga database lama ikut
+  mendapat komentar tabel tanpa migrasi manual.
+- `TkdnMysqlStore` menerima **connection factory**, bukan satu koneksi global.
+  Setiap operasi membuka koneksi sendiri lalu menutupnya. Ini penting karena
+  PyMySQL tidak thread-safe: request API dan thread collector tidak boleh
+  berbagi satu koneksi.
+- Saat startup, `api.py` memanggil `connect_mysql` sekali untuk memastikan DB
+  hidup dan tabel dibuat. Saat shutdown, tidak ada koneksi global yang perlu
+  ditutup; koneksi per operasi sudah ditutup di `finally`.
+- Kegagalan koneksi (`OperationalError`/`InterfaceError`) dipetakan menjadi
+  HTTP `503` dengan kode `db_unavailable`, bukan stack trace.
+- Saat MySQL mati, collector menghentikan job dengan status `error` dan
+  `error: "db_unavailable"`; nomor yang belum selesai tidak ditandai `found`.
+
+Test: `modules/inaproc/tests/test_db.py` (config env, prefix database,
+timeout, error koneksi) dan `test_cache.py` memakai fake connection factory.
+
+### 8. `modules/inaproc/exporter.py`
+
+- `write_csv(rows, path)` dan `write_json(rows, path)` (+ `write_jsonl` sebagai
+  opsi ekspor baris, bukan penyimpanan utama).
 - Kolom: `number, product_type, brand, type, description, standard, value, hs`.
 - Dipakai endpoint `GET /api/export?format=csv|json` sehingga hasil ekspor
   mengikuti filter yang sedang aktif di FE.
 
 Test: `modules/inaproc/tests/test_exporter.py` (headers, urutan kolom, nilai `null`, escaping koma).
 
-### 8. `modules/inaproc/__main__.py`
+### 9. `modules/inaproc/__main__.py`
 
 CLI untuk tiga hal: koneksi INAPROC interaktif, probe satu nomor, dan collect tanpa FE.
 
@@ -418,11 +854,12 @@ python -m modules.inaproc collect --nomor 11469/SJ-IND.8/E-TKDN/7/2025 --start 1
 - `collect` memakai nomor contoh sebagai template, mengganti nomor urut saja.
 - Argumen: `--nomor`, `--start`, `--end`, `--out`, `--delay-min`, `--delay-max`,
   `--force`.
-- Output default: `modules/inaproc/output/hasil.csv` + `hasil.json`.
+- Hasil collect disimpan ke MySQL. `--out` hanya untuk ekspor tambahan
+  (`modules/inaproc/output/hasil.csv` + `hasil.json`), bukan sumber data utama.
 
 Test: `modules/inaproc/tests/test_cli.py` (parse argumen + dispatch dengan mock).
 
-### 9. `modules/inaproc/login.py`
+### 10. `modules/inaproc/login.py`
 
 Fallback interaktif saja (dipakai bila INAPROC minta OTP/captcha). Buka
 `https://penyedia.inaproc.id/auth/signin?callbackUrl=/products/tkdn` dengan
@@ -437,7 +874,7 @@ Koneksi INAPROC normal dilakukan dari Vue lewat `POST /api/login`, tidak lewat f
 
 Test: `modules/inaproc/tests/test_login.py` dengan Playwright fake (tanpa browser sungguhan).
 
-### 10. `modules/inaproc/auth.py`  (inti koneksi INAPROC headless)
+### 11. `modules/inaproc/auth.py`  (inti koneksi INAPROC headless)
 
 Koneksi INAPROC normal: `connect_inaproc(email, password, session_path)` membuka Playwright
 headless, isi form signin INAPROC, submit, tunggu redirect ke `/products/tkdn`,
@@ -453,21 +890,31 @@ atau sesi aplikasi.
 
 Test: `modules/inaproc/tests/test_auth.py` memakai state dummy tanpa nilai sesi asli.
 
-### 11. `modules/inaproc/documents/contoh_session.json.example`
+### 12. `modules/inaproc/documents/contoh_session.json.example`
 
 Contoh struktur `storageState.json` **tanpa nilai asli** (cookie dummy), sebagai
 referensi cara menyiapkan sesi. File aslinya di-gitignore.
 
-### 12. `.gitignore` (update)
+### 13. `.gitignore` (update)
 
-Tambahkan pola untuk menyembunyikan file sesi, cache, dan hasil:
+Tambahkan pola untuk menyembunyikan file sesi dan hasil ekspor:
 
 ```
 modules/inaproc/*.session.json
 modules/inaproc/storageState.json
-modules/inaproc/data/
 modules/inaproc/output/
 ```
+
+Catatan: root `.gitignore` saat ini masih punya pola lama
+`modules/inaproc/data/`; pola itu dihapus saat implementasi karena tidak ada
+lagi file database lokal (MySQL).
+
+### 14. CLI tambahan untuk API Gateway
+
+`python -m modules.inaproc gateway-status` hanya menampilkan ringkasan aman:
+`enabled`, ada/tidaknya token, base URL, scope yang aktif, dan run terakhir.
+Perintah ini tidak pernah mencetak token atau cookie. CLI tambahan untuk sync
+hanya dipakai sebagai maintenance internal setelah route FE tersedia.
 
 ## Format Nomor SPT
 
@@ -612,7 +1059,8 @@ Semua endpoint di bawah prefix `/api`. Error selalu berbentuk
 | `POST` | `/api/login` | Buka sesi INAPROC via Playwright headless, simpan `storageState.json` (bukan login aplikasi) |
 | `POST` | `/api/logout` | Hapus sesi tersimpan |
 | `GET` | `/api/session` | Status sesi INAPROC tanpa membocorkan isi state |
-| `GET` | `/api/search` | Cari di cache lokal (filter, sort, pagination) |
+| `GET` | `/api/search` | Cari di database MySQL (filter, sort, pagination), tanpa scraping |
+| `POST` | `/api/lookup` | Cari **satu nomor SPT**: DB dulu, scraping hanya bila belum ada/`error` |
 | `GET` | `/api/collect/preview` | Hitung dampak rentang sebelum dijalankan |
 | `POST` | `/api/collect` | Mulai job collect untuk satu rentang (maks 1000 nomor) |
 | `GET` | `/api/status` | Progres job aktif/terakhir |
@@ -628,8 +1076,80 @@ Catatan umum:
 - Backend tidak pernah memilih rentang sendiri; tidak ada default 1..N.
 - `/api/collect` memerlukan sesi INAPROC valid (`401 belum_login`).
 - `/api/collect/preview` tidak butuh sesi; hanya menghitung dari cache.
-- `/api/search` dan `/api/export` murni membaca cache lokal tanpa sesi.
+- `/api/search` dan `/api/export` murni membaca MySQL tanpa sesi.
+- `/api/lookup` hanya butuh sesi INAPROC **bila** nomor belum final atau data
+  tidak konsisten di DB.
+- Semua endpoint yang menyentuh data mengembalikan `503 db_unavailable` bila
+  MySQL tidak bisa dihubungi; detail koneksi tidak dibocorkan ke FE.
 - `/api/status` dan `/api/collect/cancel` hanya membaca/mengubah job di memori.
+- `/api/lookup` hanya butuh sesi INAPROC bila status DB `error`, tidak
+  ditemukan, atau `found` tanpa baris `tkdn_rows` (data tidak konsisten).
+
+### `POST /api/lookup`
+
+Endpoint untuk satu nomor SPT. Ini jalur utama konsep DB-first: nomor yang sudah
+pernah di-scrape tidak di-scrape lagi.
+
+Body:
+
+```json
+{ "nomor": "11469/SJ-IND.8/E-TKDN/7/2025" }
+```
+
+Alur:
+
+1. Validasi format nomor (5 bagian, bulan/tahun valid).
+2. `SELECT status FROM tkdn_checks WHERE number = ?`.
+3. `found` -> `SELECT` baris dari `tkdn_rows`:
+   - ada baris -> balas `source: "db"`.
+   - tidak ada baris -> UPSERT status `error` dengan
+     `error_msg='data_tidak_konsisten'`, lalu lanjut ke scraping.
+4. `empty` -> hapus baris `tkdn_rows` yatim bila ada, balas `source: "db"`,
+   `items: []`.
+5. `error`, tidak ada, atau `found` tidak konsisten -> cek sesi INAPROC,
+   scraping, lalu UPSERT.
+
+Response `200`:
+
+```json
+{
+  "number": "11469/SJ-IND.8/E-TKDN/7/2025",
+  "status": "found",
+  "source": "db",
+  "items": [
+    {
+      "product_type": "Monitor",
+      "brand": "acer",
+      "type": "V",
+      "description": "23.8 Inchi",
+      "standard": null,
+      "value": 33.39,
+      "hs": null
+    }
+  ]
+}
+```
+
+| Kondisi | Respons |
+| --- | --- |
+| Nomor `found` di DB dan ada baris `tkdn_rows` | `200`, `source: "db"`, item dari MySQL |
+| Nomor `empty` di DB | `200`, `source: "db"`, `items: []` |
+| Nomor belum ada, scraping sukses | `200`, `source: "scrape"` |
+| Nomor `error`, scraping sukses | `200`, `source: "scrape"`, status baru |
+| Nomor `found` tapi tanpa baris `tkdn_rows` | dianggap tidak konsisten, scraping ulang |
+| Nomor belum ada + sesi INAPROC kosong | `401 belum_login` |
+| Format nomor salah | `422 nomor_tidak_valid` |
+| MySQL mati | `503 db_unavailable` |
+
+Catatan:
+
+- Request ke INAPROC hanya terjadi pada cabang `error`/belum ada.
+- Nomor `found` tanpa baris `tkdn_rows` juga masuk cabang scraping, karena
+  status saja tidak cukup untuk menjawab data.
+- Kalau dua user melakukan lookup nomor yang sama bersamaan, keduanya bisa
+  sama-sama scraping; hasil akhir tetap aman karena UPSERT idempotent. Lock
+  per nomor di luar lingkup versi pertama.
+- `source` dipakai FE untuk menampilkan badge "database" vs "INAPROC".
 
 ### `GET /api/search`
 
@@ -658,9 +1178,14 @@ Query params: `q` (opsional, default kosong = semua baris), `brand` (opsional),
 }
 ```
 
-Pencarian hanya ke cache lokal (tidak memanggil INAPROC). `q` mencocokkan semua
+Pencarian hanya ke MySQL (tidak memanggil INAPROC). `q` mencocokkan semua
 kolom teks (nomor, jenis, merek, tipe, uraian, standard) secara case-insensitive.
 Tanpa `q`, endpoint tetap mengembalikan baris cache yang cocok dengan filter lain.
+
+Kalau `q` berisi nomor SPT yang belum ada di DB, endpoint ini **tidak**
+men-scrape. FE harus memakai `POST /api/lookup` (satu nomor) atau
+`POST /api/collect` (rentang). Dengan begitu, pencarian teks selalu murah dan
+scraping selalu eksplisit.
 
 ### `GET /api/collect/preview`
 
@@ -726,6 +1251,9 @@ Rentang nomor **dipilih user di FE**, tidak hardcode. Body:
 - `nomor` adalah template; hanya bagian nomor urut yang diganti (`start`..`end`).
 - `start` dan `end` bebas dipilih user, minimal 1 nomor.
 - `force: true` memproses ulang nomor yang sudah ada di cache.
+- Tanpa `force`, setiap nomor dicek ke `tkdn_checks` lebih dulu: status
+  `found`/`empty` dilewati tanpa request INAPROC; hanya nomor yang belum ada
+  atau `error` yang di-scrape.
 - Satu request hanya boleh mencakup maksimal 1000 nomor. Rentang lebih besar
   dipecah oleh FE, bukan oleh backend (lihat bagian chunk di bawah).
 - `delay_min`/`delay_max` opsional; bila kosong pakai default server
@@ -893,53 +1421,265 @@ Tanpa endpoint ini, keputusan "refresh manual per nomor" tidak punya jalur API.
 | `delay_tidak_valid` | 422 | Delay di luar batas |
 | `format_tidak_valid` | 422 | Export selain csv/json |
 | `nomor_tidak_ditemukan` | 404 | Refresh nomor tidak ada di cache |
+| `db_unavailable` | 503 | MySQL tidak bisa dihubungi / koneksi terputus |
 | `upstream_timeout` | 504 | INAPROC tidak merespons |
 | `upstream_error` | 502 | Halaman INAPROC gagal dimuat atau markup tak dikenali |
 
-## Skema Cache SQLite
+## Skema Database MySQL
 
-File: `modules/inaproc/data/tkdn.db` (di-gitignore).
+Cache utama disimpan di MySQL, mengikuti pola modul lain di repo ini:
+`pymysql` + `DictCursor`, class `TkdnMysqlStore`, schema dibuat saat init.
+
+Konfigurasi lewat `.env`. Variabel khusus modul ini memakai prefix `INAPROC_`
+supaya tidak bertabrakan dengan database modul lain:
+
+```
+INAPROC_MYSQL_HOST=127.0.0.1
+INAPROC_MYSQL_PORT=3306
+INAPROC_MYSQL_USER=root
+INAPROC_MYSQL_PASSWORD=
+INAPROC_MYSQL_DATABASE=inaproc
+```
+
+`INAPROC_MYSQL_HOST`/`PORT`/`USER`/`PASSWORD` boleh fallback ke `MYSQL_*` yang
+sudah ada. `INAPROC_MYSQL_DATABASE` **wajib** diisi dan tidak fallback ke
+`MYSQL_DATABASE`, karena nilai itu milik modul lain.
+
+Tidak ada file database di repo. Database dan user dibuat manual sekali
+(mis. lewat Laragon atau `mysql -e`), lalu store membuat tabelnya sendiri.
+Kolom komentar tabel wajib ada supaya tujuan tiap tabel terbaca dari schema:
 
 ```sql
 CREATE TABLE IF NOT EXISTS tkdn_rows (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    number          TEXT    NOT NULL,
-    specification_id TEXT,
-    product_type    TEXT,
-    brand           TEXT,
-    type            TEXT,
-    description     TEXT,
-    standard        TEXT,
-    value           REAL,
-    hs              TEXT,
-    fetched_at      TEXT    NOT NULL,
-    UNIQUE(number, specification_id, brand, type, description)
-);
-
-CREATE INDEX IF NOT EXISTS idx_tkdn_brand  ON tkdn_rows(brand);
-CREATE INDEX IF NOT EXISTS idx_tkdn_number ON tkdn_rows(number);
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY,
+    number           VARCHAR(128) NOT NULL,
+    specification_id VARCHAR(128) NULL,
+    product_type     VARCHAR(255) NULL,
+    brand            VARCHAR(255) NULL,
+    type             VARCHAR(255) NULL,
+    description      VARCHAR(512) NULL,
+    standard         VARCHAR(255) NULL,
+    value            DOUBLE NULL,
+    hs               VARCHAR(64) NULL,
+    fetched_at       DATETIME NOT NULL,
+    row_hash         CHAR(64) NOT NULL,
+    UNIQUE KEY uq_tkdn_row (row_hash),
+    KEY idx_tkdn_brand (brand),
+    KEY idx_tkdn_number (number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  COMMENT='Baris hasil scraping TKDN per nomor SPT; cache utama pencarian';
 
 CREATE TABLE IF NOT EXISTS tkdn_checks (
-    number      TEXT PRIMARY KEY,
-    status      TEXT NOT NULL,          -- found | empty | error
-    checked_at  TEXT NOT NULL,
-    error_msg   TEXT
-);
+    number     VARCHAR(128) PRIMARY KEY,
+    status     VARCHAR(16) NOT NULL,   -- found | empty | error
+    checked_at DATETIME NOT NULL,
+    error_msg  TEXT NULL,
+    KEY idx_tkdn_checks_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  COMMENT='Status pengecekan per nomor SPT (found/empty/error) untuk skip collect';
 ```
+
+Catatan penting MySQL:
+
+- `row_hash` = SHA-256 dari `number|specification_id|brand|type|description`
+  yang sudah dinormalisasi (`None` -> `''`). Ini menghindari batas panjang index
+  MySQL (3072 byte) yang akan terlampaui bila lima kolom teks dijadikan satu
+  unique key utf8mb4.
+- Upsert memakai `INSERT ... ON DUPLICATE KEY UPDATE` dan memperbarui
+  `value`, `standard`, `hs`, serta `fetched_at` dari `VALUES(...)`. `row_hash`
+  ikut dikirim setiap insert, jadi tidak perlu kolom generated. Dengan begitu
+  refresh/force collect bisa memperbaiki nilai tanpa membuat baris duplikat.
+- `LIKE` untuk pencarian teks memakai `COLLATE utf8mb4_unicode_ci` agar
+  case-insensitive tanpa bergantung pada collation server.
+- Sort dan pagination memakai `ORDER BY` + `LIMIT %s OFFSET %s`; kolom sort
+  dipilih dari whitelist di kode, tidak pernah dari input mentah.
+- Store menerima **connection factory** di constructor, jadi test memakai fake
+  factory tanpa MySQL asli.
+- `CREATE TABLE IF NOT EXISTS` tidak memperbarui komentar tabel yang sudah ada.
+  Saat implementasi, jalankan `ALTER TABLE ... COMMENT='...'` yang idempotent
+  setelah `CREATE TABLE` (atau drop tabel dev lama) supaya komentar benar-benar
+  terpasang pada database yang sudah pernah dibuat.
 
 `tkdn_checks` menyimpan status per nomor supaya nomor kosong tidak di-request
 ulang saat collect diulang. Baris `error` tetap disimpan untuk diagnosa, tetapi
 collect berikutnya mencoba ulang nomor itu. Refresh manual menghapus baris nomor
 tersebut dari kedua tabel.
 
+## Event Tulis ke Database (Upsert)
+
+Bagian ini mengunci **apa yang ditulis ke MySQL lokal** dan **event apa yang
+memicunya** untuk jalur TKDN. Tujuannya hanya cache: hasil baca dari INAPROC
+disimpan supaya pencarian berikutnya cepat. Jalur API Gateway punya tabel dan
+event sendiri di bagian "Event upsert API resmi"; kedua jalur tidak saling
+menulis tabel dan tidak menulis balik ke INAPROC.
+
+### Rencana singkat penulisan DB
+
+| Data | Tempat | Kapan ditulis |
+| --- | --- | --- |
+| Baris hasil TKDN per nomor SPT | `tkdn_rows` | Hanya saat scraping menghasilkan data (`found`), setelah nomor diproses |
+| Status pengecekan nomor SPT | `tkdn_checks` | Setiap nomor selesai: `found`, `empty`, atau `error` |
+| Schema dan komentar tabel | DDL MySQL | Saat startup API, idempotent |
+
+Aturan pentingnya:
+
+- `POST /api/lookup` dan `POST /api/collect` selalu baca status/nomor dari
+  MySQL dulu. Playwright hanya dipanggil untuk nomor baru, `error`, atau
+  `found` yang kehilangan baris datanya.
+- Penulisan data selalu commit per nomor, bukan setelah seluruh rentang
+  selesai, supaya job bisa dilanjutkan bila berhenti di tengah.
+- `tkdn_rows` memakai `row_hash` unik; upsert nomor sama tidak boleh
+  menggandakan baris.
+- `force=true` dan refresh manual menghapus baris lama milik nomor itu dulu,
+  lalu scrape ulang, supaya baris yang sudah hilang di INAPROC tidak tertinggal
+  di DB.
+
+### Peran tiap tabel
+
+| Tabel | Isi | Kunci unik | Kapan baris hidup |
+| --- | --- | --- | --- |
+| `tkdn_rows` | Baris hasil TKDN: nomor SPT, jenis produk, merek, tipe, uraian, standard, nilai, hs | `row_hash` | Hanya saat nomor berstatus `found` |
+| `tkdn_checks` | Satu baris per nomor SPT: status + waktu cek + pesan error | `number` (PK) | Selalu, selama nomor pernah diproses |
+
+### Matriks event tulis
+
+| # | Event | Dipicu oleh | Operasi DB | Tabel |
+| --- | --- | --- | --- | --- |
+| 1 | Startup API | `TkdnMysqlStore.create_schema()` | `CREATE TABLE IF NOT EXISTS` + `ALTER TABLE ... COMMENT` | schema |
+| 2 | Nomor selesai, ada data (`found`) | Parser mengembalikan >=1 baris | UPSERT baris (batch per nomor) + UPSERT status `found` | `tkdn_rows` + `tkdn_checks` |
+| 3 | Nomor selesai, kosong (`empty`) | Parser mengembalikan 0 baris | DELETE baris nomor itu bila ada + UPSERT status `empty` | `tkdn_rows` + `tkdn_checks` |
+| 4 | Nomor gagal diproses (`error`) | Timeout, 429 habis retry, markup tak dikenali | UPSERT status `error` + `error_msg` | `tkdn_checks` |
+| 5 | Nomor `error` dicoba ulang | Collect berikutnya (error tidak di-skip) | Sama seperti event 2/3/4; `error_msg` jadi `NULL` bila berhasil | kedua tabel |
+| 6 | Data tidak konsisten ditemukan | `found` tanpa baris `tkdn_rows`; `empty` dengan baris yatim | `found`: reset ke `error` lalu scrape ulang; `empty`: hapus baris yatim dan tetap jawab DB | kedua tabel |
+| 7 | `force=true` | User minta proses ulang | Sama seperti event 2/3; nilai baris `found` ikut diperbarui | kedua tabel |
+| 8 | Refresh satu nomor | `POST /api/refresh` | DELETE nomor dari kedua tabel -> scrape -> UPSERT hasil baru | kedua tabel |
+| 9 | Sesi INAPROC kedaluwarsa saat collect | Redirect ke `/auth/signin` | UPSERT nomor aktif `error` (`error_msg=belum_login`), job stop | `tkdn_checks` |
+| 10 | MySQL mati saat menulis | `OperationalError`/`InterfaceError` | `rollback()`, tidak ada commit, job stop `db_unavailable` | - |
+
+Alur ringkas per nomor:
+
+```
+collect nomor N:
+  belum ada/error -> scrape
+    found -> UPSERT tkdn_rows (semua baris) + UPSERT tkdn_checks status=found
+    empty -> DELETE tkdn_rows WHERE number=N  + UPSERT tkdn_checks status=empty
+    error -> UPSERT tkdn_checks status=error (tkdn_rows tidak diubah)
+
+sebelum memproses N:
+  checks=found + rows kosong  -> UPSERT status error data_tidak_konsisten -> scrape
+  checks=empty + rows ada     -> DELETE rows yatim, status tetap empty -> jawab DB
+
+refresh nomor N:
+  DELETE tkdn_rows WHERE number=N + DELETE tkdn_checks WHERE number=N  (1 transaksi)
+  -> scrape -> UPSERT sesuai hasil found/empty/error
+```
+
+### Detail UPSERT `tkdn_rows`
+
+Dijalankan per nomor, sekali per baris hasil parse. Idempotent: `row_hash` yang
+sama tidak pernah menambah baris baru.
+
+```sql
+INSERT INTO tkdn_rows
+    (number, specification_id, product_type, brand, type, description,
+     standard, value, hs, fetched_at, row_hash)
+VALUES
+    (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+ON DUPLICATE KEY UPDATE
+    product_type = VALUES(product_type),
+    value        = VALUES(value),
+    standard     = VALUES(standard),
+    hs           = VALUES(hs),
+    fetched_at   = VALUES(fetched_at)
+```
+
+- `number`, `specification_id`, `brand`, `type`, `description` tidak ikut
+  di-update karena kelimanya pembentuk `row_hash`; kalau salah satu berubah,
+  hash-nya beda dan baris baru memang wajar dibuat.
+- `product_type` ikut di-update karena tidak ikut masuk `row_hash`.
+- `fetched_at` diisi waktu server saat baris ditulis; dipakai untuk
+  melacak kapan baris terakhir diperbarui.
+- `row_hash` = SHA-256 dari `number|specification_id|brand|type|description`
+  dengan `None` dinormalisasi ke `''`.
+- Tidak ada baris `tkdn_rows` untuk nomor berstatus `empty` atau `error`.
+
+### Detail UPSERT `tkdn_checks`
+
+Dijalankan setiap sebuah nomor selesai diproses, apa pun hasilnya.
+
+```sql
+INSERT INTO tkdn_checks (number, status, checked_at, error_msg)
+VALUES (%s, %s, %s, %s)
+ON DUPLICATE KEY UPDATE
+    status     = VALUES(status),
+    checked_at = VALUES(checked_at),
+    error_msg  = VALUES(error_msg)
+```
+
+- `status` hanya `found` | `empty` | `error`.
+- `error_msg` berisi ringkasan error (tanpa cookie/kredensial); `NULL` untuk
+  `found`/`empty`.
+- Status `error` bukan final: nomor error akan diproses lagi pada collect
+  berikutnya, dan saat berhasil `error_msg` di-set `NULL`.
+- Status `found`/`empty` di-skip pada collect berikutnya; hanya `force=true`
+  atau `POST /api/refresh` yang memproses ulang.
+
+### Operasi DELETE
+
+| Operasi | Kapan | SQL |
+| --- | --- | --- |
+| Hapus hasil satu nomor | Nomor berubah jadi `empty`; refresh manual | `DELETE FROM tkdn_rows WHERE number = %s` |
+| Hapus status satu nomor | Refresh manual (sebelum ambil ulang) | `DELETE FROM tkdn_checks WHERE number = %s` |
+| Hapus total satu nomor | Refresh manual | Dua DELETE di atas dalam satu transaksi |
+
+### Event yang TIDAK menulis ke DB
+
+| Endpoint / aksi | Alasan |
+| --- | --- |
+| `GET /api/search` | Read-only, query `tkdn_rows` |
+| `GET /api/export` | Read-only, query `tkdn_rows` |
+| `GET /api/collect/preview` | Hanya menghitung dari `tkdn_checks` |
+| `GET /api/status` | State job ada di memori |
+| `POST /api/collect/cancel` | Hanya mengubah flag di memori |
+| `POST /api/login` / `POST /api/logout` | Hanya mengelola `storageState.json`, bukan data aplikasi |
+
+### Aturan transaksi & idempotensi
+
+- Commit dilakukan **per nomor**, bukan per 1000 nomor. Job yang berhenti di
+  tengah tidak kehilangan nomor yang sudah selesai.
+- Satu event nomor = satu transaksi: DELETE (bila perlu) -> UPSERT
+  `tkdn_rows` -> UPSERT `tkdn_checks` -> `commit()`. Gagal di tengah ->
+  `rollback()`.
+- Karena `row_hash` dan `number` unik, mengulang event yang sama tidak
+  menggandakan data.
+- Kalau `commit()` gagal karena koneksi DB putus, collector berhenti dengan
+  `error: db_unavailable`; tidak ada status `found` palsu.
+
+### Method store per event (rencana)
+
+| Method | Event | Operasi |
+| --- | --- | --- |
+| `create_schema()` | Startup | CREATE + ALTER COMMENT |
+| `upsert_rows(number, rows, fetched_at)` | Found, force, refresh | `INSERT ... ON DUPLICATE KEY UPDATE` |
+| `delete_rows_for_number(number)` | Empty, refresh | DELETE baris |
+| `upsert_check(number, status, error_msg, checked_at)` | Semua nomor selesai | `INSERT ... ON DUPLICATE KEY UPDATE` |
+| `delete_number(number)` | Refresh | DELETE dari kedua tabel, satu transaksi |
+| `get_check(number)` | Skip collect, validasi refresh | SELECT |
+| `get_checks(numbers)` | Skip massal, preview | SELECT |
+
 ## Catatan Keputusan yang Sudah Ditutup
 
-- **Stack**: Python + FastAPI (BE) dan Vue 3 + TS + Bootstrap 5 + Vite + Pinia (FE). Bukan Elysia/Bun.
+- **Stack**: Python + FastAPI + PyMySQL (BE) dan Vue 3 + TS + Bootstrap 5 + Vite + Pinia (FE). Bukan Elysia/Bun.
 - **Koneksi INAPROC**: dari form Vue (`POST /api/login`), BE Playwright headless,
   simpan `storageState.json`, lalu buka halaman TKDN dengan state itu. Ini bukan
   login aplikasi. Fallback interaktif hanya untuk OTP/captcha.
 - **Sumber data**: halaman `penyedia.inaproc.id/products/tkdn?keyword=...` via
   Playwright + parser HTML. **Tanpa GraphQL dan tanpa endpoint internal.**
+- **API Gateway resmi**: jalur terpisah untuk data katalog/pengadaan
+  (`data.inaproc.id`), read-only, Bearer token backend, dan tidak dipakai untuk
+  TKDN.
+- **Database**: MySQL wajib, tanpa fallback SQLite/file. Nama database memakai
+  `INAPROC_MYSQL_DATABASE` agar tidak bertabrakan dengan `MYSQL_DATABASE` modul lain.
 - **Styling**: Bootstrap 5, tanpa Emotion (keputusan user khusus modul `inaproc`).
 
 ## Keputusan (final)
@@ -954,11 +1694,21 @@ tersebut dari kedua tabel.
 8. **Akses FE/BE**: lokal saja. Aplikasi tidak memiliki login/akun sendiri.
    Satu-satunya kredensial adalah akun penyedia INAPROC, dimasukkan lewat form di
    Vue (`POST /api/login`) untuk membuka sesi INAPROC di backend.
-9. **Ekspor & fitur tabel**: **semua** disetujui: export CSV, export JSON, filtering, sorting, dan pagination.
-10. **Sumber data final**: **HTML scrape via Playwright**. Endpoint GraphQL yang
+9. **Database**: **MySQL**. `INAPROC_MYSQL_DATABASE` wajib diisi (tanpa fallback
+   ke `MYSQL_DATABASE`). Tabel dibuat otomatis saat startup, dengan komentar
+   tabel di schema. Tidak ada SQLite atau file database lokal.
+10. **Ekspor & fitur tabel**: **semua** disetujui: export CSV, export JSON, filtering, sorting, dan pagination.
+11. **Sumber data TKDN**: **HTML scrape via Playwright**. Endpoint GraphQL yang
     pernah ditemukan **tidak dipakai**, sesuai keputusan user. Backend membuka
     halaman TKDN, menunggu tabel render, lalu mem-parse HTML-nya.
-11. **Mulai implementasi TDD**: menyusul setelah rencana ini final.
+12. **Sumber data katalog/pengadaan**: **INAPROC API Gateway resmi**
+    (`data.inaproc.id`), read-only dan memakai Bearer token yang disimpan hanya
+    di backend. Fitur nonaktif sampai token disetujui. API hanya dipakai untuk
+    pencarian; hasil yang cocok menampilkan `source_url` agar user membuka
+    detail di INAPROC setelah login di portal.
+13. **Bahasa**: artefak teknis berbahasa Inggris. Pengecualian hanya untuk teks
+    yang terlihat oleh user (Bahasa Indonesia) dan komentar penjelasan.
+14. **Mulai implementasi TDD**: menyusul setelah rencana ini final.
 
 ## Sisa yang perlu diverifikasi (bukan keputusan desain)
 
@@ -1015,22 +1765,49 @@ Setiap baris adalah satu test yang harus **gagal dulu** sebelum implementasi.
 | `test_scraper.py` | `test_halaman_kosong` | tidak ada baris -> status `empty` |
 | `test_scraper.py` | `test_timeout_selector` | selector timeout -> error yang bisa ditampilkan |
 | `test_scraper.py` | `test_retry_429` | halaman 429 -> retry dengan backoff |
+| `test_db.py` | `test_config_dari_env` | prefix `INAPROC_MYSQL_*` terbaca |
+| `test_db.py` | `test_database_tidak_fallback` | `INAPROC_MYSQL_DATABASE` kosong -> error jelas, tidak memakai `MYSQL_DATABASE` |
+| `test_db.py` | `test_connect_timeout` | opsi timeout diteruskan ke `pymysql.connect` |
+| `test_db.py` | `test_koneksi_gagal` | `OperationalError` -> `DbUnavailableError` |
+| `test_db.py` | `test_charset_utf8mb4` | `connect_mysql` mengirim `charset="utf8mb4"` |
+| `test_cache.py` | `test_creates_schema_on_init` | init membuat dua tabel + `ALTER TABLE ... COMMENT` |
 | `test_cache.py` | `test_simpan_dan_baca` | insert lalu query balik |
-| `test_cache.py` | `test_dedup_baris` | insert sama 2x -> 1 baris |
+| `test_cache.py` | `test_upsert_tanpa_duplikat` | insert sama 2x -> 1 baris, `fetched_at` ter-update |
+| `test_cache.py` | `test_upsert_perbarui_nilai` | nilai/standard berubah -> baris yang sama ikut ter-update |
+| `test_cache.py` | `test_row_hash_stabil` | input sama -> hash sama; `None` dan `''` setara |
 | `test_cache.py` | `test_filter_brand` | filter merek case-insensitive |
 | `test_cache.py` | `test_filter_nilai_minimum` | `value >= 30` |
-| `test_cache.py` | `test_sort_dan_pagination` | sort + limit/offset |
+| `test_cache.py` | `test_filter_kombinasi` | `q` + `brand` + `min_value` digabung dengan `AND` |
+| `test_cache.py` | `test_sort_dan_pagination_whitelist` | sort + limit/offset; kolom sort di luar whitelist ditolak |
 | `test_cache.py` | `test_cek_status_nomor` | `tkdn_checks` found/empty/error; status error dianggap belum final |
+| `test_cache.py` | `test_cek_status_tidak_konsisten` | `found` tanpa `tkdn_rows` -> perlu scraping; `empty` dengan baris yatim -> bersihkan dulu |
 | `test_cache.py` | `test_refresh_hapus_nomor` | refresh menghapus baris nomor itu |
+| `test_cache.py` | `test_koneksi_ditutup` | connection ditutup walau query gagal |
+| `test_cache.py` | `test_utf8mb4` | merek/deskripsi non-ASCII tersimpan dan terbaca |
+| `test_cache.py` | `test_event_empty_hapus_baris` | nomor berubah `empty` -> baris `tkdn_rows` lama terhapus |
+| `test_cache.py` | `test_event_error_simpan_pesan` | status `error` menyimpan `error_msg` di `tkdn_checks` |
+| `test_cache.py` | `test_event_error_retry_bersihkan_pesan` | error lalu sukses -> `error_msg` jadi `NULL` |
+| `test_cache.py` | `test_delete_number_satu_transaksi` | refresh menghapus kedua tabel lalu commit sekali |
+| `test_cache.py` | `test_rollback_saat_gagal` | gagal di tengah -> `rollback()`, tidak ada commit |
 | `test_collector.py` | `test_loop_rentang` | 1000-1002 -> 3 nomor diproses |
 | `test_collector.py` | `test_template_user` | template dari user dipakai apa adanya |
 | `test_collector.py` | `test_rentang_tidak_hardcode` | start/end 5-7 memakai nilai user |
 | `test_collector.py` | `test_skip_found_empty` | nomor found/empty dilewati |
+| `test_collector.py` | `test_skip_tanpa_scrape` | nomor final di DB tidak memanggil scraper sama sekali |
 | `test_collector.py` | `test_retry_error` | nomor error tidak dilewati, diproses lagi |
 | `test_collector.py` | `test_force_ulang` | `force=True` memproses ulang |
 | `test_collector.py` | `test_cancel_event` | cancel berhenti setelah nomor aktif |
 | `test_collector.py` | `test_progres_terupdate` | hitungan done/found/empty/error |
+| `test_collector.py` | `test_db_mati_stop_job` | MySQL putus -> status job `error: db_unavailable` |
 | `test_api.py` | `test_search_dari_cache` | tidak memanggil scraper |
+| `test_api.py` | `test_db_unavailable` | MySQL mati -> `503 db_unavailable` |
+| `test_api.py` | `test_lookup_dari_db_tanpa_scrape` | nomor `found` -> `source: "db"`, scraper tidak dipanggil |
+| `test_api.py` | `test_lookup_empty_tanpa_scrape` | nomor `empty` -> `items: []`, scraper tidak dipanggil |
+| `test_api.py` | `test_lookup_belum_ada_scrape` | nomor baru -> scraper dipanggil, hasil di-UPSERT |
+| `test_api.py` | `test_lookup_error_scrape_ulang` | status `error` -> scraping ulang |
+| `test_api.py` | `test_lookup_tanpa_sesi_saat_perlu_scrape` | nomor baru + sesi kosong -> `401 belum_login` |
+| `test_api.py` | `test_lookup_nomor_invalid` | format salah -> `422 nomor_tidak_valid` |
+| `test_api.py` | `test_search_tidak_pernah_scrape` | `q` nomor yang belum ada -> hasil kosong, scraper tidak dipanggil |
 | `test_api.py` | `test_search_tanpa_q` | tanpa `q` -> semua baris cache |
 | `test_api.py` | `test_collect_validasi_rentang` | >1000 nomor -> 422 `rentang_terlalu_besar` |
 | `test_api.py` | `test_collect_tepat_1000` | 1000 nomor -> 202, diterima |
@@ -1080,11 +1857,13 @@ Setiap baris adalah satu test yang harus **gagal dulu** sebelum implementasi.
 | Bagian | Perkiraan |
 | --- | --- |
 | Koneksi INAPROC headless (`auth.py`) | 1 jam (termasuk handling error) |
-| Backend inti (`spt`, `auth`, `client`, `cache`, `exporter`) | 1 sesi |
+| Database (`config`, `db`, `cache`) + test | 30-45 menit |
+| Backend inti (`spt`, `auth`, `scraper`, `parser`, `exporter`) | 1 sesi |
 | Backend orkestrasi (`collector`, `api`, `schemas`) | 1 sesi |
+| API Gateway (`gateway`, `gateway_store`, `gateway_sync`) + test | 1 sesi (setelah token disetujui) |
 | Frontend (Vue + Pinia + Vitest) | 1 sesi |
 | Smoke test + perbaikan | 30-60 menit |
-| **Total** | **2-3 sesi kerja** |
+| **Total** | **3-4 sesi kerja** |
 
 Biaya waktu collect: 1000 nomor dengan delay 1-3 detik = 25-50 menit per job.
 Nomor yang sudah pernah dicek tidak diulang, jadi job berikutnya jauh lebih cepat.
@@ -1096,6 +1875,13 @@ Modul dianggap selesai bila semua ini terpenuhi.
 **Backend**
 
 - [ ] `python -m unittest` dari root repo hijau, termasuk test modul ini.
+- [ ] Database `inaproc` sudah dibuat manual dan `INAPROC_MYSQL_DATABASE` terisi;
+  API tidak diam-diam memakai database modul lain.
+- [ ] `SHOW TABLES` menampilkan `tkdn_rows` dan `tkdn_checks`, keduanya punya
+  komentar tabel yang menjelaskan tujuannya.
+- [ ] Upsert nomor yang sama 2x tidak membuat baris duplikat.
+- [ ] MySQL dimatikan saat API jalan -> endpoint mengembalikan `503 db_unavailable`
+  dengan pesan jelas, bukan crash atau stack trace.
 - [ ] Koneksi INAPROC dari FE (`POST /api/login`) menghasilkan
   `storageState.json` yang valid. Tidak ada akun aplikasi yang dibuat.
 - [ ] Fallback `python -m modules.inaproc login` tetap jalan untuk OTP/captcha.
@@ -1108,9 +1894,28 @@ Modul dianggap selesai bila semua ini terpenuhi.
 - [ ] Rentang >1000 nomor dipecah FE dan dijalankan berurutan tanpa `409`.
 - [ ] Cancel job berhenti rapi (tidak ada thread menggantung).
 - [ ] `POST /api/refresh` memperbarui satu nomor tanpa mengganggu job lain.
+- [ ] `POST /api/lookup` untuk nomor yang sudah `found`/`empty` **tidak**
+  memanggil Playwright; respons berisi `source: "db"`.
+- [ ] `POST /api/lookup` untuk nomor baru memanggil Playwright sekali, lalu
+  lookup berikutnya dibalas dari DB (`source: "db"`).
+- [ ] `GET /api/search` tidak pernah memanggil Playwright, termasuk saat `q`
+  berisi nomor yang belum ada.
 - [ ] Cache tidak menyimpan duplikat saat nomor yang sama diambil ulang.
+- [ ] Database menggunakan `utf8mb4`; pencarian merek/deskripsi tidak gagal
+  karena karakter non-ASCII.
 - [ ] Export CSV terbuka benar di Excel (delimiter, encoding UTF-8).
 - [ ] Tidak ada isi `storageState.json`/kredensial di file yang di-track git.
+- [ ] Token API Gateway tidak pernah muncul di response FE, log, atau file git.
+- [ ] Tidak ada request tulis ke INAPROC (POST/PUT/PATCH/DELETE ke domain
+  INAPROC) di kode aplikasi; semua panggilan eksternal hanya GET.
+- [ ] Saat `INAPROC_API_TOKEN` kosong, fitur Gateway nonaktif dan TKDN tetap jalan.
+- [ ] Sync Gateway idempotent: halaman yang sama dua kali tidak menambah baris.
+- [ ] Upsert Gateway hanya menulis ke DB app; tidak ada request tulis ke INAPROC.
+- [ ] Sync Gateway berhenti benar saat `meta.has_more=false`.
+- [ ] `429`/`5xx` di-retry dengan backoff; `400`/`401`/`403`/`404` tidak di-retry.
+- [ ] Setiap sync tercatat di `inaproc_api_sync_runs` dengan status akhir.
+- [ ] Pencarian produk/e-purchasing dari FE hanya query MySQL, tidak memanggil
+  API Gateway saat request user.
 
 **Frontend**
 
@@ -1124,6 +1929,13 @@ Modul dianggap selesai bila semua ini terpenuhi.
 - [ ] Progres gabungan antar chunk akurat dan label chunk tampil.
 - [ ] Ekspor CSV/JSON mengikuti filter aktif.
 - [ ] Tombol refresh per nomor memperbarui baris tanpa reload halaman.
+- [ ] Panel API Gateway menampilkan status token dan tombol sync dengan disabled
+  loading state; pesan jelas saat token belum disetujui.
+- [ ] Badge sumber data membedakan `API Gateway`, `Portal TKDN`, dan `Database`.
+- [ ] Baris produk Gateway menampilkan link `Detail INAPROC` bila `source_url`
+  tersedia; klik link membuka tab baru dan tidak memicu request backend.
+- [ ] User yang belum login ke portal INAPROC mendapat halaman login normal saat
+  membuka link, tanpa aplikasi mencoba meneruskan sesi backend.
 - [ ] Tampilan tetap rapi di lebar 360 px dan 1440 px.
 - [ ] `prefers-reduced-motion: reduce` mematikan animasi.
 
@@ -1136,6 +1948,24 @@ Modul dianggap selesai bila semua ini terpenuhi.
 
 Dijalankan setelah FE + `POST /api/login` berfungsi. Tidak perlu tool tambahan,
 cukup aplikasi yang sudah jalan.
+
+### Langkah 0: siapkan MySQL
+
+```powershell
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS inaproc CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -e "SHOW TABLES;" inaproc
+```
+
+Isi `.env` minimal:
+
+```
+INAPROC_MYSQL_DATABASE=inaproc
+```
+
+Host/port/user/password boleh memakai fallback `MYSQL_*`, tetapi database
+**wajib** lewat `INAPROC_MYSQL_DATABASE`. Setelah API start, `SHOW TABLES` harus
+menampilkan `tkdn_rows` dan `tkdn_checks`. Kalau MySQL mati, jalankan
+`GET /api/search` dan pastikan responsnya `503 db_unavailable`.
 
 ### Langkah 1: hubungkan sesi INAPROC dari FE
 
@@ -1208,6 +2038,28 @@ Catat bila muncul halaman 429, captcha, atau blokir sementara. Sesuaikan
 Setelah 5 langkah di atas, item di bagian "Sisa yang perlu diverifikasi" bisa
 dicentang, lalu TDD `parser.py` + `scraper.py` dimulai.
 
+### Langkah 7: verifikasi akses API Gateway (setelah token disetujui)
+
+Jangan isi `INAPROC_API_TOKEN` dalam contoh, chat, atau file yang di-track.
+Verifikasi berikut cukup menampilkan status yang sudah disamarkan:
+
+```powershell
+$env:INAPROC_API_TOKEN="<token-dari-portal>"; python -m modules.inaproc gateway-status
+```
+
+Yang dicek:
+
+| Yang dicek | Ekspektasi |
+| --- | --- |
+| Status Gateway | `enabled=true` dan response JSON standar terbaca |
+| Log/error | Token tidak muncul sama sekali |
+| Endpoint disetujui | Hanya scope yang dipilih di portal dipanggil |
+| Sync kecil | Satu halaman pertama masuk ke tabel Gateway tanpa duplikat |
+| Rate limit | Header limit/remaining/reset dicatat secara aman |
+
+Kalau endpoint `gateway-status` belum ada pada tahap implementasi awal, gunakan
+unit test dengan fake HTTP; jangan uji token langsung lewat curl di dokumentasi.
+
 ## .gitignore untuk modul ini
 
 Tambahkan (tanpa menyentuh aturan modul lain):
@@ -1215,12 +2067,11 @@ Tambahkan (tanpa menyentuh aturan modul lain):
 ```
 modules/inaproc/storageState.json
 modules/inaproc/*.session.json
-modules/inaproc/data/
 modules/inaproc/output/
 ```
 
 Alasan: `storageState.json` berisi cookie/localStorage sesi INAPROC aktif;
-`data/` berisi cache SQLite hasil scraping; `output/` berisi ekspor CSV/JSON.
+`output/` berisi ekspor CSV/JSON. Cache utama ada di MySQL, bukan file lokal.
 
 ## Investigasi HTML/DOM Halaman TKDN
 
