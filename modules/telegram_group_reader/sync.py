@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 from modules.telegram_group_reader.reader import TelegramGroupReader
 
 
+
 def load_env_file(path: Path = Path(".env")) -> None:
     if not path.exists():
         return
@@ -23,7 +24,7 @@ def load_env_file(path: Path = Path(".env")) -> None:
             os.environ[key] = value
 
 
-def default_since(days: int = 10) -> datetime:
+def default_since(days: int) -> datetime:
     return datetime.now(ZoneInfo("Asia/Makassar")) - timedelta(days=days)
 
 
@@ -52,7 +53,17 @@ class SyncConfig:
         )
 
 
-def run_sync(reader: TelegramGroupReader, store, since: datetime | None = None) -> dict[str, int]:
+def run_sync(
+    reader: TelegramGroupReader,
+    store,
+    since: datetime | None = None,
+    days: int | None = None,
+) -> dict[str, int]:
+    if since is None:
+        if days is None:
+            raise ValueError("Harus mengirim since atau days.")
+        since = default_since(days=days)
+
     groups = reader.get_all_groups()
     store.save_groups(groups)
 

@@ -36,18 +36,19 @@ class TestSync(unittest.TestCase):
             TelegramGroupInfo(group_id="g1", title="Group A", group_type="group"),
             TelegramGroupInfo(group_id="g2", title="Group B", group_type="group"),
         ]
+        now = datetime.now(timezone.utc)
         backend = InMemoryTelegramBackend(
             [],
             groups=groups,
             messages_by_group={
-                "g1": [TelegramMessage(message_id=1, sender="Andi", text="Halo")],
-                "g2": [TelegramMessage(message_id=2, sender="Budi", text="Siap")],
+                "g1": [TelegramMessage(message_id=1, sender="Andi", text="Halo", date=now)],
+                "g2": [TelegramMessage(message_id=2, sender="Budi", text="Siap", date=now)],
             },
         )
         reader = TelegramGroupReader(backend=backend, chat_id="")
         store = FakeStore()
 
-        result = run_sync(reader, store)
+        result = run_sync(reader, store, since=now - timedelta(days=15))
 
         self.assertEqual(len(store.saved_groups), 2)
         self.assertEqual(len(store.saved["Group A"]), 1)
@@ -127,6 +128,40 @@ class TestSync(unittest.TestCase):
         self.assertIsNotNone(cutoff.tzinfo)
         self.assertLessEqual(before, cutoff)
         self.assertGreaterEqual(after, cutoff)
+
+    def test_run_sync_uses_days_parameter_when_since_omitted(self) -> None:
+        now = datetime(2026, 11, 23, 12, 0, 0, tzinfo=timezone.utc)
+        cutoff = now - timedelta(days=7)
+        groups = [TelegramGroupInfo(group_id="g1", title="Group A", group_type="group")]
+        backend = InMemoryTelegramBackend(
+            [],
+            groups=groups,
+            messages_by_group={
+                "g1": [
+                    TelegramMessage(message_id=1, sender="Lama", text="lama", date=now - timedelta(days=8)),
+                    TelegramMessage(message_id=2, sender="Baru", text="baru", date=cutoff),
+                ],
+            },
+        )
+        reader = TelegramGroupReader(backend=backend, chat_id="")
+        store = FakeStore()
+
+        with patch("modules.telegram_group_reader.sync.default_since", return_value=cutoff) as since_mock:
+            result = run_sync(reader, store, days=7)
+
+        since_mock.assert_called_once_with(days=7)
+        self.assertEqual(len(store.saved["Group A"]), 1)
+        self.assertEqual(store.saved["Group A"][0].sender, "Baru")
+        self.assertEqual(result["messages"], 1)
+
+    def test_run_sync_requires_days_or_since(self) -> None:
+        groups = [TelegramGroupInfo(group_id="g1", title="Group A", group_type="group")]
+        backend = InMemoryTelegramBackend([], groups=groups)
+        reader = TelegramGroupReader(backend=backend, chat_id="")
+        store = FakeStore()
+
+        with self.assertRaises(ValueError):
+            run_sync(reader, store)
 
 
 if __name__ == "__main__":

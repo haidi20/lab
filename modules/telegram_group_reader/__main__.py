@@ -1,7 +1,6 @@
 import pymysql
 
 from modules.telegram_group_reader import (
-    default_since,
     load_env_file,
     MysqlMessageStore,
     SyncConfig,
@@ -9,6 +8,9 @@ from modules.telegram_group_reader import (
     TelegramGroupReader,
     run_sync,
 )
+
+
+SYNC_DAYS = 30
 
 
 def main() -> None:
@@ -32,8 +34,7 @@ def main() -> None:
     )
     reader = TelegramGroupReader(backend=backend, chat_id="")
 
-    since = default_since(days=10)
-    result = run_sync(reader, store, since=since)
+    result = run_sync(reader, store, days=SYNC_DAYS)
     print(f"Sync selesai: {result['groups']} group, {result['messages']} pesan tersimpan (upsert).")
 
 
