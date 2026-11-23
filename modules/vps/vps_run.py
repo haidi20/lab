@@ -1,4 +1,4 @@
-"""Helper SSH sementara untuk setup VPS baru (172.232.96.174).
+"""Helper SSH sementara untuk setup VPS.
 
 Kredensial wajib dari environment: `VPS_HOST`, `VPS_USER`, `VPS_PASSWORD`
 (lihat `.env`). Tidak ada default password di source.
@@ -13,8 +13,12 @@ import sys
 
 import paramiko
 
-HOST = os.environ.get('VPS_HOST', '172.232.96.174')
-USER = os.environ.get('VPS_USER', 'root')
+from modules.vps.config import load_env
+
+load_env('.env')
+HOST = os.environ.get('VPS_HOST', '')
+
+USER = os.environ.get('VPS_USER', '')
 
 
 def password():
@@ -27,7 +31,7 @@ def password():
 def connect():
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(HOST, 22, USER, password=password(), timeout=30)
+    client.connect(HOST, int(os.environ.get('VPS_PORT', '22')), USER, password=password(), timeout=30)
     return client
 
 

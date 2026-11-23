@@ -66,3 +66,46 @@ dipulihkan ke layout lama.
 ## Test
 
     python -m unittest modules.vps.tests.test_vps_setup modules.vps.tests.test_vps_tools
+
+## Akses VPS
+
+Jangan simpan username/password di file ini. Semua kredensial dibaca dari .env:
+
+- VPS_HOST
+- VPS_PORT
+- VPS_USER
+- VPS_PASSWORD atau VPS_SSH_KEY
+- VPS_DEPLOY_ROOT
+
+Contoh koneksi manual tanpa menampilkan secret:
+
+    python -m modules.vps.vps_run "hostname; whoami; uptime"
+
+Catatan hasil pengecekan terakhir: VPS `vps-jkt2.sumopod.my.id:20680` bisa diakses sebagai `ubuntu`. Portfolio sudah live di https://haidinata.my.id (nginx di VM, TLS ditangani edge Sumopod). Stack lain (MySQL, Docker) belum dipasang.
+
+`www.haidinata.my.id` belum punya sertifikat di edge, jadi HTTPS-nya masih gagal. Daftarkan subdomain itu di tab Domains Sumopod bila ingin dipakai.
+
+## Domain edge Sumopod + DNSCloud
+
+`inventory.haidinata.my.id` butuh dua CNAME di zona DNSCloud
+(`haidinata.my.id`): traffic (`inventory` -> `vps-jkt2.sumopod.my.id`) dan
+validasi (`validation.inventory` -> target yang sama). Setelah keduanya ada,
+panel Sumopod perlu dipanggil untuk verifikasi.
+
+Semua langkah ini satu perintah, tanpa membuka panel:
+
+    set DNSCLOUD_TOKEN=dcid_...        # API token DNSCloud, scope zones:write
+    set SUMOPOD_ACCESS_TOKEN=eyJ...    # access token sesi panel Sumopod
+    python -m modules.vps domain --vps-id 250c6fb5-0c56-4fc3-9659-7d5a72593f82
+
+Token DNSCloud dibuat di panel DNSCloud, halaman API Tokens, dengan scope
+`zones:write` (dan `zone_ids` dibatasi ke zona `haidinata.my.id` bila mau
+lebih sempit). Token hanya ditampilkan sekali saat dibuat.
+
+Verifikasi manual tanpa DNSCloud (kalau record dibuat lewat panel):
+
+    python -m modules.vps domain --help
+
+Catatan: nginx vhost klinik mengirim `fastcgi_param HTTPS on` karena TLS
+diakhiri edge Sumopod. Tanpa itu Laravel membangun redirect `http://` dan
+login tenant mendarat di URL yang tidak punya sertifikat.
