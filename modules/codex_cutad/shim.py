@@ -2,16 +2,26 @@
 
 Codex 0.167.1 hanya mau berbicara `wire_api = "responses"` (mode `chat` sudah
 dihapus), sedangkan gateway `ai.cutad.web.id` menerima `/v1/responses` **hanya**
-bila tidak memakai dua field berikut:
+setelah beberapa field Codex dibuang atau dipetakan:
 
-    role: "developer"          -> 400 request_rejected
-    previous_response_id       -> 400 unsupported_parameter
+    role: "developer"          -> 400 request_rejected       => jadi "system"
+    previous_response_id       -> 400 unsupported_parameter  => dibuang
+    store                      -> 422 loc body.store         => dibuang
+    reasoning.summary          -> 400 (3051)                 => dibuang
+    tools[type="namespace"]    -> 400                        => diratakan
+    tools[type="web_search"]   -> 400 (3051)                 => dibuang
+    reasoning.effort="medium"  -> 400 effort tak didukung    => jadi "high"
 
-Shim ini mendengar di `127.0.0.1:8787`, menulis ulang dua hal itu, lalu
-meneruskan request (termasuk stream SSE) apa adanya ke gateway. Tidak ada
-terjemahan Responses->Chat; field lain (`tools`, `reasoning`, `instructions`,
-`prompt_cache_key`, `parallel_tool_calls`, `include`, `max_output_tokens`)
-terbukti diterima gateway 200 dan dibiarkan utuh.
+`store` adalah flag retensi OpenAI (menyimpan respons di server provider).
+Codex selalu mengirim `store: false`, jadi gateway yang skemanya ketat akan
+menolak semua request bila field ini tidak disaring. Karena
+`previous_response_id` juga dibuang, menyimpan respons memang tidak berguna.
+
+Shim ini mendengar di `127.0.0.1:8787`, menulis ulang field di atas, lalu
+meneruskan request (termasuk stream SSE) ke gateway. Tidak ada terjemahan
+Responses->Chat. `KEY_KONTRAK` memuat field top-level yang sudah diverifikasi
+diterima gateway; field di luar daftar tetap diteruskan tetapi dicatat sebagai
+`param_tambahan` di log agar 422 berikutnya cepat dilacak.
 
 Jalankan: `python -m modules.codex_cutad.shim [--port 8787]`
 Lalu set `~/.codex/config.toml`:
@@ -46,6 +56,25 @@ HEADER_DIBUANG = {
     "authorization",
 }
 
+# Parameter Codex yang tidak dikenal gateway CutadAI dan wajib dibuang.
+FIELD_DIBUANG = ("previous_response_id", "store")
+
+# `reasoning.effort` yang diterima gateway, peta untuk nilai Codex lain, dan
+# cadangan bila nilainya tidak dikenal sama sekali.
+EFFORT_DIDUKUNG = ("none", "low", "high", "xhigh", "max")
+PETA_EFFORT = {"minimal": "low", "medium": "high"}
+EFFORT_CADANGAN = "high"
+
+# Field top-level yang sudah diverifikasi diterima gateway `/v1/responses`.
+# Diperbarui hanya setelah diuji lewat modules.codex_cutad.diagnosa_3051.
+KEY_KONTRAK = frozenset({
+    "model", "input", "instructions", "stream", "tools", "tool_choice",
+    "parallel_tool_calls", "reasoning", "include", "prompt_cache_key",
+    "max_output_tokens", "text", "truncation", "metadata", "user",
+    "temperature", "top_p", "service_tier", "client_metadata",
+    "previous_response_id", "store",
+})
+
 
 def url_target(path: str, base: str = BASE_DEFAULT) -> str:
     """URL upstream; menerima `/v1/responses` maupun `/responses`."""
@@ -77,6 +106,48 @@ def header_ke_upstream(headers, token: str | None) -> dict:
     if token:
         hasil["Authorization"] = "Bearer " + token
     return hasil
+
+
+def buang_field_tak_didukung(payload: dict) -> tuple[dict, int]:
+    """Buang field yang ditolak gateway (`FIELD_DIBUANG`).
+
+    `store` ditolak 422 (`loc: body.store`) pada sebagian provider, sedangkan
+    `previous_response_id` ditolak 400 `unsupported_parameter`. Gateway tidak
+    menyimpan respons, jadi `store` tidak punya efek yang bisa dipertahankan.
+    Non-destruktif: payload asli tidak dimutasi.
+    """
+    baru = dict(payload)
+    jumlah = 0
+    for nama in FIELD_DIBUANG:
+        if nama in baru:
+            baru.pop(nama)
+            jumlah += 1
+    return baru, jumlah
+
+
+def normalisasi_effort(payload: dict) -> tuple[dict, list]:
+    """Petakan `reasoning.effort` ke nilai yang didukung gateway.
+
+    Gateway hanya menerima `none/low/high/xhigh/max`; `medium` (default Codex
+    untuk sebagian profil) dibalas 400 "reasoning_effort ... is not supported".
+    Nilai lain dipetakan lewat `PETA_EFFORT`, sisanya ke `EFFORT_CADANGAN`.
+    Mengembalikan (payload_baru, [(dari, ke), ...]).
+    """
+    baru = dict(payload)
+    reasoning = baru.get("reasoning")
+    if not isinstance(reasoning, dict):
+        return baru, []
+    effort = reasoning.get("effort")
+    if not isinstance(effort, str) or effort in EFFORT_DIDUKUNG:
+        return baru, []
+    tujuan = PETA_EFFORT.get(effort, EFFORT_CADANGAN)
+    baru["reasoning"] = {**reasoning, "effort": tujuan}
+    return baru, [(effort, tujuan)]
+
+
+def param_di_luar_kontrak(payload: dict) -> list:
+    """Field top-level di luar `KEY_KONTRAK`, untuk dipantau di log."""
+    return sorted(k for k in payload if k not in KEY_KONTRAK)
 
 
 def ganti_developer(payload: dict) -> tuple[dict, int]:
@@ -180,25 +251,30 @@ def buang_tool_tak_didukung(payload: dict) -> tuple[dict, int]:
 def bersihkan_payload(payload: dict) -> tuple[dict, dict]:
     """Rewrite minimal yang membuat gateway menerima payload Codex.
 
-    Lima perubahan: `developer -> system`, buang `previous_response_id`,
-    ratakan tool namespace menjadi function, buang `reasoning.summary`, dan
-    buang tool `web_search`. Gateway tidak mendukung chaining respons, jadi
-    Codex harus mengirim riwayat penuh -- itu perilaku default Codex bila shim
-    tidak mengembalikan id lama. Mengembalikan (payload_baru, info).
+    Tujuh perubahan: `developer -> system`, buang `previous_response_id` dan
+    `store`, ratakan tool namespace menjadi function, buang `reasoning.summary`,
+    buang tool `web_search`, dan petakan `reasoning.effort` ke nilai yang
+    didukung gateway. Gateway tidak mendukung chaining respons, jadi Codex
+    harus mengirim riwayat penuh -- itu perilaku default Codex bila shim tidak
+    mengembalikan id lama. Mengembalikan (payload_baru, info).
     """
     baru, diubah = ganti_developer(payload)
     baru, diratakan = ratakan_namespace_tools(baru)
     baru, ada_summary = ringkas_reasoning(baru)
     baru, web_search = buang_tool_tak_didukung(baru)
-    buang = "previous_response_id" in baru
-    if buang:
-        baru = {k: v for k, v in baru.items() if k != "previous_response_id"}
+    baru, effort = normalisasi_effort(baru)
+    ada_prev = "previous_response_id" in baru
+    ada_store = "store" in baru
+    baru, _ = buang_field_tak_didukung(baru)
     return baru, {
         "developer": diubah,
-        "buang_prev": buang,
+        "buang_prev": ada_prev,
+        "store": 1 if ada_store else 0,
         "namespace": diratakan,
         "reasoning_summary": ada_summary,
         "web_search": web_search,
+        "effort": effort,
+        "tambahan": param_di_luar_kontrak(baru),
     }
 
 
@@ -216,6 +292,13 @@ def ringkas_log(path: str, payload: dict, info: dict) -> str:
         bagian.append("reasoning.summary=dibuang")
     if info.get("web_search"):
         bagian.append("web_search_dibuang=%d" % info["web_search"])
+    if info.get("store"):
+        bagian.append("store=dibuang")
+    if info.get("effort"):
+        bagian.append("effort=" + ",".join(
+            "%s->%s" % (dari, ke) for dari, ke in info["effort"]))
+    if info.get("tambahan"):
+        bagian.append("param_tambahan=" + ",".join(info["tambahan"]))
     if status is not None:
         bagian.append("status=%s" % status)
     return " | ".join(bagian)

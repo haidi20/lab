@@ -78,10 +78,11 @@ class TestBersihkanPayload(unittest.TestCase):
                    "input": [pesan("hi", "user")],
                    "previous_response_id": "resp_1"}
         baru, _ = shim.bersihkan_payload(payload)
-        for kunci in ("model", "stream", "store", "tools", "tool_choice",
+        for kunci in ("model", "stream", "tools", "tool_choice",
                       "parallel_tool_calls", "reasoning", "prompt_cache_key",
                       "instructions", "input"):
             self.assertIn(kunci, baru, kunci)
+        self.assertNotIn("store", baru)
 
     def test_idempoten(self) -> None:
         payload = {"model": "m", "input": [pesan("i", "developer")],
@@ -243,6 +244,175 @@ class TestBuangWebSearch(unittest.TestCase):
         self.assertEqual(info["web_search"], 1)
 
 
+class TestBuangFieldTakDidukung(unittest.TestCase):
+    """Gateway menolak `store` (422/body.store) dan `previous_response_id`."""
+
+    def setUp(self) -> None:
+        self.mod = importlib.import_module("modules.codex_cutad.shim")
+
+    def test_store_false_dibuang(self) -> None:
+        baru, jumlah = self.mod.buang_field_tak_didukung(
+            {"model": "m", "store": False})
+        self.assertNotIn("store", baru)
+        self.assertEqual(jumlah, 1)
+
+    def test_store_true_dibuang(self) -> None:
+        baru, jumlah = self.mod.buang_field_tak_didukung({"store": True})
+        self.assertNotIn("store", baru)
+        self.assertEqual(jumlah, 1)
+
+    def test_previous_response_id_dibuang(self) -> None:
+        baru, jumlah = self.mod.buang_field_tak_didukung(
+            {"previous_response_id": "resp_1"})
+        self.assertNotIn("previous_response_id", baru)
+        self.assertEqual(jumlah, 1)
+
+    def test_keduanya_dibuang_sekaligus(self) -> None:
+        baru, jumlah = self.mod.buang_field_tak_didukung(
+            {"store": False, "previous_response_id": "r", "model": "m"})
+        self.assertEqual(baru, {"model": "m"})
+        self.assertEqual(jumlah, 2)
+
+    def test_tanpa_field_terlarang_tidak_berubah(self) -> None:
+        asli = {"model": "m", "stream": True}
+        baru, jumlah = self.mod.buang_field_tak_didukung(asli)
+        self.assertEqual(baru, asli)
+        self.assertEqual(jumlah, 0)
+
+    def test_payload_asli_tidak_dimutasi(self) -> None:
+        asli = {"store": False, "previous_response_id": "r"}
+        self.mod.buang_field_tak_didukung(asli)
+        self.assertIn("store", asli)
+
+    def test_bersihkan_payload_melaporkan_store(self) -> None:
+        baru, info = self.mod.bersihkan_payload({"store": False})
+        self.assertNotIn("store", baru)
+        self.assertEqual(info["store"], 1)
+
+    def test_log_menyebut_store_dibuang(self) -> None:
+        teks = self.mod.ringkas_log(
+            "/v1/responses", {"model": "m"}, {"store": 1, "status": 200})
+        self.assertIn("store=dibuang", teks)
+
+
+class TestNormalisasiEffort(unittest.TestCase):
+    """Gateway hanya menerima none/low/high/xhigh/max; `medium` wajib dipetakan."""
+
+    def setUp(self) -> None:
+        self.mod = importlib.import_module("modules.codex_cutad.shim")
+
+    def test_medium_dipetakan_ke_high(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort(
+            {"reasoning": {"effort": "medium"}})
+        self.assertEqual(baru["reasoning"], {"effort": "high"})
+        self.assertEqual(perubahan, [("medium", "high")])
+
+    def test_effort_didukung_tidak_berubah(self) -> None:
+        for nilai in ("none", "low", "high", "xhigh", "max"):
+            baru, perubahan = self.mod.normalisasi_effort(
+                {"reasoning": {"effort": nilai}})
+            self.assertEqual(baru["reasoning"]["effort"], nilai)
+            self.assertEqual(perubahan, [])
+
+    def test_effort_tak_dikenal_jadi_high(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort(
+            {"reasoning": {"effort": "sedang"}})
+        self.assertEqual(baru["reasoning"]["effort"], "high")
+        self.assertEqual(perubahan, [("sedang", "high")])
+
+    def test_tanpa_reasoning_aman(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort({"model": "m"})
+        self.assertEqual(baru, {"model": "m"})
+        self.assertEqual(perubahan, [])
+
+    def test_reasoning_bukan_dict_aman(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort({"reasoning": "auto"})
+        self.assertEqual(baru["reasoning"], "auto")
+        self.assertEqual(perubahan, [])
+
+    def test_reasoning_tanpa_effort_aman(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort(
+            {"reasoning": {"summary": "auto"}})
+        self.assertEqual(perubahan, [])
+
+    def test_effort_bukan_string_aman(self) -> None:
+        baru, perubahan = self.mod.normalisasi_effort(
+            {"reasoning": {"effort": 3}})
+        self.assertEqual(baru["reasoning"]["effort"], 3)
+        self.assertEqual(perubahan, [])
+
+    def test_payload_asli_tidak_dimutasi(self) -> None:
+        asli = {"reasoning": {"effort": "medium"}}
+        self.mod.normalisasi_effort(asli)
+        self.assertEqual(asli["reasoning"]["effort"], "medium")
+
+    def test_bersihkan_payload_melaporkan_effort(self) -> None:
+        baru, info = self.mod.bersihkan_payload(
+            {"reasoning": {"effort": "medium", "summary": "auto"}})
+        self.assertEqual(baru["reasoning"], {"effort": "high"})
+        self.assertEqual(info["effort"], [("medium", "high")])
+        self.assertEqual(info["reasoning_summary"], 1)
+
+    def test_log_menyebut_effort_dipetakan(self) -> None:
+        teks = self.mod.ringkas_log(
+            "/v1/responses", {"model": "m"},
+            {"effort": [("medium", "high")], "status": 200})
+        self.assertIn("effort=medium->high", teks)
+
+
+class TestKontrakPayload(unittest.TestCase):
+    """Payload mentah Codex 0.167.1 -> hanya field yang dikenal gateway."""
+
+    def setUp(self) -> None:
+        self.mod = importlib.import_module("modules.codex_cutad.shim")
+
+    def payload_codex(self) -> dict:
+        return {
+            "model": "deepseek-v4-pro",
+            "instructions": "x",
+            "input": [{"type": "message", "role": "developer",
+                       "content": [{"type": "input_text", "text": "i"}]}],
+            "stream": True,
+            "store": False,
+            "include": ["reasoning.encrypted_content"],
+            "prompt_cache_key": "k",
+            "parallel_tool_calls": True,
+            "tool_choice": "auto",
+            "previous_response_id": "resp_1",
+            "reasoning": {"effort": "medium", "summary": "auto"},
+            "tools": [
+                {"type": "web_search"},
+                {"type": "namespace", "name": "ns",
+                 "tools": [{"type": "function", "name": "f"}]},
+            ],
+        }
+
+    def test_hasil_bersih_sesuai_kontrak(self) -> None:
+        baru, info = self.mod.bersihkan_payload(self.payload_codex())
+        self.assertNotIn("store", baru)
+        self.assertNotIn("previous_response_id", baru)
+        self.assertEqual(baru["reasoning"], {"effort": "high"})
+        self.assertEqual([t["type"] for t in baru["tools"]], ["function"])
+        self.assertEqual(baru["input"][0]["role"], "system")
+        self.assertEqual(info["tambahan"], [])
+
+    def test_semua_key_hasil_ada_di_daftar_kontrak(self) -> None:
+        baru, _ = self.mod.bersihkan_payload(self.payload_codex())
+        asing = [k for k in baru if k not in self.mod.KEY_KONTRAK]
+        self.assertEqual(asing, [])
+
+    def test_key_tak_dikenal_dilaporkan(self) -> None:
+        baru, info = self.mod.bersihkan_payload({"model": "m", "foo_bar": 1})
+        self.assertIn("foo_bar", baru)
+        self.assertEqual(info["tambahan"], ["foo_bar"])
+
+    def test_log_menyebut_param_tambahan(self) -> None:
+        teks = self.mod.ringkas_log(
+            "/v1/responses", {"model": "m"},
+            {"tambahan": ["foo_bar"], "status": 200})
+        self.assertIn("param_tambahan=foo_bar", teks)
+
+
 class TestEksposModul(unittest.TestCase):
     """Aturan repo: setiap modul diekspos lewat `__init__.py`."""
 
@@ -319,7 +489,7 @@ class TestServerEndToEnd(unittest.TestCase):
         self.assertNotIn("previous_response_id", badan)
         self.assertEqual(badan["input"][0]["role"], "system")
         self.assertTrue(badan["stream"])
-        self.assertFalse(badan["store"])
+        self.assertNotIn("store", badan)
 
     def test_upstream_error_diteruskan_apa_adanya(self) -> None:
         from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
