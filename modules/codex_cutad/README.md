@@ -241,3 +241,45 @@ python3 -m modules.codex_cutad.fix_wire_api          # perbaiki + backup
      teks rusak di sisi Codex. Shim sekarang mendekode sendiri dan mengirim
      body polos (label gzip tidak diteruskan).
 
+---
+
+## Kontrak payload -> gateway CutadAI
+
+Gateway `ai.cutad.web.id` memvalidasi request dengan ketat: field yang tidak
+dikenal dibalas **422** (`loc: body.<field>`) dan nilai yang tidak didukung
+dibalas **400**. Karena itu shim wajib menyaring/memetakan field berikut
+sebelum meneruskan ke upstream. Daftar ini dijaga tes
+`tests/test_shim.py::TestKontrakPayload`.
+
+| Parameter Codex | Status di shim | Alasan / bukti |
+| --- | --- | --- |
+| `role: "developer"` | dipetakan -> `system` | 400 `request_rejected` |
+| `previous_response_id` | dibuang | 400 `unsupported_parameter`; gateway tidak menyimpan respons |
+| `store` | dibuang | 422 `loc: body.store` pada sebagian provider; flag retensi OpenAI, tidak berguna tanpa `previous_response_id` |
+| `reasoning.summary` | dibuang | 400 kode 3051 |
+| `reasoning.effort: "medium"` | dipetakan -> `high` | 400 kode 3051 (default Codex sebagian profil) |
+| `reasoning.effort` lain | `minimal->low`, `medium->high`, sisanya `high` | `PETA_EFFORT` + `EFFORT_CADANGAN` |
+| `tools[].type == "namespace"` | diratakan jadi function | 400; sub-tool diangkat ke level `tools` |
+| `tools[].type == "web_search"` | dibuang | 400 kode 3051 |
+| field top-level lain | diteruskan, dicatat `param_tambahan` | `KEY_KONTRAK`; nama field muncul di log agar 422 berikutnya cepat dilacak |
+
+Verifikasi ulang (berjeda, jangan menembak beruntun -- bisa 429):
+
+```bash
+python -m modules.codex_cutad.diagnosa_3051                       # semua varian
+python -m modules.codex_cutad.diagnosa_3051 --hanya store_false,store_true --jeda 10
+```
+
+Hasil probe terakhir: [`documents/2026-11-24-kontrak-payload-gateway.md`](documents/2026-11-24-kontrak-payload-gateway.md).
+
+**Penting: 9Router lokal tidak memfilter apa pun.** `app/src/mitm/server.js`
+tidak menyentuh `store`, `reasoning_effort`, maupun `stream_options` (0
+kemunculan), jadi body klien diteruskan mentah ke provider. Semua penyaringan
+harus terjadi di shim ini (atau di gateway), bukan di 9Router.
+
+Kalau Codex versi baru menambah parameter:
+
+1. tambahkan varian di `diagnosa_3051.VARIAN` lalu jalankan dengan `--hanya`;
+2. hasil 200 -> masukkan ke `KEY_KONTRAK`; hasil 400/422 -> masukkan ke
+   `FIELD_DIBUANG` (atau petakan nilainya);
+3. tambahkan kasus di `TestKontrakPayload` sebelum dipakai.
