@@ -136,17 +136,60 @@ def ratakan_namespace_tools(payload: dict) -> tuple[dict, int]:
     return baru, diratakan
 
 
+def ringkas_reasoning(payload: dict) -> tuple[dict, int]:
+    """Buang `reasoning.summary` (ditolak gateway 400/3051), sisakan effort.
+
+    Gateway CutadAI menerima `reasoning: {effort: ...}` tetapi menolak
+    `reasoning.summary` (diverifikasi 2026-11-24 lewat
+    `modules.codex_cutad.diagnosa_3051`). Codex 0.167.1 selalu mengirim
+    keduanya, jadi summary harus dibuang agar request tidak 400.
+    `reasoning` yang tinggal kosong ikut dihapus.
+    """
+    baru = dict(payload)
+    reasoning = baru.get("reasoning")
+    if not isinstance(reasoning, dict) or "summary" not in reasoning:
+        return baru, 0
+    sisa = {k: v for k, v in reasoning.items() if k != "summary"}
+    if sisa:
+        baru["reasoning"] = sisa
+    else:
+        baru.pop("reasoning")
+    return baru, 1
+
+
+def buang_tool_tak_didukung(payload: dict) -> tuple[dict, int]:
+    """Buang tool `type: "web_search"` yang ditolak gateway (400/3051).
+
+    Codex 0.167.1 selalu menyertakan tool `web_search` bawaan. Gateway CutadAI
+    menolaknya sebagai "Invalid request parameters" (diverifikasi 2026-11-24
+    lewat `modules.codex_cutad.diagnosa_3051`), jadi tool itu dibuang supaya
+    sesi Codex tetap bisa berjalan tanpa pencarian web sisi server.
+    """
+    baru = dict(payload)
+    tools = baru.get("tools")
+    if not isinstance(tools, list):
+        return baru, 0
+    sisa = [t for t in tools
+            if not (isinstance(t, dict) and t.get("type") == "web_search")]
+    dibuang = len(tools) - len(sisa)
+    if dibuang:
+        baru["tools"] = sisa
+    return baru, dibuang
+
+
 def bersihkan_payload(payload: dict) -> tuple[dict, dict]:
     """Rewrite minimal yang membuat gateway menerima payload Codex.
 
-    Tiga perubahan: `developer -> system`, buang `previous_response_id`, dan
-    ratakan tool namespace menjadi function. Gateway tidak mendukung chaining
-    respons, jadi Codex harus mengirim riwayat penuh -- itu perilaku default
-    Codex bila shim tidak mengembalikan id lama.
-    Mengembalikan (payload_baru, info).
+    Lima perubahan: `developer -> system`, buang `previous_response_id`,
+    ratakan tool namespace menjadi function, buang `reasoning.summary`, dan
+    buang tool `web_search`. Gateway tidak mendukung chaining respons, jadi
+    Codex harus mengirim riwayat penuh -- itu perilaku default Codex bila shim
+    tidak mengembalikan id lama. Mengembalikan (payload_baru, info).
     """
     baru, diubah = ganti_developer(payload)
     baru, diratakan = ratakan_namespace_tools(baru)
+    baru, ada_summary = ringkas_reasoning(baru)
+    baru, web_search = buang_tool_tak_didukung(baru)
     buang = "previous_response_id" in baru
     if buang:
         baru = {k: v for k, v in baru.items() if k != "previous_response_id"}
@@ -154,6 +197,8 @@ def bersihkan_payload(payload: dict) -> tuple[dict, dict]:
         "developer": diubah,
         "buang_prev": buang,
         "namespace": diratakan,
+        "reasoning_summary": ada_summary,
+        "web_search": web_search,
     }
 
 
@@ -167,9 +212,146 @@ def ringkas_log(path: str, payload: dict, info: dict) -> str:
         bagian.append("previous_response_id=dibuang")
     if info.get("namespace"):
         bagian.append("namespace_ditrogenkan=%d" % info["namespace"])
+    if info.get("reasoning_summary"):
+        bagian.append("reasoning.summary=dibuang")
+    if info.get("web_search"):
+        bagian.append("web_search_dibuang=%d" % info["web_search"])
     if status is not None:
         bagian.append("status=%s" % status)
     return " | ".join(bagian)
+
+
+def ratakan_teks(nilai) -> str:
+    """Normalkan nilai teks Responses API menjadi string yang bisa dibaca.
+
+    Spesifikasi Responses API mewajibkan `delta`, `text`, dan
+    `output_text.text` bertipe string. 9router@0.5.119 kadang mengirim array
+    objek reasoning di posisi itu; Codex lalu memanggil `String(nilai)` dan
+    hasilnya `[object Object]`. Fungsi ini mengekstrak isi teksnya agar tidak
+    pernah ada `[object Object]` yang sampai ke pengguna.
+
+    Bentuk yang dikenali: string (apa adanya), None (""), list (digabung),
+    dict (`text` / `thinking` / `content`), dan skalar lain (str()).
+    """
+    if nilai is None:
+        return ""
+    if isinstance(nilai, str):
+        return nilai
+    if isinstance(nilai, bool):
+        return "true" if nilai else "false"
+    if isinstance(nilai, (int, float)):
+        return str(nilai)
+    if isinstance(nilai, list):
+        return "".join(ratakan_teks(item) for item in nilai)
+    if isinstance(nilai, dict):
+        for kunci in ("text", "thinking", "content", "delta"):
+            if kunci in nilai:
+                return ratakan_teks(nilai[kunci])
+        return ""
+    return str(nilai)
+
+
+_EVENT_DELTA_TEKS = "response.output_text.delta"
+_EVENT_DELTA_REASONING = "response.reasoning_summary_text.delta"
+
+
+def _ada_chunk_reasoning(delta) -> bool:
+    """True bila `delta` memuat objek reasoning/thinking (bukan teks jawaban)."""
+    if not isinstance(delta, list):
+        return False
+    for entri in delta:
+        if not isinstance(entri, dict):
+            continue
+        if entri.get("type") in ("thinking", "reasoning"):
+            return True
+        if "thinking" in entri or "reasoning" in entri:
+            return True
+    return False
+
+
+def _blok_sse(nama_event: str, payload: dict) -> bytes:
+    """Serialisasi satu event SSE kembali menjadi blok `event:`/`data:`."""
+    badan = json.dumps(payload, ensure_ascii=False).encode()
+    return b"event: " + nama_event.encode() + b"\ndata: " + badan + b"\n\n"
+
+
+def normalisasi_baris_sse(blok: bytes) -> tuple[list[bytes], dict]:
+    """Perbaiki satu blok SSE Responses yang melanggar tipe wajib.
+
+    Mengembalikan (daftar_blok_baru, info). Blok yang sudah benar dikembalikan
+    apa adanya (byte identik). Dua kasus yang ditangani:
+
+    1. `response.output_text.delta` dengan `delta` non-string. Bila isinya
+       chunk reasoning, event diganti menjadi
+       `response.reasoning_summary_text.delta` supaya reasoning tidak
+       mengotori teks jawaban. Selain itu `delta` dijadikan string.
+    2. `output_text.done` / `content_part.done` / `output_item.done` dengan
+       field teks non-string -> dinormalkan menjadi string.
+
+    Blok yang bukan event data (komentar `:`, keep-alive, JSON rusak)
+    diteruskan tanpa perubahan agar stream tidak pernah pecah.
+    """
+    info = {"dipindah": 0, "dinormalkan": 0}
+    teks = blok.decode("utf-8", "replace")
+    baris = [b for b in teks.splitlines() if b.startswith("data:")]
+    if not baris:
+        return [blok], info
+
+    badan = baris[0][len("data:"):].strip()
+    try:
+        payload = json.loads(badan)
+    except (json.JSONDecodeError, ValueError):
+        return [blok], info
+    if not isinstance(payload, dict):
+        return [blok], info
+
+    nama = payload.get("type") or "message"
+    asli_event = nama
+    for b in teks.splitlines():
+        if b.startswith("event:"):
+            asli_event = b[len("event:"):].strip()
+            break
+
+    if nama == "response.output_text.done" and not isinstance(
+            payload.get("text"), str):
+        payload["text"] = ratakan_teks(payload.get("text"))
+        info["dinormalkan"] += 1
+
+    elif nama == "response.content_part.done":
+        bagian = payload.get("part")
+        if isinstance(bagian, dict) and not isinstance(bagian.get("text"), str):
+            bagian["text"] = ratakan_teks(bagian.get("text"))
+            info["dinormalkan"] += 1
+
+    elif nama == "response.output_item.done":
+        item = payload.get("item")
+        if isinstance(item, dict) and isinstance(item.get("content"), list):
+            for bagian in item["content"]:
+                if isinstance(bagian, dict) and not isinstance(
+                        bagian.get("text"), str):
+                    bagian["text"] = ratakan_teks(bagian.get("text"))
+                    info["dinormalkan"] += 1
+
+    elif nama == _EVENT_DELTA_TEKS:
+        delta = payload.get("delta")
+        if isinstance(delta, str):
+            return [blok], info
+        if _ada_chunk_reasoning(delta):
+            payload["type"] = _EVENT_DELTA_REASONING
+            payload["delta"] = ratakan_teks(delta)
+            payload["summary_index"] = payload.get("summary_index", 0)
+            info["dipindah"] += 1
+            return [_blok_sse(_EVENT_DELTA_REASONING, payload)], info
+        rata = ratakan_teks(delta)
+        if not rata:
+            info["dipindah"] += 1
+            return [], info
+        payload["delta"] = rata
+        info["dinormalkan"] += 1
+
+    if payload.get("type") == asli_event and info["dinormalkan"] == 0:
+        return [blok], info
+    return [_blok_sse(asli_event, payload)], info
 
 
 def _konteks_ssl():
@@ -257,11 +439,12 @@ class Handler(BaseHTTPRequestHandler):
                 self.close_connection = True
                 self.end_headers()
                 for baris in upstream:
-                    try:
-                        self.wfile.write(baris)
-                        self.wfile.flush()
-                    except (BrokenPipeError, ConnectionResetError):
-                        break
+                    for keluaran in normalisasi_baris_sse(baris)[0]:
+                        try:
+                            self.wfile.write(keluaran)
+                            self.wfile.flush()
+                        except (BrokenPipeError, ConnectionResetError):
+                            return status
                 return status
 
             isi = upstream.read()

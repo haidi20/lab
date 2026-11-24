@@ -169,6 +169,80 @@ class TestHeaderUpstream(unittest.TestCase):
             self.assertNotIn(terlarang, hasil)
 
 
+class TestRingkasReasoning(unittest.TestCase):
+    """Gateway menolak `reasoning.summary` (400/3051), tetapi menerima effort."""
+
+    def setUp(self) -> None:
+        self.mod = importlib.import_module("modules.codex_cutad.shim")
+
+    def test_summary_dibuang_effort_dipertahankan(self) -> None:
+        baru, info = self.mod.bersihkan_payload(
+            {"model": "m", "reasoning": {"effort": "none", "summary": "none"}})
+        self.assertEqual(baru["reasoning"], {"effort": "none"})
+        self.assertEqual(info["reasoning_summary"], 1)
+
+    def test_reasoning_tanpa_summary_tidak_disentuh(self) -> None:
+        asli = {"reasoning": {"effort": "high"}}
+        baru, info = self.mod.bersihkan_payload(asli)
+        self.assertEqual(baru["reasoning"], {"effort": "high"})
+        self.assertEqual(info["reasoning_summary"], 0)
+
+    def test_hanya_summary_reasoning_dihapus(self) -> None:
+        baru, _ = self.mod.bersihkan_payload({"reasoning": {"summary": "auto"}})
+        self.assertNotIn("reasoning", baru)
+
+    def test_reasoning_bukan_dict_tidak_error(self) -> None:
+        baru, info = self.mod.bersihkan_payload({"reasoning": "none"})
+        self.assertEqual(baru["reasoning"], "none")
+        self.assertEqual(info["reasoning_summary"], 0)
+
+    def test_payload_asli_tidak_dimutasi(self) -> None:
+        asli = {"reasoning": {"effort": "none", "summary": "none"}}
+        self.mod.bersihkan_payload(asli)
+        self.assertIn("summary", asli["reasoning"])
+
+    def test_log_menyebut_reasoning_dibuang(self) -> None:
+        teks = self.mod.ringkas_log(
+            "/v1/responses", {"model": "m"},
+            {"reasoning_summary": 1, "status": 200})
+        self.assertIn("reasoning.summary=dibuang", teks)
+
+
+class TestBuangWebSearch(unittest.TestCase):
+    """Gateway menolak tool `type: web_search` (400/3051)."""
+
+    def setUp(self) -> None:
+        self.mod = importlib.import_module("modules.codex_cutad.shim")
+
+    def test_web_search_dibuang_function_dipertahankan(self) -> None:
+        baru, jumlah = self.mod.buang_tool_tak_didukung(
+            {"tools": [{"type": "web_search"}, {"type": "function",
+                                                "name": "f"}]})
+        self.assertEqual([t["type"] for t in baru["tools"]], ["function"])
+        self.assertEqual(jumlah, 1)
+
+    def test_tanpa_web_search_tidak_berubah(self) -> None:
+        asli = {"tools": [{"type": "function", "name": "f"}]}
+        baru, jumlah = self.mod.buang_tool_tak_didukung(asli)
+        self.assertEqual(baru["tools"], asli["tools"])
+        self.assertEqual(jumlah, 0)
+
+    def test_tanpa_tools_aman(self) -> None:
+        baru, jumlah = self.mod.buang_tool_tak_didukung({"model": "m"})
+        self.assertEqual(baru, {"model": "m"})
+        self.assertEqual(jumlah, 0)
+
+    def test_payload_asli_tidak_dimutasi(self) -> None:
+        asli = {"tools": [{"type": "web_search"}]}
+        self.mod.buang_tool_tak_didukung(asli)
+        self.assertEqual(len(asli["tools"]), 1)
+
+    def test_bersihkan_payload_melaporkan_web_search(self) -> None:
+        _, info = self.mod.bersihkan_payload(
+            {"tools": [{"type": "web_search"}]})
+        self.assertEqual(info["web_search"], 1)
+
+
 class TestEksposModul(unittest.TestCase):
     """Aturan repo: setiap modul diekspos lewat `__init__.py`."""
 
