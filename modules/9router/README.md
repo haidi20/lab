@@ -17,8 +17,10 @@ Gejala yang terlihat dari sisi client:
 1. Request ke 9router lokal selalu gagal:
    - Awalnya: `404` → `{"error":{"message":"No active credentials for provider: z-ai","code":"model_not_found"}}`
    - Setelah nama model diperbaiki: `503` → `[openai-compatible-responses-.../z-ai/glm-5.2] [404]: "Invalid request parameters." code=unknown_endpoint (reset after 2m)`
-2. Di **Codex CLI**, error yang sama tampil jelek sebagai `[object Object]` karena
-   Codex menampilkan object error apa adanya.
+2. Di **Codex CLI**, jawaban model tampil sebagai `[object Object][object Object]...`.
+   KOREKSI (2026-11-24): ini **bukan** error tampilan. Penyebabnya bug
+   serialisasi 9router, lihat bagian *Koreksi diagnosis `[object Object]`* di
+   bawah.
 
 ## Proses Diagnosis
 
@@ -162,3 +164,44 @@ python -m unittest discover -s modules -p "test_*.py"
 | `ping.py` | Perbandingan dua URL chat completion (`TARGETS`, `kirim_chat`, `bandingkan`, `format_ringkasan`) |
 | `__init__.py` | Ekspos modul via `importlib` (nama paket diawali digit) |
 | `tests/test_ping.py` | 16 unit test (network di-mock) |
+
+## Koreksi diagnosis `[object Object]` (2026-11-24)
+
+Diagnosis awal ("Codex menampilkan object error apa adanya") **salah**. Bukti
+dari 9router@0.5.119 `app/.next-cli-build/chunks/1297.js` dan stream SSE yang
+ditangkap:
+
+1. 9router mengirim event `response.output_text.delta` dengan field `delta`
+   berupa **array objek reasoning**, misalnya:
+
+   ```json
+   {"type":"response.output_text.delta",
+    "delta":[{"type":"thinking","thinking":[{"type":"text","text":"..."}],"closed":true}]}
+   ```
+
+   Spesifikasi Responses API mewajibkan `delta` bertipe **string**. Codex
+   memanggil `String(delta)` sehingga setiap chunk tampil `[object Object]`.
+2. Jalur non-stream juga rusak: `stream:false` mengembalikan `output: []`
+   padahal `output_tokens` tidak nol.
+
+Gateway CutadAI langsung (`https://ai.cutad.web.id/v1/responses`) terbukti
+sehat (200, `output_text` berupa string), jadi masalah ada di 9router, bukan di
+gateway maupun Codex.
+
+### Perbaikan yang dipakai
+
+Jangan menambal build 9router (`app/.next-cli-build/` adalah artefak minified
+yang hilang saat update). Yang dipakai: arahkan Codex ke shim lokal
+`modules/codex_cutad/shim.py` (`127.0.0.1:8787`), yang menormalkan stream
+sebelum sampai ke Codex — chunk reasoning dipindah ke
+`response.reasoning_summary_text.delta`, `delta`/`text` non-string diratakan
+jadi string. Perbaikan permanen tetap milik upstream 9router (normalisasi tipe
+`delta`, rute chunk `type:"thinking"` ke `response.reasoning_summary_text.delta`).
+
+Migrasi config otomatis:
+
+```
+python -m modules.codex_cutad.fix_output_object --cek   # inspeksi
+python -m modules.codex_cutad.fix_output_object         # perbaiki (backup + probe)
+```
+

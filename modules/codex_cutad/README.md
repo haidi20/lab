@@ -157,10 +157,22 @@ python3 -m modules.codex_cutad.fix_wire_api          # perbaiki + backup
   | **`role:"developer"`** | **400 `request_rejected`** |
   | **`previous_response_id`** | **400 `unsupported_parameter`** |
 
-  Jadi tidak perlu terjemahan Responses→Chat sama sekali; cukup dua rewrite.
-  Itulah yang dilakukan `shim.py` (TDD, 21 test di `tests/test_shim.py`):
-  `developer → system`, lalu buang `previous_response_id`; field lain
-  diteruskan utuh termasuk stream SSE per baris.
+  Jadi tidak perlu terjemahan Responses→Chat sama sekali; cukup rewrite.
+  Itulah yang dilakukan `shim.py` (TDD di `tests/test_shim.py`):
+  `developer → system`, buang `previous_response_id`, ratakan tool
+  `type:"namespace"`, buang `reasoning.summary`, dan buang tool
+  `type:"web_search"`; field lain diteruskan utuh termasuk stream SSE per baris.
+
+  Tiga rewrite terakhir ditambahkan 2026-11-24 setelah dua kegagalan nyata:
+
+  | field | gejala | tindakan shim |
+  | --- | --- | --- |
+  | `tools[].type: "namespace"` | 400 `request_rejected` | sub-tool diangkat ke level `tools` |
+  | `reasoning.summary` | 400 code `3051` `Invalid request parameters` | dibuang, `reasoning.effort` tetap |
+  | `tools[].type: "web_search"` | 400 code `3051` `Invalid request parameters` | tool dibuang |
+
+  Bukti per-field diambil dengan `python -m modules.codex_cutad.diagnosa_3051`
+  (mengirim satu field per request ke gateway).
 
   Verifikasi live di mesin ini:
 
