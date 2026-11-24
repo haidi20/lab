@@ -28,3 +28,6 @@ modules/inaproc/output/
 .npm-cache/
 modules/inaproc/web/node_modules/
 modules/inaproc/web/dist/
+
+# log shim CutadAI (run manual dari root repo)
+shim*.log
